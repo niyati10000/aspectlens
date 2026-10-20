@@ -38,6 +38,9 @@ data/processed_*.json
 !data/demo_sample.json
 !data/seed_lexicon.json
 
+# Temporary scratch files
+scratch/
+
 # System and IDE
 .DS_Store
 Thumbs.db

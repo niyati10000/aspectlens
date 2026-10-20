@@ -36,6 +36,9 @@ class Settings(BaseSettings):
     DEFAULT_EXTRACTOR: str = "spacy_chunks"
     MIN_ASPECT_FREQUENCY: int = 5
     CHUNK_GRAMMAR: str = r"NP: {<DT>?<JJ>*<NN.*>+}"
+    SENTIMENT_MODEL: str = "cardiffnlp/twitter-roberta-base-sentiment-latest"
+    SENTIMENT_FALLBACK_MODEL: str = "distilbert-base-uncased-finetuned-sst-2-english"
+    EMBEDDING_MODEL: str = "sentence-transformers/all-MiniLM-L6-v2"
 
     # Input limits & abuse prevention
     MAX_REVIEW_LENGTH: int = 2000

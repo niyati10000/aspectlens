@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 4 — Aspect grouping (completed, awaiting cluster review)
-- **Last completed phase:** 4 (aspect grouping)
-- **Last session summary:** Implemented data/seed_lexicon.json covering 11 canonical aspects and variants without code coupling; implemented nlp/grouping.py combining Seed Lexicon (priority 1), WordNet primary sense synonyms/hypernyms, and all-MiniLM-L6-v2 centroid cosine similarity with AgglomerativeClustering; cached embeddings; built demo cluster analysis script and verified with pytest (18 passing tests).
-- **Open questions / blockers:** Awaiting manual review of the printed cluster analysis table before proceeding to Phase 5.
-- **Next action:** Phase 5 (Opinions & sentiment: clause-scoped linking, VADER, and transformer scorers).
+- **Current phase:** 5 — Opinions and sentiment (completed)
+- **Last completed phase:** 5 (opinions and sentiment)
+- **Last session summary:** Implemented nlp/opinions.py (clause-scoped dependency opinion linking, contrast boundary splitting without crossing, negation and intensifier handling, Rule 6 empty opinion list for neutral low confidence), nlp/sentiment.py (unified Scorer Protocol for VADER with domain phrase enhancements, RoBERTa/DistilBERT Transformer, and FineTuned stub), nlp/pipeline.py (end-to-end analyze_review and analyze_batch matching ARCHITECTURE.md Section 5 schema with exact character offsets). Verified golden review (Battery+ [amazing], Delivery- [late], Price- [too high]), negation tests ('not good', 'never worked'), and low-confidence neutral fallbacks (all 26 tests passing).
+- **Open questions / blockers:** None.
+- **Next action:** Phase 6 (Aggregation & storage: app/db.py schema, SQLite persistence, and nlp/aggregate.py).
