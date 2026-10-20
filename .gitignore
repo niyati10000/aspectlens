@@ -1,0 +1,43 @@
+# Python virtual environment
+.venv/
+venv/
+env/
+ENV/
+
+# Python caches and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# SQLite databases
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+
+# Environment variables & secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Raw / full datasets & model weights
+data/raw/
+data/*.gz
+data/*.zip
+*.tar.gz
+data/semeval/
+
+# System and IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~

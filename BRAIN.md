@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 0 — Plan & approval (completed, awaiting human approval)
-- **Last completed phase:** 0 (plan & availability verification delivered)
-- **Last session summary:** Verified all datasets (SemEval, SNAP Amazon, HF mirrors) and models (spaCy, NLTK, MiniLM, RoBERTa, DistilBERT) with live HTTP queries; verified memory fits HF Space free tier (~1.8 GB / 16 GB); generated 12-phase implementation plan and saved findings in docs/availability_report.md.
-- **Open questions / blockers:** Awaiting human approval of Phase 0 plan and availability report before proceeding to Phase 1.
-- **Next action:** Upon user approval, begin Phase 1 (Scaffold & environment).
+- **Current phase:** 1 — Scaffold & environment (completed)
+- **Last completed phase:** 1 (scaffold & environment)
+- **Last session summary:** Created full repository structure according to ARCHITECTURE.md with empty docstring modules; initialized Python 3.11.9 venv and verified all pinned dependencies install cleanly together; configured .gitignore, .dockerignore, .env.example, Dockerfile, app/config.py; created minimal FastAPI app with lifespan handler and GET /health; verified uvicorn startup and passing pytest health suite.
+- **Open questions / blockers:** None. Ready for Phase 2 (Data).
+- **Next action:** Phase 2 (Data: download scripts, common schema parsing, demo sample).

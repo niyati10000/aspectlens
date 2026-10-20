@@ -1,0 +1,33 @@
+/* AspectLens Design System Tokens */
+:root {
+  /* surface */
+  --bg: #F7F8FA;  --surface: #FFFFFF;  --border: #E2E5EA;
+  --text: #1B1F27; --text-muted: #5B6472;
+  /* brand */
+  --primary: #3B5BDB; --primary-hover: #2F4AC0; --primary-soft: #E7ECFF;
+  /* sentiment */
+  --pos: #1F8A4C;  --pos-soft: #E3F4EA;
+  --neg: #C92A2A;  --neg-soft: #FBE7E7;
+  --neu: #6B7280;  --neu-soft: #ECEEF1;
+  /* feedback */
+  --warn: #B7791F; --focus: #3B5BDB;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0F1218; --surface: #171B23; --border: #2A303B;
+    --text: #EEF1F6; --text-muted: #9AA3B2;
+    --primary: #7C95FF; --primary-hover: #9AAEFF; --primary-soft: #1E2542;
+    --pos: #4CC38A; --pos-soft: #12301F;
+    --neg: #FF6B6B; --neg-soft: #3A1717;
+    --neu: #9AA3B2; --neu-soft: #232832;
+  }
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 1.5rem;
+}

@@ -1,0 +1,27 @@
+# Git and IDE
+.git/
+.gitignore
+.vscode/
+.idea/
+
+# Environments and secrets
+.venv/
+venv/
+env/
+.env
+*.db
+*.sqlite3
+
+# Python caches
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.coverage
+
+# Notebooks and raw data
+notebooks/
+data/raw/
+*.gz
+*.zip
+*.tar.gz
