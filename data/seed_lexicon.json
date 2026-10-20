@@ -1,0 +1,96 @@
+{
+  "domains": ["electronics", "restaurant", "general"],
+  "canonical_aspects": {
+    "Battery": {
+      "domain": "electronics",
+      "keywords": [
+        "battery", "battery life", "charge", "charger", "charging",
+        "power", "cord", "cable", "adapter", "standby", "recharge", "drain"
+      ]
+    },
+    "Price": {
+      "domain": "general",
+      "keywords": [
+        "price", "cost", "value", "expensive", "cheap", "worth",
+        "deal", "money", "pricing", "budget", "affordable", "discount"
+      ]
+    },
+    "Delivery": {
+      "domain": "general",
+      "keywords": [
+        "delivery", "shipping", "shipment", "package", "packaging",
+        "arrival", "arrived", "carrier", "tracking", "box", "order time"
+      ]
+    },
+    "Display": {
+      "domain": "electronics",
+      "keywords": [
+        "display", "screen", "resolution", "brightness", "color",
+        "touchscreen", "panel", "pixels", "clarity", "glare", "viewing angle"
+      ]
+    },
+    "Camera": {
+      "domain": "electronics",
+      "keywords": [
+        "camera", "photo", "lens", "video", "sensor", "picture",
+        "flash", "zoom", "megapixel", "shot", "recording", "focus"
+      ]
+    },
+    "Performance": {
+      "domain": "electronics",
+      "keywords": [
+        "performance", "speed", "fast", "slow", "processor", "cpu",
+        "lag", "freezing", "smooth", "responsive", "multitasking", "ram"
+      ]
+    },
+    "Build Quality": {
+      "domain": "general",
+      "keywords": [
+        "build quality", "build", "material", "durability", "sturdy",
+        "durable", "finish", "design", "case", "hinge", "feel", "weight"
+      ]
+    },
+    "Customer Service": {
+      "domain": "general",
+      "keywords": [
+        "customer service", "support", "warranty", "refund", "return",
+        "seller", "representative", "response", "service", "help", "repair"
+      ]
+    },
+    "Packaging": {
+      "domain": "general",
+      "keywords": [
+        "packaging", "box", "wrapped", "unboxing", "packing", "packaged",
+        "bubble wrap", "package condition"
+      ]
+    },
+    "Sound": {
+      "domain": "electronics",
+      "keywords": [
+        "sound", "audio", "speaker", "volume", "bass", "clarity",
+        "microphone", "mic", "earpiece", "treble", "noise", "headphone"
+      ]
+    },
+    "Software": {
+      "domain": "electronics",
+      "keywords": [
+        "software", "app", "operating system", "os", "update", "interface",
+        "ui", "firmware", "sync", "bluetooth", "connectivity", "wifi"
+      ]
+    },
+    "Food Quality": {
+      "domain": "restaurant",
+      "keywords": [
+        "food", "dish", "meal", "taste", "flavor", "menu",
+        "portion", "ingredients", "freshness", "delicious", "texture"
+      ]
+    },
+    "Ambience": {
+      "domain": "restaurant",
+      "keywords": [
+        "ambience", "atmosphere", "decor", "music", "lighting",
+        "vibe", "seating", "table", "crowd", "cleanliness", "noise level"
+      ]
+    }
+  }
+}

@@ -33,6 +33,10 @@ data/*.gz
 data/*.zip
 *.tar.gz
 data/semeval/
+data/amazon_sample_large.json
+data/processed_*.json
+!data/demo_sample.json
+!data/seed_lexicon.json
 
 # System and IDE
 .DS_Store

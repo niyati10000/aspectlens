@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 1 — Scaffold & environment (completed)
-- **Last completed phase:** 1 (scaffold & environment)
-- **Last session summary:** Created full repository structure according to ARCHITECTURE.md with empty docstring modules; initialized Python 3.11.9 venv and verified all pinned dependencies install cleanly together; configured .gitignore, .dockerignore, .env.example, Dockerfile, app/config.py; created minimal FastAPI app with lifespan handler and GET /health; verified uvicorn startup and passing pytest health suite.
-- **Open questions / blockers:** None. Ready for Phase 2 (Data).
-- **Next action:** Phase 2 (Data: download scripts, common schema parsing, demo sample).
+- **Current phase:** 2 — Data (completed)
+- **Last completed phase:** 2 (data)
+- **Last session summary:** Implemented download and parsing scripts for SemEval-2014 Task 4 (7,686 sentences with aspect terms) and Amazon review dataset (20,709 reviews across 59 products); implemented PII stripping and common review schema; generated deterministic, balanced demo sample (3,750 reviews across 15 products, 2.48 MB < 20 MB); implemented stats script and verified with pytest (4 tests passing).
+- **Open questions / blockers:** None. Ready for Phase 3 (Aspect extraction).
+- **Next action:** Phase 3 (Aspect extraction: 3 switchable candidate extractors, generic blacklist, candidate filtering).
