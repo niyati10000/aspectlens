@@ -1,21 +1,14 @@
 """Unit tests for aspect extraction methods, preprocessing, and filtering rules."""
 
-import pytest
-from nlp.preprocess import (
-    clean_text,
-    strip_pii,
-    clean_whitespace,
-    expand_contractions,
-    preprocess_review,
-)
 from nlp.aspects import (
     extract_aspects,
-    extract_aspects_nltk,
-    extract_aspects_spacy_chunks,
-    extract_aspects_spacy_deps,
-    filter_candidates_by_frequency,
-    is_generic_noun,
     get_spacy_model,
+    is_generic_noun,
+)
+from nlp.preprocess import (
+    clean_text,
+    expand_contractions,
+    preprocess_review,
 )
 
 # 15 Hand-written test sentences covering laptops, phones, electronics, restaurants
@@ -83,7 +76,7 @@ def test_sentence_splitting_and_offsets():
 
     for span in doc.sentences:
         # Offsets must exactly reproduce the sentence text
-        assert text[span.start_char:span.end_char] == span.text
+        assert text[span.start_char : span.end_char] == span.text
         assert span.lower_text == span.text.lower()
 
 
@@ -104,7 +97,7 @@ def test_candidate_character_offsets_invariant():
         for method in ["nltk_regex", "spacy_chunks", "spacy_deps", "all"]:
             candidates = extract_aspects(sentence, method=method)
             for c in candidates:
-                extracted_slice = sentence[c.char_start:c.char_end]
+                extracted_slice = sentence[c.char_start : c.char_end]
                 assert extracted_slice == c.term, (
                     f"Offset mismatch for method '{method}' in '{sentence}': "
                     f"expected '{c.term}', got '{extracted_slice}'"
@@ -117,9 +110,9 @@ def test_golden_review_extraction():
     for method in ["nltk_regex", "spacy_chunks", "spacy_deps", "all"]:
         candidates = extract_aspects(golden, method=method)
         lemmas = [c.lemma for c in candidates]
-        assert any("battery" in l for l in lemmas), f"Battery missing in {method}"
-        assert any("delivery" in l for l in lemmas), f"Delivery missing in {method}"
-        assert any("price" in l for l in lemmas), f"Price missing in {method}"
+        assert any("battery" in lem for lem in lemmas), f"Battery missing in {method}"
+        assert any("delivery" in lem for lem in lemmas), f"Delivery missing in {method}"
+        assert any("price" in lem for lem in lemmas), f"Price missing in {method}"
 
 
 def test_all_15_sentences_extraction():
@@ -161,5 +154,7 @@ def test_frequency_filter_across_product_reviews():
         product_reviews=product_reviews,
     )
     lemmas = [c.lemma for c in filtered]
-    assert any("battery" in l for l in lemmas)
-    assert not any("packaging" in l for l in lemmas), "Infrequent aspect 'packaging' should be pruned!"
+    assert any("battery" in lem for lem in lemmas)
+    assert not any("packaging" in lem for lem in lemmas), (
+        "Infrequent aspect 'packaging' should be pruned!"
+    )

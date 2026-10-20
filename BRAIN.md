@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 9 — Evaluation (completed)
-- **Last completed phase:** 9 (evaluation)
-- **Last session summary:** Implemented offline evaluation framework in eval/ (eval/extraction_eval.py, eval/sentiment_eval.py, eval/baseline_tfidf.py, eval/amazon_value.py, eval/latency.py, eval/error_analysis.py, eval/run_all.py). Executed `python -m eval.run_all` with fixed seed 42 on identical splits, saving 7 JSON and 6 CSV artifacts to eval/results/. RoBERTa transformer achieved 0.6842 Macro-F1 (winner vs 0.6240 TF-IDF baseline and 0.6160 VADER). Amazon mining revealed 39.43% of 4-5★ reviews contain hidden negative aspects and 61.02% of 1-2★ reviews contain positive praise. Enhanced frontend Evaluation page with KPI tiles, ablation table, sentiment comparison, and 60-example error inspector. Full test suite passing (61/61 tests).
+- **Current phase:** 10 — Tests and quality (completed)
+- **Last completed phase:** 10 (tests and quality)
+- **Last session summary:** Completed pytest suite to 80 passing unit and integration tests across preprocessing, opinion linking, mocked scorers, aggregation, and API limits. Configured pyproject.toml with ruff (linter & formatter) and mypy; fixed all 20 type issues across 25 source files with 0 errors remaining. Executed pip-audit vulnerability scan. Verified 86% production code coverage (95% pipeline, 92% aspects, 92% preprocess, 90% grouping, 87% aggregation, 86% api). Validated clean checkout clone and test execution.
 - **Open questions / blockers:** None.
-- **Next action:** Phase 10 (Tests and quality: comprehensive pytest coverage, type hints, docstrings, formatting and linting).
+- **Next action:** Phase 11 (Docker & deployment: Dockerfile, entrypoint, Hugging Face Space configuration).

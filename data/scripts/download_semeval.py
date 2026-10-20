@@ -1,12 +1,11 @@
 """Download and parse SemEval-2014 Task 4 datasets (laptops and restaurants)."""
 
-import os
-import ssl
 import json
+import ssl
 import urllib.request
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import Any
 
 from nlp.preprocess import clean_text
 
@@ -40,7 +39,7 @@ def download_file(url: str, dest_path: Path) -> None:
     print(f"Saved: {dest_path} ({dest_path.stat().st_size} bytes)")
 
 
-def parse_semeval_xml(xml_path: Path, domain: str, split: str) -> List[Dict[str, Any]]:
+def parse_semeval_xml(xml_path: Path, domain: str, split: str) -> list[dict[str, Any]]:
     """Parse SemEval-2014 Task 4 XML file into common schema + evaluation aspect terms."""
     tree = ET.parse(xml_path)
     root = tree.getroot()
@@ -62,12 +61,14 @@ def parse_semeval_xml(xml_path: Path, domain: str, split: str) -> List[Dict[str,
                 from_idx = int(a_term.get("from", -1))
                 to_idx = int(a_term.get("to", -1))
                 if term and polarity:
-                    aspect_terms.append({
-                        "term": term,
-                        "polarity": polarity,
-                        "from": from_idx,
-                        "to": to_idx,
-                    })
+                    aspect_terms.append(
+                        {
+                            "term": term,
+                            "polarity": polarity,
+                            "from": from_idx,
+                            "to": to_idx,
+                        }
+                    )
 
         aspect_categories = []
         aspect_cats_elem = sentence.find("aspectCategories")
@@ -76,29 +77,33 @@ def parse_semeval_xml(xml_path: Path, domain: str, split: str) -> List[Dict[str,
                 cat = a_cat.get("category")
                 polarity = a_cat.get("polarity")
                 if cat and polarity:
-                    aspect_categories.append({
-                        "category": cat,
-                        "polarity": polarity,
-                    })
+                    aspect_categories.append(
+                        {
+                            "category": cat,
+                            "polarity": polarity,
+                        }
+                    )
 
         # Common schema mapping
-        records.append({
-            "review_id": f"semeval_{domain}_{split}_{s_id}",
-            "product_id": f"semeval_{domain}",
-            "text": clean_text(raw_text),
-            "raw_text": raw_text,
-            "rating": None,
-            "date": "2014-01-01",
-            "domain": domain,
-            "split": split,
-            "aspect_terms": aspect_terms,
-            "aspect_categories": aspect_categories,
-        })
+        records.append(
+            {
+                "review_id": f"semeval_{domain}_{split}_{s_id}",
+                "product_id": f"semeval_{domain}",
+                "text": clean_text(raw_text),
+                "raw_text": raw_text,
+                "rating": None,
+                "date": "2014-01-01",
+                "domain": domain,
+                "split": split,
+                "aspect_terms": aspect_terms,
+                "aspect_categories": aspect_categories,
+            }
+        )
 
     return records
 
 
-def process_semeval() -> List[Dict[str, Any]]:
+def process_semeval() -> list[dict[str, Any]]:
     """Download and process all SemEval splits."""
     all_records = []
     RAW_SEMEVAL_DIR.mkdir(parents=True, exist_ok=True)
@@ -119,11 +124,11 @@ def process_semeval() -> List[Dict[str, Any]]:
     return all_records
 
 
-def load_semeval(split: Optional[str] = None, domain: Optional[str] = None) -> List[Dict[str, Any]]:
+def load_semeval(split: str | None = None, domain: str | None = None) -> list[dict[str, Any]]:
     """Load processed SemEval dataset with optional filtering."""
     if not PROCESSED_SEMEVAL_FILE.exists():
         process_semeval()
-    with open(PROCESSED_SEMEVAL_FILE, "r", encoding="utf-8") as f:
+    with open(PROCESSED_SEMEVAL_FILE, encoding="utf-8") as f:
         records = json.load(f)
     if split:
         records = [r for r in records if r.get("split") == split]

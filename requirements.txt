@@ -15,3 +15,9 @@ scikit-learn==1.5.2
 torch==2.4.1
 transformers==4.45.1
 sentence-transformers==3.1.1
+
+# Development & Quality Tools
+pytest-cov==7.1.0
+ruff==0.17.1
+mypy==2.4.0
+pip-audit==2.10.1

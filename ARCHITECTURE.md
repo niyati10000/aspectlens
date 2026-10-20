@@ -68,7 +68,10 @@ Each extractor and scorer is chosen via config / request parameter so ablations 
 ```python
 class Scorer(Protocol):
     name: str
+
     def score(self, clause: str, aspect: str, opinion_words: list[str]) -> ScoreResult: ...
+
+
 # ScoreResult: label ("positive"|"negative"|"neutral"), confidence (0-1), opinion_words
 ```
 **Pipeline output** (`POST /analyze` response)

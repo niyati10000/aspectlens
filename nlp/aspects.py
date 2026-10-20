@@ -8,60 +8,153 @@ Implements three switchable extraction methods:
 Includes generic-noun blacklist filtering and per-product frequency thresholding.
 """
 
-from dataclasses import dataclass
-from typing import List, Dict, Set, Optional, Tuple
 from collections import Counter
-import re
+from dataclasses import dataclass
+
 import nltk
-from nltk.tokenize import TreebankWordTokenizer
 import spacy
+from nltk.tokenize import TreebankWordTokenizer
 
 # Generic noun blacklist as specified in BRAIN.md Rule 3
-GENERIC_NOUN_BLACKLIST: Set[str] = {
-    "thing", "things",
-    "product", "products",
-    "item", "items",
-    "one", "ones",
-    "time", "times",
-    "day", "days",
-    "way", "ways",
-    "lot", "lots",
-    "bit", "bits",
+GENERIC_NOUN_BLACKLIST: set[str] = {
+    "thing",
+    "things",
+    "product",
+    "products",
+    "item",
+    "items",
+    "one",
+    "ones",
+    "time",
+    "times",
+    "day",
+    "days",
+    "way",
+    "ways",
+    "lot",
+    "lots",
+    "bit",
+    "bits",
     "stuff",
-    "something", "anything", "everything", "nothing",
-    "someone", "anyone", "everyone", "nobody",
-    "part", "parts",
-    "use", "uses",
-    "year", "years", "month", "months", "week", "weeks",
-    "kind", "kinds", "sort", "sorts", "type", "types",
-    "deal", "deals",
-    "value", "purchase", "order",
+    "something",
+    "anything",
+    "everything",
+    "nothing",
+    "someone",
+    "anyone",
+    "everyone",
+    "nobody",
+    "part",
+    "parts",
+    "use",
+    "uses",
+    "year",
+    "years",
+    "month",
+    "months",
+    "week",
+    "weeks",
+    "kind",
+    "kinds",
+    "sort",
+    "sorts",
+    "type",
+    "types",
+    "deal",
+    "deals",
+    "value",
+    "purchase",
+    "order",
 }
 
 # Pronouns that should never be aspect candidates
-PRONOUNS_BLACKLIST: Set[str] = {
-    "i", "me", "my", "myself",
-    "you", "your", "yours", "yourself", "yourselves",
-    "he", "him", "his", "himself",
-    "she", "her", "hers", "herself",
-    "it", "its", "itself",
-    "we", "us", "our", "ours", "ourselves",
-    "they", "them", "their", "theirs", "themselves",
-    "who", "whom", "whose", "which", "what",
-    "this", "that", "these", "those",
+PRONOUNS_BLACKLIST: set[str] = {
+    "i",
+    "me",
+    "my",
+    "myself",
+    "you",
+    "your",
+    "yours",
+    "yourself",
+    "yourselves",
+    "he",
+    "him",
+    "his",
+    "himself",
+    "she",
+    "her",
+    "hers",
+    "herself",
+    "it",
+    "its",
+    "itself",
+    "we",
+    "us",
+    "our",
+    "ours",
+    "ourselves",
+    "they",
+    "them",
+    "their",
+    "theirs",
+    "themselves",
+    "who",
+    "whom",
+    "whose",
+    "which",
+    "what",
+    "this",
+    "that",
+    "these",
+    "those",
 }
 
-DETERMINERS_AND_ARTICLES: Set[str] = {
-    "the", "a", "an", "this", "that", "these", "those",
-    "my", "your", "his", "her", "its", "our", "their",
-    "all", "some", "any", "every", "each", "both", "such",
+DETERMINERS_AND_ARTICLES: set[str] = {
+    "the",
+    "a",
+    "an",
+    "this",
+    "that",
+    "these",
+    "those",
+    "my",
+    "your",
+    "his",
+    "her",
+    "its",
+    "our",
+    "their",
+    "all",
+    "some",
+    "any",
+    "every",
+    "each",
+    "both",
+    "such",
 }
 
 # Evaluative opinion adjectives to optionally strip from leading chunks
-EVALUATIVE_ADJECTIVES: Set[str] = {
-    "great", "good", "bad", "terrible", "horrible", "awesome", "amazing",
-    "excellent", "poor", "mediocre", "stunning", "fantastic", "wonderful",
-    "superb", "disappointing", "impressive", "decent", "nice", "subpar",
+EVALUATIVE_ADJECTIVES: set[str] = {
+    "great",
+    "good",
+    "bad",
+    "terrible",
+    "horrible",
+    "awesome",
+    "amazing",
+    "excellent",
+    "poor",
+    "mediocre",
+    "stunning",
+    "fantastic",
+    "wonderful",
+    "superb",
+    "disappointing",
+    "impressive",
+    "decent",
+    "nice",
+    "subpar",
 }
 
 NP_CHUNK_GRAMMAR = r"NP: {<DT>?<JJ>*<NN.*>+}"
@@ -70,12 +163,13 @@ NP_CHUNK_GRAMMAR = r"NP: {<DT>?<JJ>*<NN.*>+}"
 @dataclass
 class AspectCandidate:
     """Represents an extracted aspect candidate with exact character offsets in review text."""
-    term: str              # Original surface text slice (e.g. "Battery life")
-    lemma: str             # Normalized lowercase lemma (e.g. "battery life")
-    char_start: int        # Character start offset in review text
-    char_end: int          # Character end offset in review text
-    extractor: str         # "nltk_regex" | "spacy_chunks" | "spacy_deps"
-    head_noun: str         # Core head noun for filtering
+
+    term: str  # Original surface text slice (e.g. "Battery life")
+    lemma: str  # Normalized lowercase lemma (e.g. "battery life")
+    char_start: int  # Character start offset in review text
+    char_end: int  # Character end offset in review text
+    extractor: str  # "nltk_regex" | "spacy_chunks" | "spacy_deps"
+    head_noun: str  # Core head noun for filtering
 
 
 _SPACY_MODEL = None
@@ -110,9 +204,9 @@ def _clean_candidate_span(
     start: int,
     end: int,
     extractor_name: str,
-    nlp_doc: Optional[spacy.tokens.Doc] = None,
+    nlp_doc: spacy.tokens.Doc | None = None,
     strip_evaluative: bool = False,
-) -> Optional[AspectCandidate]:
+) -> AspectCandidate | None:
     """Validate, trim determiners/pronouns, and construct an AspectCandidate ensuring exact character slice."""
     if start < 0 or end > len(text) or start >= end:
         return None
@@ -131,7 +225,9 @@ def _clean_candidate_span(
 
     # Trim leading determiners/articles (e.g. "the battery life" -> "battery life")
     words = term.split()
-    while words and (words[0].lower() in DETERMINERS_AND_ARTICLES or words[0].lower() in PRONOUNS_BLACKLIST):
+    while words and (
+        words[0].lower() in DETERMINERS_AND_ARTICLES or words[0].lower() in PRONOUNS_BLACKLIST
+    ):
         drop_word = words.pop(0)
         advance = len(drop_word)
         while adj_start + advance < adj_end and text[adj_start + advance].isspace():
@@ -160,7 +256,9 @@ def _clean_candidate_span(
         span_tokens = [t for t in nlp_doc if t.idx >= adj_start and (t.idx + len(t)) <= adj_end]
         if span_tokens:
             head = span_tokens[-1].lemma_.lower()
-            lemma = " ".join(t.lemma_.lower() for t in span_tokens if t.pos_ not in ("DET", "PUNCT", "PRON"))
+            lemma = " ".join(
+                t.lemma_.lower() for t in span_tokens if t.pos_ not in ("DET", "PUNCT", "PRON")
+            )
         else:
             head = term.split()[-1].lower()
             lemma = term.lower()
@@ -172,7 +270,9 @@ def _clean_candidate_span(
         return None
 
     # Invariant: text[adj_start:adj_end] == term
-    assert text[adj_start:adj_end] == term, f"Offset mismatch: '{text[adj_start:adj_end]}' != '{term}'"
+    assert text[adj_start:adj_end] == term, (
+        f"Offset mismatch: '{text[adj_start:adj_end]}' != '{term}'"
+    )
 
     return AspectCandidate(
         term=term,
@@ -187,7 +287,9 @@ def _clean_candidate_span(
 # ----------------------------------------------------------------------
 # Extractor 1: NLTK RegexpParser
 # ----------------------------------------------------------------------
-def extract_aspects_nltk(text: str, nlp_spacy: Optional[spacy.language.Language] = None) -> List[AspectCandidate]:
+def extract_aspects_nltk(
+    text: str, nlp_spacy: spacy.language.Language | None = None
+) -> list[AspectCandidate]:
     """Extractor 1: NLTK RegexpParser with grammar NP: {<DT>?<JJ>*<NN.*>+}."""
     if not text or not text.strip():
         return []
@@ -205,7 +307,7 @@ def extract_aspects_nltk(text: str, nlp_spacy: Optional[spacy.language.Language]
     parser = nltk.RegexpParser(NP_CHUNK_GRAMMAR)
     tree = parser.parse(pos_tags)
 
-    candidates: List[AspectCandidate] = []
+    candidates: list[AspectCandidate] = []
     token_idx = 0
 
     for subtree in tree:
@@ -230,7 +332,9 @@ def extract_aspects_nltk(text: str, nlp_spacy: Optional[spacy.language.Language]
 # ----------------------------------------------------------------------
 # Extractor 2: spaCy Noun Chunks
 # ----------------------------------------------------------------------
-def extract_aspects_spacy_chunks(text: str, nlp_spacy: Optional[spacy.language.Language] = None) -> List[AspectCandidate]:
+def extract_aspects_spacy_chunks(
+    text: str, nlp_spacy: spacy.language.Language | None = None
+) -> list[AspectCandidate]:
     """Extractor 2: spaCy noun chunks extraction with determiner & pronoun stripping."""
     if not text or not text.strip():
         return []
@@ -238,10 +342,12 @@ def extract_aspects_spacy_chunks(text: str, nlp_spacy: Optional[spacy.language.L
     nlp = nlp_spacy or get_spacy_model()
     doc = nlp(text)
 
-    candidates: List[AspectCandidate] = []
+    candidates: list[AspectCandidate] = []
     for chunk in doc.noun_chunks:
         # Strip leading evaluative adjectives to extract the core aspect
-        cand = _clean_candidate_span(text, chunk.start_char, chunk.end_char, "spacy_chunks", doc, strip_evaluative=True)
+        cand = _clean_candidate_span(
+            text, chunk.start_char, chunk.end_char, "spacy_chunks", doc, strip_evaluative=True
+        )
         if cand:
             candidates.append(cand)
 
@@ -251,7 +357,9 @@ def extract_aspects_spacy_chunks(text: str, nlp_spacy: Optional[spacy.language.L
 # ----------------------------------------------------------------------
 # Extractor 3: spaCy Dependency Rules
 # ----------------------------------------------------------------------
-def extract_aspects_spacy_deps(text: str, nlp_spacy: Optional[spacy.language.Language] = None) -> List[AspectCandidate]:
+def extract_aspects_spacy_deps(
+    text: str, nlp_spacy: spacy.language.Language | None = None
+) -> list[AspectCandidate]:
     """Extractor 3: spaCy syntactic dependency rules:
     - Subject + Adjective Complement (nsubj/nsubjpass with copula or acomp/attr)
     - Adjective Modifier + Noun (amod modifying noun head)
@@ -263,7 +371,7 @@ def extract_aspects_spacy_deps(text: str, nlp_spacy: Optional[spacy.language.Lan
     nlp = nlp_spacy or get_spacy_model()
     doc = nlp(text)
 
-    candidates: List[AspectCandidate] = []
+    candidates: list[AspectCandidate] = []
 
     for token in doc:
         # Rule 3a: Subject with adjective complement or copular predicate
@@ -302,7 +410,7 @@ def extract_aspects_spacy_deps(text: str, nlp_spacy: Optional[spacy.language.Lan
     return _deduplicate_candidates(candidates)
 
 
-def _expand_noun_phrase(noun_token: spacy.tokens.Token) -> List[spacy.tokens.Token]:
+def _expand_noun_phrase(noun_token: spacy.tokens.Token) -> list[spacy.tokens.Token]:
     """Expand a noun token to include adjacent compound tokens and nominal modifiers."""
     tokens = [noun_token]
     for left in noun_token.lefts:
@@ -318,13 +426,13 @@ def _expand_noun_phrase(noun_token: spacy.tokens.Token) -> List[spacy.tokens.Tok
     return tokens
 
 
-def _deduplicate_candidates(candidates: List[AspectCandidate]) -> List[AspectCandidate]:
+def _deduplicate_candidates(candidates: list[AspectCandidate]) -> list[AspectCandidate]:
     """Deduplicate candidates by overlapping span, keeping the more specific span."""
     if not candidates:
         return []
 
     sorted_cands = sorted(candidates, key=lambda c: (-(c.char_end - c.char_start), c.char_start))
-    kept: List[AspectCandidate] = []
+    kept: list[AspectCandidate] = []
 
     for cand in sorted_cands:
         overlap = False
@@ -343,14 +451,14 @@ def _deduplicate_candidates(candidates: List[AspectCandidate]) -> List[AspectCan
 # Frequency Filtering across Product Reviews (Rule 4)
 # ----------------------------------------------------------------------
 def filter_candidates_by_frequency(
-    review_candidates_list: List[List[AspectCandidate]],
+    review_candidates_list: list[list[AspectCandidate]],
     min_freq: int = 5,
-) -> List[List[AspectCandidate]]:
+) -> list[list[AspectCandidate]]:
     """Filter candidates across a product's reviews: keep only candidates appearing in >= min_freq reviews."""
     if min_freq <= 1:
         return review_candidates_list
 
-    lemma_review_counts = Counter()
+    lemma_review_counts: Counter[str] = Counter()
     for review_cands in review_candidates_list:
         distinct_lemmas = set(c.lemma for c in review_cands)
         for lemma in distinct_lemmas:
@@ -371,9 +479,9 @@ def extract_aspects(
     text: str,
     method: str = "spacy_chunks",
     min_freq: int = 1,
-    product_reviews: Optional[List[str]] = None,
-    nlp_spacy: Optional[spacy.language.Language] = None,
-) -> List[AspectCandidate]:
+    product_reviews: list[str] | None = None,
+    nlp_spacy: spacy.language.Language | None = None,
+) -> list[AspectCandidate]:
     """Extract aspect candidates using the selected switchable extractor."""
     if not text or not text.strip():
         return []
@@ -397,7 +505,9 @@ def extract_aspects(
         )
 
     if product_reviews and min_freq > 1:
-        corpus_cands = [extract_aspects(r, method=method, min_freq=1, nlp_spacy=nlp) for r in product_reviews]
+        corpus_cands = [
+            extract_aspects(r, method=method, min_freq=1, nlp_spacy=nlp) for r in product_reviews
+        ]
         filtered_corpus = filter_candidates_by_frequency(corpus_cands + [cands], min_freq=min_freq)
         return filtered_corpus[-1]
 

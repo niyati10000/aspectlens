@@ -10,21 +10,18 @@ Computes exact match and token overlap Precision, Recall, and F1.
 Saves results to eval/results/extraction_ablation.json and extraction_ablation.csv.
 """
 
-import json
 import csv
+import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any, Tuple, Set
-from collections import Counter
+from typing import Any
 
-from nlp.preprocess import clean_text
 from nlp.aspects import (
-    extract_aspects_spacy_chunks,
-    extract_aspects_spacy_deps,
+    AspectCandidate,
     _deduplicate_candidates,
+    extract_aspects_spacy_deps,
     filter_candidates_by_frequency,
     get_spacy_model,
-    AspectCandidate,
 )
 from nlp.grouping import AspectGrouper
 
@@ -36,7 +33,7 @@ DATA_PATH = BASE_DIR / "data" / "processed_semeval.json"
 RESULTS_DIR = BASE_DIR / "eval" / "results"
 
 
-def compute_prf(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
+def compute_prf(tp: int, fp: int, fn: int) -> tuple[float, float, float]:
     """Calculate Precision, Recall, and F1 score."""
     p = tp / (tp + fp) if (tp + fp) > 0 else 0.0
     r = tp / (tp + fn) if (tp + fn) > 0 else 0.0
@@ -45,9 +42,9 @@ def compute_prf(tp: int, fp: int, fn: int) -> Tuple[float, float, float]:
 
 
 def evaluate_extraction_lists(
-    predicted_lists: List[List[str]],
-    gold_lists: List[List[str]],
-) -> Dict[str, Any]:
+    predicted_lists: list[list[str]],
+    gold_lists: list[list[str]],
+) -> dict[str, Any]:
     """Evaluate exact string matches between predicted candidate lemmas and gold terms."""
     tp, fp, fn = 0, 0, 0
 
@@ -68,15 +65,19 @@ def evaluate_extraction_lists(
         "tp": tp,
         "fp": fp,
         "fn": fn,
-        "total_gold": sum(len(set(g.strip().lower() for g in g_list if g.strip())) for g_list in gold_lists),
-        "total_predicted": sum(len(set(p.strip().lower() for p in p_list if p.strip())) for p_list in predicted_lists),
+        "total_gold": sum(
+            len(set(g.strip().lower() for g in g_list if g.strip())) for g_list in gold_lists
+        ),
+        "total_predicted": sum(
+            len(set(p.strip().lower() for p in p_list if p.strip())) for p_list in predicted_lists
+        ),
     }
 
 
 def evaluate_overlap_lists(
-    predicted_lists: List[List[str]],
-    gold_lists: List[List[str]],
-) -> Dict[str, Any]:
+    predicted_lists: list[list[str]],
+    gold_lists: list[list[str]],
+) -> dict[str, Any]:
     """Evaluate token-overlap matches (partial credit for boundary variations)."""
     tp, fp, fn = 0, 0, 0
 
@@ -99,11 +100,11 @@ def evaluate_overlap_lists(
         fn += len(g_set - matched_gold)
         fp += len(p_set - matched_pred)
 
-    p, r, f1 = compute_prf(tp, fp, fn)
+    prec, rec, f1_val = compute_prf(tp, fp, fn)
     return {
-        "precision_overlap": p,
-        "recall_overlap": r,
-        "f1_overlap": f1,
+        "precision_overlap": prec,
+        "recall_overlap": rec,
+        "f1_overlap": f1_val,
     }
 
 
@@ -111,10 +112,10 @@ def run_extraction_evaluation(
     data_path: Path = DATA_PATH,
     results_dir: Path = RESULTS_DIR,
     sample_limit: int = 0,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run four extraction ablations over the SemEval test set and save results."""
     logger.info("Loading SemEval data from %s", data_path)
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, encoding="utf-8") as f:
         all_data = json.load(f)
 
     # Use identical official test split
@@ -132,18 +133,25 @@ def run_extraction_evaluation(
     spacy_docs = [nlp(row["text"]) for row in test_docs]
 
     gold_terms_per_doc = [
-        [t["term"].strip().lower() for t in row.get("aspect_terms", [])]
-        for row in test_docs
+        [t["term"].strip().lower() for t in row.get("aspect_terms", [])] for row in test_docs
     ]
 
     # --- Ablation 1: Chunks only ---
     logger.info("Running Ablation 1: Chunks only...")
-    chunks_cands_raw: List[List[AspectCandidate]] = []
+    chunks_cands_raw: list[list[AspectCandidate]] = []
     for doc in spacy_docs:
         cands = []
         for chunk in doc.noun_chunks:
             from nlp.aspects import _clean_candidate_span
-            cand = _clean_candidate_span(doc.text, chunk.start_char, chunk.end_char, "spacy_chunks", doc, strip_evaluative=True)
+
+            cand = _clean_candidate_span(
+                doc.text,
+                chunk.start_char,
+                chunk.end_char,
+                "spacy_chunks",
+                doc,
+                strip_evaluative=True,
+            )
             if cand:
                 cands.append(cand)
         chunks_cands_raw.append(_deduplicate_candidates(cands))
@@ -154,9 +162,8 @@ def run_extraction_evaluation(
 
     # --- Ablation 2: Chunks + Dependency Rules ---
     logger.info("Running Ablation 2: Chunks + Dependency Rules...")
-    deps_cands_raw: List[List[AspectCandidate]] = []
+    deps_cands_raw: list[list[AspectCandidate]] = []
     for doc, c_cands in zip(spacy_docs, chunks_cands_raw):
-        from nlp.aspects import extract_aspects_spacy_deps
         d_cands = extract_aspects_spacy_deps(doc.text, nlp_spacy=nlp)
         merged = _deduplicate_candidates(c_cands + d_cands)
         deps_cands_raw.append(merged)
@@ -250,7 +257,17 @@ def run_extraction_evaluation(
     logger.info("Saved JSON results to %s", json_path)
 
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
-        fieldnames = ["ablation", "description", "exact_precision", "exact_recall", "exact_f1", "overlap_f1", "tp", "fp", "fn"]
+        fieldnames = [
+            "ablation",
+            "description",
+            "exact_precision",
+            "exact_recall",
+            "exact_f1",
+            "overlap_f1",
+            "tp",
+            "fp",
+            "fn",
+        ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for row in ablation_results:
@@ -264,4 +281,6 @@ if __name__ == "__main__":
     results = run_extraction_evaluation()
     print("\n=== SemEval-2014 Aspect Extraction Ablation Results ===")
     for row in results["ablations"]:
-        print(f"[{row['ablation']}] P: {row['exact_precision']:.4f} | R: {row['exact_recall']:.4f} | Exact F1: {row['exact_f1']:.4f} | Overlap F1: {row['overlap_f1']:.4f}")
+        print(
+            f"[{row['ablation']}] P: {row['exact_precision']:.4f} | R: {row['exact_recall']:.4f} | Exact F1: {row['exact_f1']:.4f} | Overlap F1: {row['overlap_f1']:.4f}"
+        )

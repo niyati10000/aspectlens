@@ -1,11 +1,9 @@
 """Unit tests for aspect canonical grouping, seed lexicon, WordNet, and MiniLM clustering."""
 
-import pytest
 import numpy as np
+
 from nlp.grouping import (
-    AspectGrouper,
     get_aspect_grouper,
-    group_aspect_term,
 )
 
 
@@ -15,7 +13,9 @@ def test_acceptance_criteria_price_grouping():
 
     for term in ["cost", "price", "value for money"]:
         canonical, origin, conf = grouper.group_aspect(term)
-        assert canonical == "Price", f"Expected 'Price' for '{term}', got '{canonical}' (via {origin})"
+        assert canonical == "Price", (
+            f"Expected 'Price' for '{term}', got '{canonical}' (via {origin})"
+        )
 
 
 def test_all_11_canonical_aspects_coverage():
@@ -58,7 +58,9 @@ def test_seed_lexicon_priority_over_conflicts():
     """Verify that seed lexicon takes strict priority over embedding and WordNet matches."""
     grouper = get_aspect_grouper()
     # 'cord' in Battery keywords
-    canonical, origin, conf = grouper.group_aspect("cord", use_seed=True, use_wordnet=True, use_embeddings=True)
+    canonical, origin, conf = grouper.group_aspect(
+        "cord", use_seed=True, use_wordnet=True, use_embeddings=True
+    )
     assert canonical == "Battery"
     assert origin == "seed"
     assert conf == 1.0
@@ -69,22 +71,30 @@ def test_switchable_ablation_flags():
     grouper = get_aspect_grouper()
 
     # With seed only
-    can_seed, orig_seed, _ = grouper.group_aspect("cost", use_seed=True, use_wordnet=False, use_embeddings=False)
+    can_seed, orig_seed, _ = grouper.group_aspect(
+        "cost", use_seed=True, use_wordnet=False, use_embeddings=False
+    )
     assert can_seed == "Price"
     assert orig_seed == "seed"
 
     # With wordnet only
-    can_wn, orig_wn, _ = grouper.group_aspect("cost", use_seed=False, use_wordnet=True, use_embeddings=False)
+    can_wn, orig_wn, _ = grouper.group_aspect(
+        "cost", use_seed=False, use_wordnet=True, use_embeddings=False
+    )
     assert can_wn == "Price"
     assert orig_wn == "wordnet"
 
     # With embeddings only
-    can_emb, orig_emb, _ = grouper.group_aspect("cost", use_seed=False, use_wordnet=False, use_embeddings=True)
+    can_emb, orig_emb, _ = grouper.group_aspect(
+        "cost", use_seed=False, use_wordnet=False, use_embeddings=True
+    )
     assert can_emb == "Price"
     assert orig_emb == "embedding"
 
     # With all disabled: falls back to title-cased unmatched
-    can_none, orig_none, _ = grouper.group_aspect("cost", use_seed=False, use_wordnet=False, use_embeddings=False)
+    can_none, orig_none, _ = grouper.group_aspect(
+        "cost", use_seed=False, use_wordnet=False, use_embeddings=False
+    )
     assert can_none == "Cost"
     assert orig_none == "unmatched"
 
@@ -107,8 +117,12 @@ def test_agglomerative_clustering_unmatched():
     """Verify AgglomerativeClustering groups semantically related unmatched terms."""
     grouper = get_aspect_grouper()
     unmatched_terms = [
-        "rubber bumper", "protective bumper", "silicone bumper",
-        "car adapter", "vehicle adapter", "lighter adapter"
+        "rubber bumper",
+        "protective bumper",
+        "silicone bumper",
+        "car adapter",
+        "vehicle adapter",
+        "lighter adapter",
     ]
 
     clusters = grouper.cluster_unmatched(unmatched_terms, distance_threshold=0.45)

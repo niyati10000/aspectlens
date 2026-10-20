@@ -2,11 +2,11 @@
 
 import json
 import random
+from collections import defaultdict
 from pathlib import Path
-from typing import List, Dict, Any
-from collections import Counter, defaultdict
+from typing import Any
 
-from data.scripts.download_amazon import load_amazon, PRODUCT_NAMES
+from data.scripts.download_amazon import PRODUCT_NAMES, load_amazon
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 DEMO_SAMPLE_FILE = BASE_DIR / "data" / "demo_sample.json"
@@ -37,7 +37,7 @@ CORE_PRODUCTS = [
 def build_demo_sample(
     max_reviews_per_product: int = 250,
     seed: int = RANDOM_SEED,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Sample reviews deterministically to create a compact, balanced demo dataset (< 20 MB)."""
     random.seed(seed)
     all_reviews = load_amazon()
@@ -80,7 +80,9 @@ def build_demo_sample(
             product_sampled = product_sampled[:max_reviews_per_product]
 
         sampled_reviews.extend(product_sampled)
-        print(f"Sampled {len(product_sampled)} reviews for product {pid} ({PRODUCT_NAMES.get(pid, pid)})")
+        print(
+            f"Sampled {len(product_sampled)} reviews for product {pid} ({PRODUCT_NAMES.get(pid, pid)})"
+        )
 
     # Sort deterministically by product_id and review_id
     sampled_reviews.sort(key=lambda x: (x["product_id"], x["review_id"]))
@@ -90,7 +92,7 @@ def build_demo_sample(
         json.dump(sampled_reviews, f, indent=2, ensure_ascii=False)
 
     size_mb = DEMO_SAMPLE_FILE.stat().st_size / (1024 * 1024)
-    print(f"\nDemo sample successfully built:")
+    print("\nDemo sample successfully built:")
     print(f"- Total reviews: {len(sampled_reviews)}")
     print(f"- Total products: {len(CORE_PRODUCTS)}")
     print(f"- File size: {size_mb:.2f} MB (Constraint: < 20 MB)")
@@ -99,11 +101,11 @@ def build_demo_sample(
     return sampled_reviews
 
 
-def load_demo_sample() -> List[Dict[str, Any]]:
+def load_demo_sample() -> list[dict[str, Any]]:
     """Load the committed demo sample dataset."""
     if not DEMO_SAMPLE_FILE.exists():
         build_demo_sample()
-    with open(DEMO_SAMPLE_FILE, "r", encoding="utf-8") as f:
+    with open(DEMO_SAMPLE_FILE, encoding="utf-8") as f:
         return json.load(f)
 
 

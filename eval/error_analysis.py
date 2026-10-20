@@ -13,13 +13,13 @@ Saves results to:
 - eval/results/error_analysis.csv (at least 50 detailed misclassified rows)
 """
 
-import json
 import csv
-import re
+import json
 import logging
-from pathlib import Path
-from typing import List, Dict, Any, Tuple
+import re
 from collections import Counter
+from pathlib import Path
+from typing import Any
 
 from nlp.aspects import get_spacy_model
 from nlp.opinions import extract_opinions_for_aspect, split_into_clauses
@@ -33,7 +33,9 @@ DATA_PATH = BASE_DIR / "data" / "processed_semeval.json"
 RESULTS_DIR = BASE_DIR / "eval" / "results"
 
 COMPARISON_PATTERNS = [
-    re.compile(r"\b(better|worse|faster|slower|cheaper|smaller|bigger|longer|shorter)\s+than\b", re.I),
+    re.compile(
+        r"\b(better|worse|faster|slower|cheaper|smaller|bigger|longer|shorter)\s+than\b", re.I
+    ),
     re.compile(r"\b(more|less)\s+\w+\s+than\b", re.I),
     re.compile(r"\bcompared\s+to\b", re.I),
     re.compile(r"\bunlike\b", re.I),
@@ -41,13 +43,25 @@ COMPARISON_PATTERNS = [
 ]
 
 NEGATION_TOKENS = {
-    "not", "n't", "never", "no", "neither", "nor", "hardly", "barely",
-    "scarcely", "seldom", "rarely", "without", "nothing", "nobody"
+    "not",
+    "n't",
+    "never",
+    "no",
+    "neither",
+    "nor",
+    "hardly",
+    "barely",
+    "scarcely",
+    "seldom",
+    "rarely",
+    "without",
+    "nothing",
+    "nobody",
 }
 
 SARCASM_INDICATORS = [
     re.compile(r"\b(great job|thanks for|brilliant|just perfect|wonderful)\b.*[!]", re.I),
-    re.compile(r"['\"][a-zA-Z]+['\"]", re.I), # quotation marks around words indicating irony
+    re.compile(r"['\"][a-zA-Z]+['\"]", re.I),  # quotation marks around words indicating irony
     re.compile(r"[!]{2,}", re.I),
 ]
 
@@ -58,8 +72,8 @@ def categorize_error(
     aspect: str,
     gold: str,
     pred: str,
-    other_aspects_in_sentence: List[str],
-) -> Tuple[str, str]:
+    other_aspects_in_sentence: list[str],
+) -> tuple[str, str]:
     """Classify the linguistic failure mode and provide an explanation."""
     sent_lower = sentence.lower()
     clause_lower = clause.lower()
@@ -67,30 +81,65 @@ def categorize_error(
     # 1. Comparison check
     for pat in COMPARISON_PATTERNS:
         if pat.search(sent_lower):
-            return "comparison", "Comparative construct shifts sentiment relative to another entity."
+            return (
+                "comparison",
+                "Comparative construct shifts sentiment relative to another entity.",
+            )
 
     # 2. Sarcasm / Irony check
     if gold == "negative" and pred == "positive":
         for spat in SARCASM_INDICATORS:
             if spat.search(sentence):
-                return "sarcasm", "Sarcastic or ironic phrasing using positive words to express dissatisfaction."
+                return (
+                    "sarcasm",
+                    "Sarcastic or ironic phrasing using positive words to express dissatisfaction.",
+                )
 
     # 3. Negation check
-    has_neg = any(tok in clause_lower.split() or tok in sent_lower.split() for tok in NEGATION_TOKENS)
+    has_neg = any(
+        tok in clause_lower.split() or tok in sent_lower.split() for tok in NEGATION_TOKENS
+    )
     if has_neg and (gold != pred):
         return "negation", "Complex or scoped negation inverted intended aspect sentiment."
 
     # 4. Multi-aspect clause check
     if len(other_aspects_in_sentence) > 1:
-        co_occurring = [a for a in other_aspects_in_sentence if a.lower() != aspect.lower() and a.lower() in clause_lower]
+        co_occurring = [
+            a
+            for a in other_aspects_in_sentence
+            if a.lower() != aspect.lower() and a.lower() in clause_lower
+        ]
         if co_occurring:
-            return "multi-aspect clause", f"Clause contains multiple co-occurring aspects ({', '.join(co_occurring)}) with diverging polarity."
+            return (
+                "multi-aspect clause",
+                f"Clause contains multiple co-occurring aspects ({', '.join(co_occurring)}) with diverging polarity.",
+            )
 
     # 5. Implicit aspect check
-    if aspect.lower() in {"it", "this", "everything", "something", "anything", "part", "overall", "quality", "price"} and not clause.strip():
-        return "implicit aspect", "Aspect depends on implicit conversational context without explicit local modifier."
+    if (
+        aspect.lower()
+        in {
+            "it",
+            "this",
+            "everything",
+            "something",
+            "anything",
+            "part",
+            "overall",
+            "quality",
+            "price",
+        }
+        and not clause.strip()
+    ):
+        return (
+            "implicit aspect",
+            "Aspect depends on implicit conversational context without explicit local modifier.",
+        )
     if not clause.strip() or pred == "neutral" and gold != "neutral":
-        return "implicit aspect", "Reviewer implies sentiment without standard evaluative adjectives."
+        return (
+            "implicit aspect",
+            "Reviewer implies sentiment without standard evaluative adjectives.",
+        )
 
     # 6. Other (Lexical gap, domain idiom, or mixed nuances)
     return "other", "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
@@ -100,10 +149,10 @@ def run_error_analysis(
     data_path: Path = DATA_PATH,
     results_dir: Path = RESULTS_DIR,
     target_count: int = 60,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Extract real misclassified examples from SemEval test set and categorize failure modes."""
     logger.info("Loading SemEval test data from %s", data_path)
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, encoding="utf-8") as f:
         all_data = json.load(f)
 
     test_docs = [r for r in all_data if r.get("split") == "test" and r.get("aspect_terms")]
@@ -111,7 +160,7 @@ def run_error_analysis(
     nlp = get_spacy_model()
     vader = VADERScorer()
 
-    collected_errors: List[Dict[str, Any]] = []
+    collected_errors: list[dict[str, Any]] = []
     category_counts: Counter = Counter()
 
     logger.info("Analyzing %d test sentences for misclassifications...", len(test_docs))
@@ -145,24 +194,33 @@ def run_error_analysis(
                 )
 
                 category_counts[cat] += 1
-                collected_errors.append({
-                    "id": len(collected_errors) + 1,
-                    "sentence": sentence,
-                    "aspect": term,
-                    "gold_polarity": gold_polarity,
-                    "predicted_polarity": pred_polarity,
-                    "opinion_words": res.opinion_words,
-                    "clause": clause,
-                    "category": cat,
-                    "reason": reason,
-                })
+                collected_errors.append(
+                    {
+                        "id": len(collected_errors) + 1,
+                        "sentence": sentence,
+                        "aspect": term,
+                        "gold_polarity": gold_polarity,
+                        "predicted_polarity": pred_polarity,
+                        "opinion_words": res.opinion_words,
+                        "clause": clause,
+                        "category": cat,
+                        "reason": reason,
+                    }
+                )
 
     logger.info("Found %d total misclassified instances across test set.", len(collected_errors))
     logger.info("Category breakdown: %s", dict(category_counts))
 
     # Balance selection across categories to ensure comprehensive representation
-    selected_errors: List[Dict[str, Any]] = []
-    categories = ["implicit aspect", "negation", "sarcasm", "multi-aspect clause", "comparison", "other"]
+    selected_errors: list[dict[str, Any]] = []
+    categories = [
+        "implicit aspect",
+        "negation",
+        "sarcasm",
+        "multi-aspect clause",
+        "comparison",
+        "other",
+    ]
 
     # Select representative samples per category
     for cat in categories:
@@ -173,7 +231,7 @@ def run_error_analysis(
     # Fill remaining to reach target_count if needed
     if len(selected_errors) < target_count:
         remaining = [e for e in collected_errors if e not in selected_errors]
-        selected_errors.extend(remaining[:(target_count - len(selected_errors))])
+        selected_errors.extend(remaining[: (target_count - len(selected_errors))])
 
     # Ensure sequential IDs
     for idx, e in enumerate(selected_errors, 1):
@@ -197,20 +255,31 @@ def run_error_analysis(
     logger.info("Saved JSON error analysis to %s", json_path)
 
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
-        fieldnames = ["id", "aspect", "gold_polarity", "predicted_polarity", "category", "reason", "sentence", "opinion_words"]
+        fieldnames = [
+            "id",
+            "aspect",
+            "gold_polarity",
+            "predicted_polarity",
+            "category",
+            "reason",
+            "sentence",
+            "opinion_words",
+        ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for e in selected_errors:
-            writer.writerow({
-                "id": e["id"],
-                "aspect": e["aspect"],
-                "gold_polarity": e["gold_polarity"],
-                "predicted_polarity": e["predicted_polarity"],
-                "category": e["category"],
-                "reason": e["reason"],
-                "sentence": e["sentence"],
-                "opinion_words": ", ".join(e["opinion_words"]),
-            })
+            writer.writerow(
+                {
+                    "id": e["id"],
+                    "aspect": e["aspect"],
+                    "gold_polarity": e["gold_polarity"],
+                    "predicted_polarity": e["predicted_polarity"],
+                    "category": e["category"],
+                    "reason": e["reason"],
+                    "sentence": e["sentence"],
+                    "opinion_words": ", ".join(e["opinion_words"]),
+                }
+            )
     logger.info("Saved CSV error analysis (%d rows) to %s", len(selected_errors), csv_path)
 
     return output_payload

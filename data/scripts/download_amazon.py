@@ -1,14 +1,13 @@
 """Download and parse Amazon review datasets into common review schema."""
 
-import os
 import gzip
 import json
 import ssl
 import urllib.request
-from datetime import datetime, timezone
-from pathlib import Path
-from typing import List, Dict, Any, Optional
 from collections import Counter
+from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
 
 from nlp.preprocess import clean_text
 
@@ -67,7 +66,10 @@ def download_snap_dataset() -> Path:
                 break
             f.write(chunk)
             downloaded += len(chunk)
-            print(f"Downloaded {downloaded / (1024*1024):.1f} / {total / (1024*1024):.1f} MB", end="\r")
+            print(
+                f"Downloaded {downloaded / (1024 * 1024):.1f} / {total / (1024 * 1024):.1f} MB",
+                end="\r",
+            )
 
     print(f"\nDownload complete: {LOCAL_GZ}")
     return LOCAL_GZ
@@ -77,7 +79,7 @@ def parse_amazon_reviews(
     target_reviews: int = 25000,
     top_n_products: int = 70,
     min_product_reviews: int = 200,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Scan the dataset, select top products, and parse into the common schema."""
     download_snap_dataset()
 
@@ -133,7 +135,7 @@ def parse_amazon_reviews(
             unix_ts = data.get("unixReviewTime")
             if unix_ts:
                 try:
-                    review_date = datetime.fromtimestamp(unix_ts, tz=timezone.utc).strftime("%Y-%m-%d")
+                    review_date = datetime.fromtimestamp(unix_ts, tz=UTC).strftime("%Y-%m-%d")
                 except Exception:
                     review_date = "2014-01-01"
             else:
@@ -143,16 +145,18 @@ def parse_amazon_reviews(
             summary = clean_text(data.get("summary", ""))
             product_name = PRODUCT_NAMES.get(asin, f"Cell Phone Accessory {asin}")
 
-            records.append({
-                "review_id": review_id,
-                "product_id": asin,
-                "product_name": product_name,
-                "category": "Cell Phones & Accessories",
-                "text": cleaned_body,
-                "summary": summary,
-                "rating": rating,
-                "date": review_date,
-            })
+            records.append(
+                {
+                    "review_id": review_id,
+                    "product_id": asin,
+                    "product_name": product_name,
+                    "category": "Cell Phones & Accessories",
+                    "text": cleaned_body,
+                    "summary": summary,
+                    "rating": rating,
+                    "date": review_date,
+                }
+            )
 
             if len(records) >= target_reviews:
                 break
@@ -167,11 +171,11 @@ def parse_amazon_reviews(
     return records
 
 
-def load_amazon(limit: Optional[int] = None) -> List[Dict[str, Any]]:
+def load_amazon(limit: int | None = None) -> list[dict[str, Any]]:
     """Load processed Amazon reviews from disk."""
     if not PROCESSED_AMAZON_FILE.exists():
         parse_amazon_reviews()
-    with open(PROCESSED_AMAZON_FILE, "r", encoding="utf-8") as f:
+    with open(PROCESSED_AMAZON_FILE, encoding="utf-8") as f:
         data = json.load(f)
     if limit:
         return data[:limit]

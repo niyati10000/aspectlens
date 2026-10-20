@@ -7,13 +7,13 @@ Follows DATABASE_SCHEMA.md strictly:
 - Auto-seeds canonical aspects and demo reviews if database is empty.
 """
 
-from typing import Optional, List, Dict, Any, Generator, Tuple
-from pathlib import Path
-from contextlib import contextmanager
-import sqlite3
 import json
 import logging
-from datetime import datetime
+import sqlite3
+from collections.abc import Generator
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any
 
 from app.config import settings
 from nlp.preprocess import clean_text
@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 SCHEMA_VERSION = 1
 
 
-def get_connection(db_path: Optional[Path] = None) -> sqlite3.Connection:
+def get_connection(db_path: Path | None = None) -> sqlite3.Connection:
     """Create and configure a SQLite connection with foreign keys and dict-like row access."""
     target_path = db_path or settings.DB_PATH
     if isinstance(target_path, Path):
@@ -38,7 +38,7 @@ def get_connection(db_path: Optional[Path] = None) -> sqlite3.Connection:
 
 
 @contextmanager
-def get_db(db_path: Optional[Path] = None) -> Generator[sqlite3.Connection, None, None]:
+def get_db(db_path: Path | None = None) -> Generator[sqlite3.Connection, None, None]:
     """Context manager for SQLite database transactions."""
     conn = get_connection(db_path)
     try:
@@ -52,10 +52,10 @@ def get_db(db_path: Optional[Path] = None) -> Generator[sqlite3.Connection, None
 
 
 def init_db(
-    db_path: Optional[Path] = None,
+    db_path: Path | None = None,
     seed_if_empty: bool = True,
-    demo_sample_path: Optional[Path] = None,
-    seed_lexicon_path: Optional[Path] = None,
+    demo_sample_path: Path | None = None,
+    seed_lexicon_path: Path | None = None,
 ) -> sqlite3.Connection:
     """Initialize SQLite database tables, indexes, and seed canonical aspects and demo reviews."""
     conn = get_connection(db_path)
@@ -65,7 +65,7 @@ def init_db(
 
         # Check existing schema version
         cursor = conn.execute("PRAGMA user_version;")
-        current_version = cursor.fetchone()[0]
+        cursor.fetchone()[0]
 
         # -------------------------------------------------------------
         # 1. Create Tables
@@ -153,9 +153,15 @@ def init_db(
         # -------------------------------------------------------------
         conn.execute("CREATE INDEX IF NOT EXISTS idx_reviews_product ON reviews(product_id);")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_reviews_date ON reviews(review_date);")
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_mentions_review ON aspect_mentions(review_id);")
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_mentions_aspect ON aspect_mentions(canonical_id, sentiment);")
-        conn.execute("CREATE INDEX IF NOT EXISTS idx_mentions_canonical ON aspect_mentions(canonical_id);")
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_mentions_review ON aspect_mentions(review_id);"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_mentions_aspect ON aspect_mentions(canonical_id, sentiment);"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_mentions_canonical ON aspect_mentions(canonical_id);"
+        )
 
         conn.execute(f"PRAGMA user_version = {SCHEMA_VERSION};")
 
@@ -183,7 +189,7 @@ def _seed_canonical_aspects(conn: sqlite3.Connection, lexicon_path: Path) -> Non
         logger.warning("Seed lexicon file not found at: %s", lexicon_path)
         return
 
-    with open(lexicon_path, "r", encoding="utf-8") as f:
+    with open(lexicon_path, encoding="utf-8") as f:
         data = json.load(f)
 
     canonical_aspects = data.get("canonical_aspects", {})
@@ -222,11 +228,11 @@ def _seed_demo_reviews_if_empty(conn: sqlite3.Connection, demo_path: Path) -> No
         return
 
     logger.info("Seeding database from demo sample: %s", demo_path)
-    with open(demo_path, "r", encoding="utf-8") as f:
+    with open(demo_path, encoding="utf-8") as f:
         demo_reviews = json.load(f)
 
     # 1. Group reviews by product
-    products_map: Dict[str, Dict[str, Any]] = {}
+    products_map: dict[str, dict[str, Any]] = {}
     for r in demo_reviews:
         pid = r["product_id"]
         if pid not in products_map:
@@ -256,7 +262,7 @@ def _seed_demo_reviews_if_empty(conn: sqlite3.Connection, demo_path: Path) -> No
             raw_text = r.get("text", "")
             cleaned = clean_text(raw_text)
             rating = r.get("rating")
-            
+
             # Overall whole-review sentiment label for comparison
             overall = "neutral"
             if rating is not None:
@@ -265,16 +271,18 @@ def _seed_demo_reviews_if_empty(conn: sqlite3.Connection, demo_path: Path) -> No
                 elif rating <= 2:
                     overall = "negative"
 
-            review_records.append((
-                r["review_id"],
-                r["product_id"],
-                None,  # batch_id null for seeded demo
-                cleaned,
-                rating,
-                r.get("date"),
-                overall,
-                None,  # processed_at
-            ))
+            review_records.append(
+                (
+                    r["review_id"],
+                    r["product_id"],
+                    None,  # batch_id null for seeded demo
+                    cleaned,
+                    rating,
+                    r.get("date"),
+                    overall,
+                    None,  # processed_at
+                )
+            )
 
         conn.executemany(
             """
@@ -288,7 +296,7 @@ def _seed_demo_reviews_if_empty(conn: sqlite3.Connection, demo_path: Path) -> No
     logger.info("Seeded %d products and %d reviews.", len(products_map), len(review_records))
 
 
-def get_canonical_aspect_id_map(conn: sqlite3.Connection) -> Dict[str, int]:
+def get_canonical_aspect_id_map(conn: sqlite3.Connection) -> dict[str, int]:
     """Return dictionary mapping canonical aspect names to database IDs."""
     cursor = conn.execute("SELECT id, name FROM canonical_aspects;")
     return {row["name"]: row["id"] for row in cursor.fetchall()}

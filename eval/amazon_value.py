@@ -10,14 +10,13 @@ Saves results to:
 - eval/results/amazon_mixed_sentiment.csv
 """
 
-import json
 import csv
+import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
-from collections import Counter
+from typing import Any
 
-from nlp.pipeline import analyze_review, get_spacy_model, get_aspect_grouper
+from nlp.pipeline import analyze_review, get_aspect_grouper, get_spacy_model
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -31,21 +30,22 @@ def run_amazon_value_evaluation(
     data_path: Path = DATA_PATH,
     results_dir: Path = RESULTS_DIR,
     sample_limit: int = 1000,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run ABSA pipeline over Amazon demo reviews to compute mixed-sentiment discovery shares."""
     logger.info("Loading Amazon reviews from %s", data_path)
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, encoding="utf-8") as f:
         reviews = json.load(f)
 
     if sample_limit > 0 and len(reviews) > sample_limit:
         # Balanced sample preserving star rating distribution with fixed random seed
         import random
+
         random.seed(42)
-        by_rating = {}
+        by_rating: dict[int, list[dict[str, Any]]] = {}
         for r in reviews:
             rt = r.get("rating", 3)
             by_rating.setdefault(rt, []).append(r)
-        
+
         sample_reviews = []
         per_rating_cap = sample_limit // len(by_rating)
         for rt, group in sorted(by_rating.items()):
@@ -62,8 +62,8 @@ def run_amazon_value_evaluation(
     low_star_total = 0
     low_star_with_positive_aspect = 0
 
-    negative_in_high_star_examples: List[Dict[str, Any]] = []
-    positive_in_low_star_examples: List[Dict[str, Any]] = []
+    negative_in_high_star_examples: list[dict[str, Any]] = []
+    positive_in_low_star_examples: list[dict[str, Any]] = []
 
     for idx, r in enumerate(reviews, 1):
         rating = r.get("rating", 3)
@@ -90,13 +90,17 @@ def run_amazon_value_evaluation(
                 high_star_with_negative_aspect += 1
                 if len(negative_in_high_star_examples) < 10:
                     neg_aspects = [a for a in aspects if a["sentiment"] == "negative"]
-                    negative_in_high_star_examples.append({
-                        "review_id": r.get("review_id", ""),
-                        "rating": rating,
-                        "text": text[:200] + ("..." if len(text) > 200 else ""),
-                        "negative_aspects": [a["canonical"] for a in neg_aspects],
-                        "opinion_words": [w for a in neg_aspects for w in a.get("opinion_words", [])],
-                    })
+                    negative_in_high_star_examples.append(
+                        {
+                            "review_id": r.get("review_id", ""),
+                            "rating": rating,
+                            "text": text[:200] + ("..." if len(text) > 200 else ""),
+                            "negative_aspects": [a["canonical"] for a in neg_aspects],
+                            "opinion_words": [
+                                w for a in neg_aspects for w in a.get("opinion_words", [])
+                            ],
+                        }
+                    )
 
         elif rating in (1, 2):
             low_star_total += 1
@@ -104,21 +108,27 @@ def run_amazon_value_evaluation(
                 low_star_with_positive_aspect += 1
                 if len(positive_in_low_star_examples) < 10:
                     pos_aspects = [a for a in aspects if a["sentiment"] == "positive"]
-                    positive_in_low_star_examples.append({
-                        "review_id": r.get("review_id", ""),
-                        "rating": rating,
-                        "text": text[:200] + ("..." if len(text) > 200 else ""),
-                        "positive_aspects": [a["canonical"] for a in pos_aspects],
-                        "opinion_words": [w for a in pos_aspects for w in a.get("opinion_words", [])],
-                    })
+                    positive_in_low_star_examples.append(
+                        {
+                            "review_id": r.get("review_id", ""),
+                            "rating": rating,
+                            "text": text[:200] + ("..." if len(text) > 200 else ""),
+                            "positive_aspects": [a["canonical"] for a in pos_aspects],
+                            "opinion_words": [
+                                w for a in pos_aspects for w in a.get("opinion_words", [])
+                            ],
+                        }
+                    )
 
     pct_neg_in_high = (
         round((high_star_with_negative_aspect / high_star_total) * 100, 2)
-        if high_star_total > 0 else 0.0
+        if high_star_total > 0
+        else 0.0
     )
     pct_pos_in_low = (
         round((low_star_with_positive_aspect / low_star_total) * 100, 2)
-        if low_star_total > 0 else 0.0
+        if low_star_total > 0
+        else 0.0
     )
 
     output_payload = {
@@ -157,29 +167,38 @@ def run_amazon_value_evaluation(
 
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         fieldnames = [
-            "cohort", "star_range", "total_count", "mixed_aspect_count",
-            "absa_detected_share_pct", "whole_review_detected_share_pct", "delta_pct"
+            "cohort",
+            "star_range",
+            "total_count",
+            "mixed_aspect_count",
+            "absa_detected_share_pct",
+            "whole_review_detected_share_pct",
+            "delta_pct",
         ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        writer.writerow({
-            "cohort": "High-Star Reviews with Negative Aspect",
-            "star_range": "4-5 stars",
-            "total_count": high_star_total,
-            "mixed_aspect_count": high_star_with_negative_aspect,
-            "absa_detected_share_pct": pct_neg_in_high,
-            "whole_review_detected_share_pct": 0.0,
-            "delta_pct": pct_neg_in_high,
-        })
-        writer.writerow({
-            "cohort": "Low-Star Reviews with Positive Aspect",
-            "star_range": "1-2 stars",
-            "total_count": low_star_total,
-            "mixed_aspect_count": low_star_with_positive_aspect,
-            "absa_detected_share_pct": pct_pos_in_low,
-            "whole_review_detected_share_pct": 0.0,
-            "delta_pct": pct_pos_in_low,
-        })
+        writer.writerow(
+            {
+                "cohort": "High-Star Reviews with Negative Aspect",
+                "star_range": "4-5 stars",
+                "total_count": high_star_total,
+                "mixed_aspect_count": high_star_with_negative_aspect,
+                "absa_detected_share_pct": pct_neg_in_high,
+                "whole_review_detected_share_pct": 0.0,
+                "delta_pct": pct_neg_in_high,
+            }
+        )
+        writer.writerow(
+            {
+                "cohort": "Low-Star Reviews with Positive Aspect",
+                "star_range": "1-2 stars",
+                "total_count": low_star_total,
+                "mixed_aspect_count": low_star_with_positive_aspect,
+                "absa_detected_share_pct": pct_pos_in_low,
+                "whole_review_detected_share_pct": 0.0,
+                "delta_pct": pct_pos_in_low,
+            }
+        )
     logger.info("Saved CSV results to %s", csv_path)
 
     return output_payload
@@ -189,5 +208,9 @@ if __name__ == "__main__":
     results = run_amazon_value_evaluation()
     m = results["metrics"]
     print("\n=== Amazon Mixed-Sentiment Discovery Benchmark ===")
-    print(f"4-5★ with >= 1 Negative Aspect: {m['high_star_reviews']['share_pct']}% ({m['high_star_reviews']['count_with_negative_aspect']}/{m['high_star_reviews']['total_count']})")
-    print(f"1-2★ with >= 1 Positive Aspect: {m['low_star_reviews']['share_pct']}% ({m['low_star_reviews']['count_with_positive_aspect']}/{m['low_star_reviews']['total_count']})")
+    print(
+        f"4-5★ with >= 1 Negative Aspect: {m['high_star_reviews']['share_pct']}% ({m['high_star_reviews']['count_with_negative_aspect']}/{m['high_star_reviews']['total_count']})"
+    )
+    print(
+        f"1-2★ with >= 1 Positive Aspect: {m['low_star_reviews']['share_pct']}% ({m['low_star_reviews']['count_with_positive_aspect']}/{m['low_star_reviews']['total_count']})"
+    )

@@ -3,9 +3,9 @@
 import pytest
 from starlette.testclient import TestClient
 
-from app.main import app
 from app.db import init_db
 from app.limiter import limiter
+from app.main import app
 
 
 @pytest.fixture(autouse=True)
@@ -25,7 +25,9 @@ def client():
 def test_page_1_analyze_integration(client):
     """Page 1 (Analyze): submit review, receive aspect mentions and exact offsets."""
     text = "Battery life is amazing, but the delivery was late and the price is too high."
-    res = client.post("/analyze", json={"text": text, "scorer": "vader", "extractor": "spacy_chunks"})
+    res = client.post(
+        "/analyze", json={"text": text, "scorer": "vader", "extractor": "spacy_chunks"}
+    )
     assert res.status_code == 200
     data = res.json()
     assert data["text"] == text
@@ -33,7 +35,7 @@ def test_page_1_analyze_integration(client):
 
     # Check offsets
     for a in data["aspects"]:
-        assert text[a["start"]:a["end"]] == a["term"]
+        assert text[a["start"] : a["end"]] == a["term"]
 
 
 def test_page_2_dashboard_integration(client):

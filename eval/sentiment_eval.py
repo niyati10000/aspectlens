@@ -10,19 +10,21 @@ Evaluates on identical test splits and saves results to:
 - eval/results/sentiment_benchmark.csv
 """
 
-import json
 import csv
+import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
-from collections import Counter
+from typing import Any
 
-from sklearn.metrics import accuracy_score, f1_score, precision_recall_fscore_support, classification_report
-import numpy as np
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    precision_recall_fscore_support,
+)
 
 from nlp.aspects import get_spacy_model
 from nlp.opinions import extract_opinions_for_aspect, split_into_clauses
-from nlp.sentiment import VADERScorer, TransformerScorer, FineTunedScorer, Scorer
+from nlp.sentiment import FineTunedScorer, Scorer, TransformerScorer, VADERScorer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -36,12 +38,12 @@ VALID_POLARITIES = {"positive", "negative", "neutral"}
 
 def evaluate_scorer_on_instances(
     scorer: Scorer,
-    instances: List[Dict[str, Any]],
-) -> Dict[str, Any]:
+    instances: list[dict[str, Any]],
+) -> dict[str, Any]:
     """Evaluate a sentiment scorer on a list of prepared test aspect instances."""
-    golds: List[str] = []
-    preds: List[str] = []
-    clause_cache: Dict[str, Any] = {}
+    golds: list[str] = []
+    preds: list[str] = []
+    clause_cache: dict[str, Any] = {}
 
     for inst in instances:
         clause = inst["clause"]
@@ -91,10 +93,10 @@ def run_sentiment_evaluation(
     data_path: Path = DATA_PATH,
     results_dir: Path = RESULTS_DIR,
     sample_limit: int = 0,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Run aspect sentiment evaluation across VADER, Transformer, and FineTuned models on identical splits."""
     logger.info("Loading SemEval data from %s", data_path)
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, encoding="utf-8") as f:
         all_data = json.load(f)
 
     test_docs = [row for row in all_data if row.get("split") == "test"]
@@ -104,7 +106,7 @@ def run_sentiment_evaluation(
     logger.info("Extracting aspect instances from %d test sentences...", len(test_docs))
 
     nlp = get_spacy_model()
-    instances: List[Dict[str, Any]] = []
+    instances: list[dict[str, Any]] = []
 
     for row in test_docs:
         aspects = row.get("aspect_terms", [])
@@ -127,17 +129,21 @@ def run_sentiment_evaluation(
 
             opinion_words, clause_text = extract_opinions_for_aspect(doc, start, end, clauses)
 
-            instances.append({
-                "sentence": text,
-                "aspect": term,
-                "gold_polarity": pol,
-                "start": start,
-                "end": end,
-                "clause": clause_text,
-                "opinion_words": opinion_words,
-            })
+            instances.append(
+                {
+                    "sentence": text,
+                    "aspect": term,
+                    "gold_polarity": pol,
+                    "start": start,
+                    "end": end,
+                    "clause": clause_text,
+                    "opinion_words": opinion_words,
+                }
+            )
 
-    logger.info("Prepared %d test aspect instances across %d sentences.", len(instances), len(test_docs))
+    logger.info(
+        "Prepared %d test aspect instances across %d sentences.", len(instances), len(test_docs)
+    )
 
     # Instantiate scorers
     logger.info("Evaluating VADER Scorer...")
@@ -172,26 +178,36 @@ def run_sentiment_evaluation(
     # Flatten for CSV
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
         fieldnames = [
-            "scorer", "accuracy", "macro_f1", "total_instances",
-            "pos_f1", "neu_f1", "neg_f1",
-            "pos_precision", "pos_recall", "neg_precision", "neg_recall"
+            "scorer",
+            "accuracy",
+            "macro_f1",
+            "total_instances",
+            "pos_f1",
+            "neu_f1",
+            "neg_f1",
+            "pos_precision",
+            "pos_recall",
+            "neg_precision",
+            "neg_recall",
         ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for r in results_list:
-            writer.writerow({
-                "scorer": r["scorer"],
-                "accuracy": r["accuracy"],
-                "macro_f1": r["macro_f1"],
-                "total_instances": r["total_instances"],
-                "pos_f1": r["per_class"]["positive"]["f1"],
-                "neu_f1": r["per_class"]["neutral"]["f1"],
-                "neg_f1": r["per_class"]["negative"]["f1"],
-                "pos_precision": r["per_class"]["positive"]["precision"],
-                "pos_recall": r["per_class"]["positive"]["recall"],
-                "neg_precision": r["per_class"]["negative"]["precision"],
-                "neg_recall": r["per_class"]["negative"]["recall"],
-            })
+            writer.writerow(
+                {
+                    "scorer": r["scorer"],
+                    "accuracy": r["accuracy"],
+                    "macro_f1": r["macro_f1"],
+                    "total_instances": r["total_instances"],
+                    "pos_f1": r["per_class"]["positive"]["f1"],
+                    "neu_f1": r["per_class"]["neutral"]["f1"],
+                    "neg_f1": r["per_class"]["negative"]["f1"],
+                    "pos_precision": r["per_class"]["positive"]["precision"],
+                    "pos_recall": r["per_class"]["positive"]["recall"],
+                    "neg_precision": r["per_class"]["negative"]["precision"],
+                    "neg_recall": r["per_class"]["negative"]["recall"],
+                }
+            )
     logger.info("Saved CSV results to %s", csv_path)
 
     return output_payload
@@ -201,4 +217,6 @@ if __name__ == "__main__":
     results = run_sentiment_evaluation()
     print("\n=== SemEval-2014 Aspect Sentiment Classification Results ===")
     for r in results["results"]:
-        print(f"[{r['scorer'].upper()}] Accuracy: {r['accuracy']:.4f} | Macro-F1: {r['macro_f1']:.4f}")
+        print(
+            f"[{r['scorer'].upper()}] Accuracy: {r['accuracy']:.4f} | Macro-F1: {r['macro_f1']:.4f}"
+        )

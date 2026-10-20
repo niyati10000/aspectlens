@@ -1,13 +1,9 @@
 """Run aspect extraction and grouping across demo products and print a cluster analysis table."""
 
 import sys
-import json
 from collections import Counter, defaultdict
-from pathlib import Path
-from typing import List, Dict, Any
 
-from app.config import settings
-from data.scripts.build_demo_sample import load_demo_sample, PRODUCT_NAMES
+from data.scripts.build_demo_sample import load_demo_sample
 from nlp.aspects import extract_aspects
 from nlp.grouping import get_aspect_grouper
 
@@ -82,7 +78,9 @@ def run_demo_grouping(max_reviews: int = 1500) -> None:
 
     # 3. Emergent Clustering on Ungrouped Candidates
     print("\n" + "=" * 80)
-    print(f" 3. UNGROUPED CANDIDATES ({len(ungrouped_candidates)} distinct terms, {sum(ungrouped_candidates.values()):,} total mentions)")
+    print(
+        f" 3. UNGROUPED CANDIDATES ({len(ungrouped_candidates)} distinct terms, {sum(ungrouped_candidates.values()):,} total mentions)"
+    )
     print("=" * 80)
 
     top_ungrouped = ungrouped_candidates.most_common(25)
@@ -93,7 +91,9 @@ def run_demo_grouping(max_reviews: int = 1500) -> None:
     # Run AgglomerativeClustering on top ungrouped terms
     frequent_ungrouped = [term for term, cnt in ungrouped_candidates.items() if cnt >= 3]
     if frequent_ungrouped:
-        print(f"\n Discovered Emergent Clusters from ungrouped terms (>= 3 mentions, {len(frequent_ungrouped)} terms):")
+        print(
+            f"\n Discovered Emergent Clusters from ungrouped terms (>= 3 mentions, {len(frequent_ungrouped)} terms):"
+        )
         clusters = grouper.cluster_unmatched(frequent_ungrouped, distance_threshold=0.40)
         for c_name, members in sorted(clusters.items(), key=lambda x: len(x[1]), reverse=True):
             if len(members) > 1:

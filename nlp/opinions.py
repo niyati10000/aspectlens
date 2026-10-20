@@ -7,15 +7,10 @@ Adheres strictly to BRAIN.md Non-negotiable NLP Rules:
 - Rule 7: Handle negation ('not good', 'never arrived') and intensifiers ('too', 'very', 'extremely') explicitly.
 """
 
-from typing import List, Dict, Tuple, Optional, Set
-import re
-import spacy
 from spacy.tokens import Doc, Token
 
-from nlp.aspects import get_spacy_model
-
 # Contrast conjunctions and transition words that form strict sentiment clause boundaries
-CONTRAST_WORDS: Set[str] = {
+CONTRAST_WORDS: set[str] = {
     "but",
     "however",
     "although",
@@ -28,7 +23,7 @@ CONTRAST_WORDS: Set[str] = {
 }
 
 # Negation words to attach to opinion modifiers and verbs
-NEGATION_WORDS: Set[str] = {
+NEGATION_WORDS: set[str] = {
     "not",
     "n't",
     "never",
@@ -43,7 +38,7 @@ NEGATION_WORDS: Set[str] = {
 }
 
 # Intensifiers and degree adverbs
-INTENSIFIERS: Set[str] = {
+INTENSIFIERS: set[str] = {
     "too",
     "very",
     "extremely",
@@ -62,7 +57,7 @@ INTENSIFIERS: Set[str] = {
 }
 
 # Common transaction or neutral functional verbs that should NOT be treated as evaluative opinions
-NEUTRAL_VERBS: Set[str] = {
+NEUTRAL_VERBS: set[str] = {
     "buy",
     "bought",
     "purchase",
@@ -108,26 +103,100 @@ NEUTRAL_VERBS: Set[str] = {
 }
 
 # Known evaluative or domain-specific sentiment terms (adjectives, adverbs, verbs)
-EVALUATIVE_TERMS: Set[str] = {
-    "amazing", "great", "good", "excellent", "awesome", "fantastic", "wonderful",
-    "superb", "impressive", "decent", "nice", "fine", "reliable", "sturdy",
-    "fast", "responsive", "crisp", "clear", "bright", "sharp", "smooth",
-    "bad", "terrible", "horrible", "awful", "poor", "mediocre", "subpar",
-    "disappointing", "slow", "sluggish", "laggy", "late", "delayed",
-    "overpriced", "expensive", "costly", "cheap", "damaged", "broken",
-    "defective", "scratched", "flimsy", "heavy", "noisy", "loud", "faint",
-    "dull", "dim", "blurry", "hot", "warm", "dead", "unusable", "unresponsive",
-    "love", "like", "recommend", "enjoy", "prefer", "praise",
-    "hate", "dislike", "regret", "fail", "failed", "crash", "crashed",
-    "lag", "lags", "lagged", "drain", "drains", "drained", "break", "broke",
-    "scratch", "scratched", "suck", "sucks", "sucked", "burn", "burned",
-    "work", "worked", "function", "functioned",
+EVALUATIVE_TERMS: set[str] = {
+    "amazing",
+    "great",
+    "good",
+    "excellent",
+    "awesome",
+    "fantastic",
+    "wonderful",
+    "superb",
+    "impressive",
+    "decent",
+    "nice",
+    "fine",
+    "reliable",
+    "sturdy",
+    "fast",
+    "responsive",
+    "crisp",
+    "clear",
+    "bright",
+    "sharp",
+    "smooth",
+    "bad",
+    "terrible",
+    "horrible",
+    "awful",
+    "poor",
+    "mediocre",
+    "subpar",
+    "disappointing",
+    "slow",
+    "sluggish",
+    "laggy",
+    "late",
+    "delayed",
+    "overpriced",
+    "expensive",
+    "costly",
+    "cheap",
+    "damaged",
+    "broken",
+    "defective",
+    "scratched",
+    "flimsy",
+    "heavy",
+    "noisy",
+    "loud",
+    "faint",
+    "dull",
+    "dim",
+    "blurry",
+    "hot",
+    "warm",
+    "dead",
+    "unusable",
+    "unresponsive",
+    "love",
+    "like",
+    "recommend",
+    "enjoy",
+    "prefer",
+    "praise",
+    "hate",
+    "dislike",
+    "regret",
+    "fail",
+    "failed",
+    "crash",
+    "crashed",
+    "lag",
+    "lags",
+    "lagged",
+    "drain",
+    "drains",
+    "drained",
+    "break",
+    "broke",
+    "scratch",
+    "scratched",
+    "suck",
+    "sucks",
+    "sucked",
+    "burn",
+    "burned",
+    "work",
+    "worked",
+    "function",
+    "functioned",
 }
 
 
-def split_into_clauses(doc: Doc) -> List[Tuple[int, int, str]]:
+def split_into_clauses(doc: Doc) -> list[tuple[int, int, str]]:
     """Split a spaCy Doc into clause spans (start_token_idx, end_token_idx, clause_text).
-    
+
     Strictly splits at contrast words (but, however, although, though, yet, etc.)
     and clause-bounding punctuation (;, :, ., !, ?).
     """
@@ -153,7 +222,7 @@ def split_into_clauses(doc: Doc) -> List[Tuple[int, int, str]]:
     if boundaries[-1] != len(doc):
         boundaries.append(len(doc))
 
-    clauses: List[Tuple[int, int, str]] = []
+    clauses: list[tuple[int, int, str]] = []
     for s, e in zip(boundaries[:-1], boundaries[1:]):
         span_text = doc[s:e].text.strip()
         cleaned_text = span_text.lstrip(",;:.- ").rstrip(",;:.- ").strip()
@@ -170,8 +239,8 @@ def get_clause_for_aspect(
     doc: Doc,
     aspect_start_char: int,
     aspect_end_char: int,
-    clauses: Optional[List[Tuple[int, int, str]]] = None,
-) -> Tuple[int, int, str]:
+    clauses: list[tuple[int, int, str]] | None = None,
+) -> tuple[int, int, str]:
     """Identify the exact clause span corresponding to an aspect's character span."""
     if clauses is None:
         clauses = split_into_clauses(doc)
@@ -194,17 +263,17 @@ def extract_opinions_for_aspect(
     doc: Doc,
     aspect_start_char: int,
     aspect_end_char: int,
-    clauses: Optional[List[Tuple[int, int, str]]] = None,
-) -> Tuple[List[str], str]:
+    clauses: list[tuple[int, int, str]] | None = None,
+) -> tuple[list[str], str]:
     """Find opinion words associated with an aspect candidate in a review.
-    
+
     Follows Non-negotiable Rules:
     1. Scope strictly within the aspect's clause; never cross a contrast word.
     2. Dependency arcs first (nsubj + acomp/attr, amod, dobj).
     3. Fallback window <= 5 tokens inside the same clause.
     4. Handle negation ('not', 'never', 'n't') and intensifiers ('too', 'very', 'extremely').
     5. Return empty list if no opinion word is found.
-    
+
     Returns:
         (opinion_words: List[str], clause_text: str)
     """
@@ -222,20 +291,20 @@ def extract_opinions_for_aspect(
     if not aspect_tokens:
         return [], clause_text
 
-    opinion_phrases: List[str] = []
+    opinion_phrases: list[str] = []
 
     def build_opinion_phrase(
         word_token: Token,
-        extra_neg_word: Optional[str] = None,
-    ) -> Optional[str]:
+        extra_neg_word: str | None = None,
+    ) -> str | None:
         """Construct an opinion phrase attaching negation and intensifier modifiers."""
         # Reject non-evaluative neutral transaction verbs
         if word_token.pos_ in ("VERB", "AUX") and word_token.lemma_.lower() in NEUTRAL_VERBS:
             return None
 
         # Check for negation and intensifier in word's syntactic children
-        neg_word: Optional[str] = extra_neg_word
-        intensifier_word: Optional[str] = None
+        neg_word: str | None = extra_neg_word
+        intensifier_word: str | None = None
 
         for child in word_token.children:
             if child.i in clause_token_indices:
@@ -287,7 +356,9 @@ def extract_opinions_for_aspect(
                 # Find any negation attached directly to the predicate verb/copula
                 pred_neg_word = None
                 for c in pred.children:
-                    if c.i in clause_token_indices and (c.dep_ == "neg" or c.lower_ in NEGATION_WORDS):
+                    if c.i in clause_token_indices and (
+                        c.dep_ == "neg" or c.lower_ in NEGATION_WORDS
+                    ):
                         pred_neg_word = c.text.lower()
 
                 # If predicate is an adjective itself
@@ -300,7 +371,13 @@ def extract_opinions_for_aspect(
                 elif pred.pos_ in ("AUX", "VERB"):
                     found_complement = False
                     for child in pred.children:
-                        if child.i in clause_token_indices and child.dep_ in ("acomp", "attr", "oprd", "advmod", "dobj"):
+                        if child.i in clause_token_indices and child.dep_ in (
+                            "acomp",
+                            "attr",
+                            "oprd",
+                            "advmod",
+                            "dobj",
+                        ):
                             # Check if child is an adjective, opinion noun/adverb, or evaluative term
                             is_eval = (
                                 child.pos_ in ("ADJ", "ADV")
@@ -315,9 +392,12 @@ def extract_opinions_for_aspect(
                                 # Also check conjoined adjectives ("late and damaged")
                                 for conj in child.conjuncts:
                                     if conj.i in clause_token_indices and (
-                                        conj.pos_ in ("ADJ", "ADV") or conj.lower_ in EVALUATIVE_TERMS
+                                        conj.pos_ in ("ADJ", "ADV")
+                                        or conj.lower_ in EVALUATIVE_TERMS
                                     ):
-                                        c_phrase = build_opinion_phrase(conj, extra_neg_word=pred_neg_word)
+                                        c_phrase = build_opinion_phrase(
+                                            conj, extra_neg_word=pred_neg_word
+                                        )
                                         if c_phrase:
                                             opinion_phrases.append(c_phrase)
 
@@ -326,7 +406,11 @@ def extract_opinions_for_aspect(
                         is_eval_verb = (
                             pred.lower_ in EVALUATIVE_TERMS
                             or pred_neg_word is not None
-                            or any(c.dep_ == "advmod" for c in pred.children if c.i in clause_token_indices)
+                            or any(
+                                c.dep_ == "advmod"
+                                for c in pred.children
+                                if c.i in clause_token_indices
+                            )
                         )
                         if is_eval_verb:
                             phrase = build_opinion_phrase(pred, extra_neg_word=pred_neg_word)
@@ -341,7 +425,9 @@ def extract_opinions_for_aspect(
                 if verb.lemma_.lower() not in NEUTRAL_VERBS:
                     verb_neg_word = None
                     for c in verb.children:
-                        if c.i in clause_token_indices and (c.dep_ == "neg" or c.lower_ in NEGATION_WORDS):
+                        if c.i in clause_token_indices and (
+                            c.dep_ == "neg" or c.lower_ in NEGATION_WORDS
+                        ):
                             verb_neg_word = c.text.lower()
                     phrase = build_opinion_phrase(verb, extra_neg_word=verb_neg_word)
                     if phrase:
@@ -355,7 +441,7 @@ def extract_opinions_for_aspect(
         min_tok = min(aspect_indices)
         max_tok = max(aspect_indices)
 
-        candidates_in_window: List[Tuple[int, Token]] = []
+        candidates_in_window: list[tuple[int, Token]] = []
         for i in sorted(clause_token_indices):
             if i in aspect_indices:
                 continue
@@ -363,8 +449,7 @@ def extract_opinions_for_aspect(
             if dist <= 5:
                 tok = doc[i]
                 is_eval_candidate = (
-                    tok.pos_ in ("ADJ",)
-                    or tok.lower_ in EVALUATIVE_TERMS
+                    tok.pos_ in ("ADJ",) or tok.lower_ in EVALUATIVE_TERMS
                 ) and tok.lemma_.lower() not in NEUTRAL_VERBS
                 if is_eval_candidate:
                     candidates_in_window.append((dist, tok))
@@ -378,7 +463,7 @@ def extract_opinions_for_aspect(
                 opinion_phrases.append(phrase)
 
     # Clean, normalize whitespace, and deduplicate
-    dedup: List[str] = []
+    dedup: list[str] = []
     for op in opinion_phrases:
         clean_op = " ".join(op.strip().split())
         if clean_op and clean_op not in dedup:

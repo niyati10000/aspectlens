@@ -11,15 +11,16 @@ Adheres to BRAIN.md Non-negotiable NLP Rule 6:
 If an aspect has no opinion word, return neutral with low confidence (0.30). Do not guess.
 """
 
-from dataclasses import dataclass
-from typing import List, Optional, Protocol, Dict, Any
 import logging
 import re
+from dataclasses import dataclass
+from typing import Protocol
+
 import nltk
-from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import torch
 import torch.nn.functional as F
-from transformers import AutoTokenizer, AutoModelForSequenceClassification
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
 from app.config import settings
 
@@ -29,17 +30,19 @@ logger = logging.getLogger(__name__)
 @dataclass
 class ScoreResult:
     """Standardized sentiment scoring output matching ARCHITECTURE.md contract."""
-    label: str               # "positive" | "negative" | "neutral"
-    confidence: float        # 0.0 to 1.0
-    opinion_words: List[str] # List of opinion phrases supporting this classification
-    score: float             # Continuous polarity score in range [-1.0, 1.0]
+
+    label: str  # "positive" | "negative" | "neutral"
+    confidence: float  # 0.0 to 1.0
+    opinion_words: list[str]  # List of opinion phrases supporting this classification
+    score: float  # Continuous polarity score in range [-1.0, 1.0]
 
 
 class Scorer(Protocol):
     """Unified Protocol for all aspect sentiment scorers."""
+
     name: str
 
-    def score(self, clause: str, aspect: str, opinion_words: List[str]) -> ScoreResult:
+    def score(self, clause: str, aspect: str, opinion_words: list[str]) -> ScoreResult:
         """Score the sentiment of an aspect within its clause context."""
         ...
 
@@ -48,7 +51,7 @@ class Scorer(Protocol):
 # 1. VADER Scorer with Domain and Intensifier Enhancements
 # ----------------------------------------------------------------------
 # Review domain lexicon adjustments (sentiment words missing or misplaced in generic VADER)
-DOMAIN_VADER_LEXICON: Dict[str, float] = {
+DOMAIN_VADER_LEXICON: dict[str, float] = {
     # Delivery and fulfillment
     "late": -1.8,
     "delayed": -1.8,
@@ -132,6 +135,7 @@ DOMAIN_PHRASE_RULES = [
 
 class VADERScorer:
     """VADER-based sentiment scorer with domain adjustments, negation, and intensifier handling."""
+
     name: str = "vader"
 
     def __init__(self):
@@ -146,7 +150,7 @@ class VADERScorer:
         for _, token, score in DOMAIN_PHRASE_RULES:
             self.sia.lexicon[token] = score
 
-    def score(self, clause: str, aspect: str, opinion_words: List[str]) -> ScoreResult:
+    def score(self, clause: str, aspect: str, opinion_words: list[str]) -> ScoreResult:
         # Rule 6: No opinion word found -> return neutral with low confidence
         if not opinion_words:
             return ScoreResult(
@@ -201,7 +205,7 @@ _TRANSFORMER_MODEL = None
 _TRANSFORMER_LOADED_NAME = None
 
 
-def get_transformer_model(model_name: Optional[str] = None):
+def get_transformer_model(model_name: str | None = None):
     """Load and cache the Hugging Face transformer model and tokenizer once."""
     global _TRANSFORMER_TOKENIZER, _TRANSFORMER_MODEL, _TRANSFORMER_LOADED_NAME
     target_model = model_name or settings.SENTIMENT_MODEL
@@ -215,8 +219,7 @@ def get_transformer_model(model_name: Optional[str] = None):
             _TRANSFORMER_LOADED_NAME = target_model
         except Exception as e:
             logger.warning(
-                "Failed to load %s (%s). Attempting DistilBERT fallback.",
-                target_model, e
+                "Failed to load %s (%s). Attempting DistilBERT fallback.", target_model, e
             )
             fallback = "distilbert-base-uncased-finetuned-sst-2-english"
             _TRANSFORMER_TOKENIZER = AutoTokenizer.from_pretrained(fallback)
@@ -229,15 +232,16 @@ def get_transformer_model(model_name: Optional[str] = None):
 
 class TransformerScorer:
     """Pretrained transformer sentiment scorer operating on the aspect's clause."""
+
     name: str = "transformer"
 
-    def __init__(self, model_name: Optional[str] = None):
+    def __init__(self, model_name: str | None = None):
         self.model_name = model_name or settings.SENTIMENT_MODEL
         self.tokenizer, self.model = get_transformer_model(self.model_name)
         self.id2label = {int(k): v.lower() for k, v in self.model.config.id2label.items()}
         self.is_binary = len(self.id2label) == 2
 
-    def score(self, clause: str, aspect: str, opinion_words: List[str]) -> ScoreResult:
+    def score(self, clause: str, aspect: str, opinion_words: list[str]) -> ScoreResult:
         # Rule 6: No opinion word found -> return neutral with low confidence
         if not opinion_words:
             return ScoreResult(
@@ -264,7 +268,7 @@ class TransformerScorer:
             # 3-class model (negative, neutral, positive)
             pred_idx = int(torch.argmax(logits, dim=-1).item())
             raw_label = self.id2label.get(pred_idx, "neutral")
-            
+
             # Normalize label
             if "pos" in raw_label:
                 label = "positive"
@@ -274,7 +278,7 @@ class TransformerScorer:
                 label = "neutral"
 
             conf = float(probs[pred_idx].item())
-            
+
             # Find positive and negative indices for score
             pos_prob = 0.0
             neg_prob = 0.0
@@ -317,17 +321,18 @@ class TransformerScorer:
 # ----------------------------------------------------------------------
 class FineTunedScorer:
     """Stub scorer for future domain/ABSA fine-tuned models (Phase 11).
-    
+
     Accepts (clause, aspect, opinion_words) pair. When trained weights exist,
     evaluates paired cross-encoder; otherwise provides clean fallback.
     """
+
     name: str = "finetuned"
 
-    def __init__(self, model_path: Optional[str] = None):
+    def __init__(self, model_path: str | None = None):
         self.model_path = model_path or "models/finetuned_absa"
-        self._fallback_scorer: Optional[Scorer] = None
+        self._fallback_scorer: Scorer | None = None
 
-    def score(self, clause: str, aspect: str, opinion_words: List[str]) -> ScoreResult:
+    def score(self, clause: str, aspect: str, opinion_words: list[str]) -> ScoreResult:
         if not opinion_words:
             return ScoreResult(
                 label="neutral",
@@ -346,7 +351,7 @@ class FineTunedScorer:
 # ----------------------------------------------------------------------
 # Scorer Factory and Registry
 # ----------------------------------------------------------------------
-_SCORER_INSTANCES: Dict[str, Scorer] = {}
+_SCORER_INSTANCES: dict[str, Scorer] = {}
 
 
 def get_scorer(name: str = "vader") -> Scorer:

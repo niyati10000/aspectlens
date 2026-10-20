@@ -1,17 +1,16 @@
 """Unit tests for SQLite database initialization and summary aggregation queries."""
 
-import pytest
 import sqlite3
-import json
-from pathlib import Path
 
-from app.db import init_db, get_canonical_aspect_id_map
+import pytest
+
+from app.db import get_canonical_aspect_id_map, init_db
 from nlp.aggregate import (
-    get_product_aspect_summary,
-    get_monthly_trend,
-    get_representative_snippets,
-    get_product_summary,
     compare_products,
+    get_monthly_trend,
+    get_product_aspect_summary,
+    get_product_summary,
+    get_representative_snippets,
 )
 
 
@@ -24,7 +23,7 @@ def fixture_db() -> sqlite3.Connection:
         # Insert two test products
         conn.execute("""
             INSERT INTO products (id, name, category, source, review_count)
-            VALUES 
+            VALUES
                 ('PROD_PHONE_A', 'Apex Pro Phone', 'Cell Phones', 'test', 5),
                 ('PROD_PHONE_B', 'Budget Lite Phone', 'Cell Phones', 'test', 4);
         """)
@@ -32,21 +31,80 @@ def fixture_db() -> sqlite3.Connection:
         # Insert test reviews spanning different months
         reviews_data = [
             # Product A reviews
-            ('rev_a1', 'PROD_PHONE_A', 'Battery life is amazing and fast charging.', 5, '2024-01-10', 'positive'),
-            ('rev_a2', 'PROD_PHONE_A', 'Great battery, screen is bright and sharp.', 5, '2024-01-20', 'positive'),
-            ('rev_a3', 'PROD_PHONE_A', 'Battery died quickly yesterday.', 2, '2024-02-05', 'negative'),
-            ('rev_a4', 'PROD_PHONE_A', 'Price is too high for what you get.', 2, '2024-02-15', 'negative'),
-            ('rev_a5', 'PROD_PHONE_A', 'Normal phone, battery is okay.', 3, '2024-03-01', 'neutral'),
+            (
+                "rev_a1",
+                "PROD_PHONE_A",
+                "Battery life is amazing and fast charging.",
+                5,
+                "2024-01-10",
+                "positive",
+            ),
+            (
+                "rev_a2",
+                "PROD_PHONE_A",
+                "Great battery, screen is bright and sharp.",
+                5,
+                "2024-01-20",
+                "positive",
+            ),
+            (
+                "rev_a3",
+                "PROD_PHONE_A",
+                "Battery died quickly yesterday.",
+                2,
+                "2024-02-05",
+                "negative",
+            ),
+            (
+                "rev_a4",
+                "PROD_PHONE_A",
+                "Price is too high for what you get.",
+                2,
+                "2024-02-15",
+                "negative",
+            ),
+            (
+                "rev_a5",
+                "PROD_PHONE_A",
+                "Normal phone, battery is okay.",
+                3,
+                "2024-03-01",
+                "neutral",
+            ),
             # Product B reviews
-            ('rev_b1', 'PROD_PHONE_B', 'Affordable price and good screen.', 4, '2024-01-15', 'positive'),
-            ('rev_b2', 'PROD_PHONE_B', 'Battery is terrible, screen is okay.', 1, '2024-02-10', 'negative'),
-            ('rev_b3', 'PROD_PHONE_B', 'Horrible battery life.', 1, '2024-02-20', 'negative'),
-            ('rev_b4', 'PROD_PHONE_B', 'Cheap price, low cost bargain.', 5, '2024-03-05', 'positive'),
+            (
+                "rev_b1",
+                "PROD_PHONE_B",
+                "Affordable price and good screen.",
+                4,
+                "2024-01-15",
+                "positive",
+            ),
+            (
+                "rev_b2",
+                "PROD_PHONE_B",
+                "Battery is terrible, screen is okay.",
+                1,
+                "2024-02-10",
+                "negative",
+            ),
+            ("rev_b3", "PROD_PHONE_B", "Horrible battery life.", 1, "2024-02-20", "negative"),
+            (
+                "rev_b4",
+                "PROD_PHONE_B",
+                "Cheap price, low cost bargain.",
+                5,
+                "2024-03-05",
+                "positive",
+            ),
         ]
-        conn.executemany("""
+        conn.executemany(
+            """
             INSERT INTO reviews (id, product_id, text_display, rating, review_date, overall_label)
             VALUES (?, ?, ?, ?, ?, ?);
-        """, reviews_data)
+        """,
+            reviews_data,
+        )
 
     canon_map = get_canonical_aspect_id_map(conn)
     battery_id = canon_map["Battery"]
@@ -57,34 +115,192 @@ def fixture_db() -> sqlite3.Connection:
     mentions_data = [
         # Product A mentions:
         # Battery: 3 pos, 1 neg, 1 neu (5 total) -> pos_pct = 60.0%, neg_pct = 20.0%, neu_pct = 20.0%
-        ('rev_a1', battery_id, 'Battery life', 0, 12, 'positive', 0.95, 0.90, '["amazing"]', 'vader', 'spacy_chunks', 'Battery life is amazing'),
-        ('rev_a1', battery_id, 'charging', 22, 30, 'positive', 0.85, 0.80, '["fast"]', 'vader', 'spacy_chunks', 'fast charging'),
-        ('rev_a2', battery_id, 'battery', 6, 13, 'positive', 0.90, 0.85, '["great"]', 'vader', 'spacy_chunks', 'Great battery'),
-        ('rev_a3', battery_id, 'Battery', 0, 7, 'negative', 0.88, -0.80, '["died quickly"]', 'vader', 'spacy_chunks', 'Battery died quickly yesterday'),
-        ('rev_a5', battery_id, 'battery', 14, 21, 'neutral', 0.50, 0.00, '["okay"]', 'vader', 'spacy_chunks', 'battery is okay'),
+        (
+            "rev_a1",
+            battery_id,
+            "Battery life",
+            0,
+            12,
+            "positive",
+            0.95,
+            0.90,
+            '["amazing"]',
+            "vader",
+            "spacy_chunks",
+            "Battery life is amazing",
+        ),
+        (
+            "rev_a1",
+            battery_id,
+            "charging",
+            22,
+            30,
+            "positive",
+            0.85,
+            0.80,
+            '["fast"]',
+            "vader",
+            "spacy_chunks",
+            "fast charging",
+        ),
+        (
+            "rev_a2",
+            battery_id,
+            "battery",
+            6,
+            13,
+            "positive",
+            0.90,
+            0.85,
+            '["great"]',
+            "vader",
+            "spacy_chunks",
+            "Great battery",
+        ),
+        (
+            "rev_a3",
+            battery_id,
+            "Battery",
+            0,
+            7,
+            "negative",
+            0.88,
+            -0.80,
+            '["died quickly"]',
+            "vader",
+            "spacy_chunks",
+            "Battery died quickly yesterday",
+        ),
+        (
+            "rev_a5",
+            battery_id,
+            "battery",
+            14,
+            21,
+            "neutral",
+            0.50,
+            0.00,
+            '["okay"]',
+            "vader",
+            "spacy_chunks",
+            "battery is okay",
+        ),
         # Display: 1 pos (1 total)
-        ('rev_a2', display_id, 'screen', 15, 21, 'positive', 0.92, 0.88, '["bright", "sharp"]', 'vader', 'spacy_chunks', 'screen is bright and sharp'),
+        (
+            "rev_a2",
+            display_id,
+            "screen",
+            15,
+            21,
+            "positive",
+            0.92,
+            0.88,
+            '["bright", "sharp"]',
+            "vader",
+            "spacy_chunks",
+            "screen is bright and sharp",
+        ),
         # Price: 1 neg (1 total)
-        ('rev_a4', price_id, 'Price', 0, 5, 'negative', 0.89, -0.75, '["too high"]', 'vader', 'spacy_chunks', 'Price is too high'),
-
+        (
+            "rev_a4",
+            price_id,
+            "Price",
+            0,
+            5,
+            "negative",
+            0.89,
+            -0.75,
+            '["too high"]',
+            "vader",
+            "spacy_chunks",
+            "Price is too high",
+        ),
         # Product B mentions:
         # Battery: 0 pos, 2 neg (2 total) -> pos_pct = 0.0%, neg_pct = 100.0%
-        ('rev_b2', battery_id, 'Battery', 0, 7, 'negative', 0.94, -0.90, '["terrible"]', 'vader', 'spacy_chunks', 'Battery is terrible'),
-        ('rev_b3', battery_id, 'battery life', 9, 21, 'negative', 0.96, -0.95, '["horrible"]', 'vader', 'spacy_chunks', 'Horrible battery life'),
+        (
+            "rev_b2",
+            battery_id,
+            "Battery",
+            0,
+            7,
+            "negative",
+            0.94,
+            -0.90,
+            '["terrible"]',
+            "vader",
+            "spacy_chunks",
+            "Battery is terrible",
+        ),
+        (
+            "rev_b3",
+            battery_id,
+            "battery life",
+            9,
+            21,
+            "negative",
+            0.96,
+            -0.95,
+            '["horrible"]',
+            "vader",
+            "spacy_chunks",
+            "Horrible battery life",
+        ),
         # Price: 2 pos (2 total) -> pos_pct = 100.0%, neg_pct = 0.0%
-        ('rev_b1', price_id, 'price', 11, 16, 'positive', 0.86, 0.75, '["affordable"]', 'vader', 'spacy_chunks', 'Affordable price'),
-        ('rev_b4', price_id, 'price', 6, 11, 'positive', 0.91, 0.85, '["cheap", "bargain"]', 'vader', 'spacy_chunks', 'Cheap price'),
+        (
+            "rev_b1",
+            price_id,
+            "price",
+            11,
+            16,
+            "positive",
+            0.86,
+            0.75,
+            '["affordable"]',
+            "vader",
+            "spacy_chunks",
+            "Affordable price",
+        ),
+        (
+            "rev_b4",
+            price_id,
+            "price",
+            6,
+            11,
+            "positive",
+            0.91,
+            0.85,
+            '["cheap", "bargain"]',
+            "vader",
+            "spacy_chunks",
+            "Cheap price",
+        ),
         # Display: 1 pos (1 total)
-        ('rev_b1', display_id, 'screen', 26, 32, 'positive', 0.80, 0.70, '["good"]', 'vader', 'spacy_chunks', 'good screen'),
+        (
+            "rev_b1",
+            display_id,
+            "screen",
+            26,
+            32,
+            "positive",
+            0.80,
+            0.70,
+            '["good"]',
+            "vader",
+            "spacy_chunks",
+            "good screen",
+        ),
     ]
 
     with conn:
-        conn.executemany("""
+        conn.executemany(
+            """
             INSERT INTO aspect_mentions (
                 review_id, canonical_id, term, char_start, char_end,
                 sentiment, confidence, score, opinion_words, scorer, extractor, snippet
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-        """, mentions_data)
+        """,
+            mentions_data,
+        )
 
     return conn
 
@@ -174,13 +390,17 @@ def test_monthly_trend_aggregation(fixture_db):
     assert months == sorted(months)  # Chronological ordering
 
     # Check January 2024 for Battery
-    jan_battery = next((t for t in trend if t["month"] == "2024-01" and t["aspect"] == "Battery"), None)
+    jan_battery = next(
+        (t for t in trend if t["month"] == "2024-01" and t["aspect"] == "Battery"), None
+    )
     assert jan_battery is not None
     assert jan_battery["mentions"] == 3
     assert jan_battery["pos_pct"] == 100.0
 
     # Check February 2024 for Battery
-    feb_battery = next((t for t in trend if t["month"] == "2024-02" and t["aspect"] == "Battery"), None)
+    feb_battery = next(
+        (t for t in trend if t["month"] == "2024-02" and t["aspect"] == "Battery"), None
+    )
     assert feb_battery is not None
     assert feb_battery["mentions"] == 1
     assert feb_battery["neg_pct"] == 100.0

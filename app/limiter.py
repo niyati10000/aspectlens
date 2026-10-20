@@ -1,7 +1,7 @@
 """Rate limiter configuration and client IP resolution for AspectLens."""
 
-from slowapi import Limiter
 from fastapi import Request
+from slowapi import Limiter
 
 
 def get_client_ip(request: Request) -> str:

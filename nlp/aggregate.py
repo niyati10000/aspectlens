@@ -8,18 +8,18 @@ Implements all aggregation queries specified in DATABASE_SCHEMA.md:
 - Strict parameterised queries and always displaying mention counts beside percentages.
 """
 
-from typing import List, Dict, Any, Optional
-import sqlite3
 import json
+import sqlite3
+from typing import Any
 
 
 def get_product_aspect_summary(
     conn: sqlite3.Connection,
     product_id: str,
     min_mentions: int = 1,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Compute per-aspect statistics for a given product.
-    
+
     Returns:
         List of dicts: aspect, canonical_id, mentions, pos_pct, neg_pct, neu_pct, avg_score.
         Always displays mention counts alongside percentages.
@@ -61,14 +61,14 @@ def get_product_aspect_summary(
 def get_monthly_trend(
     conn: sqlite3.Connection,
     product_id: str,
-    canonical_id: Optional[int] = None,
+    canonical_id: int | None = None,
     min_mentions: int = 1,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Compute monthly sentiment trends for a product, optionally filtered by aspect.
-    
+
     Groups by calendar month (YYYY-MM) and canonical aspect.
     """
-    params: List[Any] = [product_id]
+    params: list[Any] = [product_id]
     aspect_clause = ""
     if canonical_id is not None:
         aspect_clause = "AND ca.id = ?"
@@ -117,9 +117,9 @@ def get_representative_snippets(
     product_id: str,
     canonical_id: int,
     limit: int = 3,
-) -> Dict[str, List[Dict[str, Any]]]:
+) -> dict[str, list[dict[str, Any]]]:
     """Retrieve top positive and top negative representative snippets for an aspect.
-    
+
     Ordered by model confidence and absolute polarity score.
     Returns:
         {
@@ -180,17 +180,19 @@ def get_representative_snippets(
                     op_words = [op_words]
 
             snippet_text = r["snippet"] or r["term"]
-            res.append({
-                "id": r["id"],
-                "term": r["term"],
-                "snippet": snippet_text,
-                "confidence": float(r["confidence"]),
-                "score": float(r["score"]),
-                "opinion_words": op_words,
-                "review_id": r["review_id"],
-                "rating": r["rating"],
-                "review_date": r["review_date"],
-            })
+            res.append(
+                {
+                    "id": r["id"],
+                    "term": r["term"],
+                    "snippet": snippet_text,
+                    "confidence": float(r["confidence"]),
+                    "score": float(r["score"]),
+                    "opinion_words": op_words,
+                    "review_id": r["review_id"],
+                    "rating": r["rating"],
+                    "review_date": r["review_date"],
+                }
+            )
         return res
 
     return {
@@ -203,7 +205,7 @@ def get_product_summary(
     conn: sqlite3.Connection,
     product_id: str,
     min_mentions: int = 1,
-) -> Optional[Dict[str, Any]]:
+) -> dict[str, Any] | None:
     """Assemble complete product summary: product metadata, per-aspect stats, snippets, and monthly trend."""
     # 1. Product details
     cursor = conn.execute(
@@ -225,9 +227,7 @@ def get_product_summary(
 
     # 3. Attach snippets to each aspect
     for aspect in aspect_summaries:
-        snippets = get_representative_snippets(
-            conn, product_id, aspect["canonical_id"], limit=3
-        )
+        snippets = get_representative_snippets(conn, product_id, aspect["canonical_id"], limit=3)
         aspect["snippets"] = snippets
 
     # 4. Monthly trend
@@ -249,7 +249,7 @@ def compare_products(
     product_a_id: str,
     product_b_id: str,
     min_mentions: int = 1,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Perform side-by-side aspect comparison between two products."""
     # Product details
     cur_a = conn.execute(
@@ -259,12 +259,20 @@ def compare_products(
         "SELECT id, name, category, review_count FROM products WHERE id = ?;", (product_b_id,)
     ).fetchone()
 
-    prod_a_info = dict(cur_a) if cur_a else {"id": product_a_id, "name": product_a_id, "review_count": 0}
-    prod_b_info = dict(cur_b) if cur_b else {"id": product_b_id, "name": product_b_id, "review_count": 0}
+    prod_a_info = (
+        dict(cur_a) if cur_a else {"id": product_a_id, "name": product_a_id, "review_count": 0}
+    )
+    prod_b_info = (
+        dict(cur_b) if cur_b else {"id": product_b_id, "name": product_b_id, "review_count": 0}
+    )
 
     # Aspect summaries
-    summary_a = {a["aspect"]: a for a in get_product_aspect_summary(conn, product_a_id, min_mentions=0)}
-    summary_b = {b["aspect"]: b for b in get_product_aspect_summary(conn, product_b_id, min_mentions=0)}
+    summary_a = {
+        a["aspect"]: a for a in get_product_aspect_summary(conn, product_a_id, min_mentions=0)
+    }
+    summary_b = {
+        b["aspect"]: b for b in get_product_aspect_summary(conn, product_b_id, min_mentions=0)
+    }
 
     # Union of all aspects
     all_aspect_names = sorted(list(set(summary_a.keys()) | set(summary_b.keys())))
@@ -281,7 +289,8 @@ def compare_products(
         if mentions_a < min_mentions and mentions_b < min_mentions:
             continue
 
-        cid = (stats_a or stats_b)["canonical_id"]
+        target_stats = stats_a or stats_b
+        cid = target_stats["canonical_id"] if target_stats else 0
 
         a_data = {
             "mentions": mentions_a,
@@ -315,17 +324,19 @@ def compare_products(
         else:
             winner = "tie"
 
-        compared_aspects.append({
-            "aspect": name,
-            "canonical_id": cid,
-            "product_a": a_data,
-            "product_b": b_data,
-            "winner": winner,
-        })
+        compared_aspects.append(
+            {
+                "aspect": name,
+                "canonical_id": cid,
+                "product_a": a_data,
+                "product_b": b_data,
+                "winner": winner,
+            }
+        )
 
     # Sort by total mentions across both products
     compared_aspects.sort(
-        key=lambda x: (x["product_a"]["mentions"] + x["product_b"]["mentions"]),
+        key=lambda x: x["product_a"]["mentions"] + x["product_b"]["mentions"],
         reverse=True,
     )
 

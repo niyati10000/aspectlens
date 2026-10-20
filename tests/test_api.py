@@ -1,14 +1,14 @@
 """Unit and integration tests for AspectLens FastAPI endpoints."""
 
-import pytest
 import io
-import json
+
+import pytest
 from starlette.testclient import TestClient
 
-from app.main import app
 from app.config import settings
 from app.db import init_db
 from app.limiter import limiter
+from app.main import app
 
 
 @pytest.fixture(autouse=True)
@@ -45,7 +45,11 @@ def test_docs_endpoint(client):
     """GET /docs returns 200 Swagger documentation."""
     response = client.get("/docs")
     assert response.status_code == 200
-    assert "swagger" in response.text.lower() or "openapi" in response.text.lower() or "html" in response.text.lower()
+    assert (
+        "swagger" in response.text.lower()
+        or "openapi" in response.text.lower()
+        or "html" in response.text.lower()
+    )
 
 
 def test_frontend_root_serving(client):

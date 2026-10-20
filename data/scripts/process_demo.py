@@ -1,18 +1,18 @@
 """Process demo reviews through the ABSA pipeline and store extracted aspect mentions in SQLite."""
 
 import argparse
+import json
 import logging
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
-import json
-from datetime import datetime, timezone
 
 # Ensure project root is in sys.path
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(BASE_DIR))
 
 from app.config import settings
-from app.db import init_db, get_connection, get_canonical_aspect_id_map
+from app.db import get_canonical_aspect_id_map, get_connection, init_db
 from nlp.pipeline import analyze_review
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
@@ -45,7 +45,12 @@ def process_reviews(
     cursor = conn.execute(query)
     reviews_to_process = cursor.fetchall()
 
-    logger.info("Found %d reviews to process (scorer=%s, extractor=%s).", len(reviews_to_process), scorer, extractor)
+    logger.info(
+        "Found %d reviews to process (scorer=%s, extractor=%s).",
+        len(reviews_to_process),
+        scorer,
+        extractor,
+    )
     if not reviews_to_process:
         print("No unprocessed reviews found.")
         return
@@ -63,7 +68,7 @@ def process_reviews(
         analysis = analyze_review(text, scorer=scorer, extractor=extractor)
         aspects = analysis.get("aspects", [])
 
-        now_iso = datetime.now(timezone.utc).isoformat()
+        now_iso = datetime.now(UTC).isoformat()
 
         with conn:
             # Delete existing mentions for this review if reprocessing
@@ -81,7 +86,9 @@ def process_reviews(
                     )
                     canonical_id = c_cur.lastrowid
                     if not canonical_id:
-                        c_fetch = conn.execute("SELECT id FROM canonical_aspects WHERE name = ?;", (canonical_name,))
+                        c_fetch = conn.execute(
+                            "SELECT id FROM canonical_aspects WHERE name = ?;", (canonical_name,)
+                        )
                         canonical_id = c_fetch.fetchone()[0]
                     canon_map[canonical_name] = canonical_id
 
@@ -97,7 +104,10 @@ def process_reviews(
                 else:
                     score = 0.0
 
-                snippet = a.get("snippet") or text[max(0, a["start"] - 30):min(len(text), a["end"] + 30)].strip()
+                snippet = (
+                    a.get("snippet")
+                    or text[max(0, a["start"] - 30) : min(len(text), a["end"] + 30)].strip()
+                )
 
                 conn.execute(
                     """
@@ -130,7 +140,12 @@ def process_reviews(
 
         processed_count += 1
         if i % 100 == 0 or i == len(reviews_to_process):
-            logger.info("Processed %d / %d reviews (%d mentions stored)...", i, len(reviews_to_process), total_mentions)
+            logger.info(
+                "Processed %d / %d reviews (%d mentions stored)...",
+                i,
+                len(reviews_to_process),
+                total_mentions,
+            )
 
     # Update denormalized review counts on products
     with conn:
@@ -146,9 +161,15 @@ def process_reviews(
     print("=" * 50)
     print(f"Reviews processed:     {processed_count}")
     print(f"Aspect mentions stored: {total_mentions}")
-    print(f"Sentiment breakdown:   Positive: {sentiment_counts['positive']} ({sentiment_counts['positive']/max(1, total_mentions):.1%})")
-    print(f"                       Negative: {sentiment_counts['negative']} ({sentiment_counts['negative']/max(1, total_mentions):.1%})")
-    print(f"                       Neutral:  {sentiment_counts['neutral']} ({sentiment_counts['neutral']/max(1, total_mentions):.1%})")
+    print(
+        f"Sentiment breakdown:   Positive: {sentiment_counts['positive']} ({sentiment_counts['positive'] / max(1, total_mentions):.1%})"
+    )
+    print(
+        f"                       Negative: {sentiment_counts['negative']} ({sentiment_counts['negative'] / max(1, total_mentions):.1%})"
+    )
+    print(
+        f"                       Neutral:  {sentiment_counts['neutral']} ({sentiment_counts['neutral'] / max(1, total_mentions):.1%})"
+    )
 
     # Top aspects query
     top_aspects = conn.execute("""
@@ -168,11 +189,21 @@ def process_reviews(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process demo reviews through AspectLens pipeline")
-    parser.add_argument("--limit", type=int, default=500, help="Number of reviews to process (0 for all)")
-    parser.add_argument("--scorer", type=str, default="vader", help="Sentiment scorer (vader or transformer)")
-    parser.add_argument("--extractor", type=str, default="spacy_chunks", help="Aspect extractor method")
-    parser.add_argument("--reprocess", action="store_true", help="Reprocess already processed reviews")
-    parser.add_argument("--db-path", type=str, default=str(settings.DB_PATH), help="Target SQLite database path")
+    parser.add_argument(
+        "--limit", type=int, default=500, help="Number of reviews to process (0 for all)"
+    )
+    parser.add_argument(
+        "--scorer", type=str, default="vader", help="Sentiment scorer (vader or transformer)"
+    )
+    parser.add_argument(
+        "--extractor", type=str, default="spacy_chunks", help="Aspect extractor method"
+    )
+    parser.add_argument(
+        "--reprocess", action="store_true", help="Reprocess already processed reviews"
+    )
+    parser.add_argument(
+        "--db-path", type=str, default=str(settings.DB_PATH), help="Target SQLite database path"
+    )
 
     args = parser.parse_args()
     process_reviews(

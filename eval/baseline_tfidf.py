@@ -10,12 +10,11 @@ Saves comparison to:
 - eval/results/baseline_comparison.csv
 """
 
-import json
 import csv
+import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any, Tuple
-from collections import Counter
+from typing import Any
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
@@ -35,10 +34,10 @@ def run_baseline_evaluation(
     data_path: Path = DATA_PATH,
     results_dir: Path = RESULTS_DIR,
     sample_limit: int = 0,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Train whole-review TF-IDF baseline and evaluate against aspect-level test ground truth."""
     logger.info("Loading SemEval data from %s", data_path)
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, encoding="utf-8") as f:
         all_data = json.load(f)
 
     train_docs = [r for r in all_data if r.get("split") == "train"]
@@ -48,8 +47,8 @@ def run_baseline_evaluation(
         test_docs = test_docs[:sample_limit]
 
     logger.info("Preparing training set from %d SemEval train sentences...", len(train_docs))
-    train_texts: List[str] = []
-    train_labels: List[str] = []
+    train_texts: list[str] = []
+    train_labels: list[str] = []
 
     for row in train_docs:
         aspects = row.get("aspect_terms", [])
@@ -79,11 +78,11 @@ def run_baseline_evaluation(
 
     # Evaluate on test aspect instances
     logger.info("Evaluating whole-review baseline on test split...")
-    test_golds: List[str] = []
-    test_preds: List[str] = []
+    test_golds: list[str] = []
+    test_preds: list[str] = []
 
     # Cache predictions per test text
-    text_pred_cache: Dict[str, str] = {}
+    text_pred_cache: dict[str, str] = {}
 
     for row in test_docs:
         aspects = row.get("aspect_terms", [])
@@ -133,20 +132,22 @@ def run_baseline_evaluation(
 
     # Load sentiment_benchmark.json if available to include comparison
     sentiment_path = results_dir / "sentiment_benchmark.json"
-    comparison_entries = [baseline_metrics]
+    comparison_entries: list[dict[str, Any]] = [baseline_metrics]
     if sentiment_path.exists():
         try:
-            with open(sentiment_path, "r", encoding="utf-8") as f:
+            with open(sentiment_path, encoding="utf-8") as f:
                 sb_data = json.load(f)
                 for item in sb_data.get("results", []):
-                    comparison_entries.append({
-                        "model": item["scorer"],
-                        "description": f"AspectLens clause-scoped {item['scorer']} scorer",
-                        "accuracy": item["accuracy"],
-                        "macro_f1": item["macro_f1"],
-                        "total_instances": item["total_instances"],
-                        "per_class": item["per_class"],
-                    })
+                    comparison_entries.append(
+                        {
+                            "model": item["scorer"],
+                            "description": f"AspectLens clause-scoped {item['scorer']} scorer",
+                            "accuracy": item["accuracy"],
+                            "macro_f1": item["macro_f1"],
+                            "total_instances": item["total_instances"],
+                            "per_class": item["per_class"],
+                        }
+                    )
         except Exception as e:
             logger.warning("Could not read sentiment_benchmark for comparison: %s", e)
 
@@ -170,14 +171,16 @@ def run_baseline_evaluation(
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         for c in comparison_entries:
-            writer.writerow({
-                "model": c["model"],
-                "accuracy": c["accuracy"],
-                "macro_f1": c["macro_f1"],
-                "pos_f1": c["per_class"]["positive"]["f1"],
-                "neu_f1": c["per_class"]["neutral"]["f1"],
-                "neg_f1": c["per_class"]["negative"]["f1"],
-            })
+            writer.writerow(
+                {
+                    "model": c["model"],
+                    "accuracy": c["accuracy"],
+                    "macro_f1": c["macro_f1"],
+                    "pos_f1": c["per_class"]["positive"]["f1"],
+                    "neu_f1": c["per_class"]["neutral"]["f1"],
+                    "neg_f1": c["per_class"]["negative"]["f1"],
+                }
+            )
     logger.info("Saved CSV results to %s", csv_path)
 
     return output_payload
@@ -186,5 +189,5 @@ def run_baseline_evaluation(
 if __name__ == "__main__":
     results = run_baseline_evaluation()
     b = results["baseline"]
-    print(f"\n=== Baseline TF-IDF + Logistic Regression Results ===")
+    print("\n=== Baseline TF-IDF + Logistic Regression Results ===")
     print(f"Accuracy: {b['accuracy']:.4f} | Macro-F1: {b['macro_f1']:.4f}")

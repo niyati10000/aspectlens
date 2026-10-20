@@ -1,12 +1,11 @@
 """Tests for the Phase 9 Evaluation framework and benchmark metrics."""
 
-import pytest
-import json
 import csv
+import json
 from pathlib import Path
 
-from eval.extraction_eval import compute_prf, evaluate_extraction_lists, evaluate_overlap_lists
 from eval.error_analysis import categorize_error
+from eval.extraction_eval import compute_prf, evaluate_extraction_lists, evaluate_overlap_lists
 from eval.sentiment_eval import evaluate_scorer_on_instances
 from nlp.sentiment import VADERScorer
 
@@ -176,7 +175,7 @@ def test_persisted_benchmark_artifacts_exist():
         assert p.stat().st_size > 0
 
         # Validate CSV is parseable
-        with open(p, "r", encoding="utf-8") as f:
+        with open(p, encoding="utf-8") as f:
             reader = csv.reader(f)
             rows = list(reader)
             assert len(rows) >= 2, f"CSV {cf} should have header and at least one data row"
@@ -185,7 +184,7 @@ def test_persisted_benchmark_artifacts_exist():
 def test_summary_metrics_structure():
     """Validate summary_metrics.json contains all required KPI fields."""
     summary_path = RESULTS_DIR / "summary_metrics.json"
-    with open(summary_path, "r", encoding="utf-8") as f:
+    with open(summary_path, encoding="utf-8") as f:
         data = json.load(f)
 
     assert "generated_at" in data

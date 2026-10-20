@@ -1,11 +1,7 @@
 """Unit and golden tests for opinion linking, sentiment scorers, and end-to-end pipeline."""
 
-import pytest
-from nlp.pipeline import analyze_review, analyze_batch
-from nlp.sentiment import get_scorer, VADERScorer, TransformerScorer, FineTunedScorer, ScoreResult
-from nlp.opinions import split_into_clauses, extract_opinions_for_aspect
-from nlp.aspects import get_spacy_model
-
+from nlp.pipeline import analyze_batch, analyze_review
+from nlp.sentiment import FineTunedScorer, ScoreResult, get_scorer
 
 GOLDEN_REVIEW = "Battery life is amazing, but the delivery was late and the price is too high."
 
@@ -32,7 +28,7 @@ def test_golden_review_vader():
     assert bat["term"] == "Battery life"
     assert bat["start"] == 0
     assert bat["end"] == 12
-    assert GOLDEN_REVIEW[bat["start"]:bat["end"]] == "Battery life"
+    assert GOLDEN_REVIEW[bat["start"] : bat["end"]] == "Battery life"
     assert bat["sentiment"] == "positive"
     assert "amazing" in bat["opinion_words"]
 
@@ -42,7 +38,7 @@ def test_golden_review_vader():
     assert deliv["term"] == "delivery"
     assert deliv["start"] == 33
     assert deliv["end"] == 41
-    assert GOLDEN_REVIEW[deliv["start"]:deliv["end"]] == "delivery"
+    assert GOLDEN_REVIEW[deliv["start"] : deliv["end"]] == "delivery"
     assert deliv["sentiment"] == "negative"
     assert "late" in deliv["opinion_words"]
 
@@ -52,7 +48,7 @@ def test_golden_review_vader():
     assert pr["term"] == "price"
     assert pr["start"] == 59
     assert pr["end"] == 64
-    assert GOLDEN_REVIEW[pr["start"]:pr["end"]] == "price"
+    assert GOLDEN_REVIEW[pr["start"] : pr["end"]] == "price"
     assert pr["sentiment"] == "negative"
     assert any("high" in op for op in pr["opinion_words"])
 
@@ -124,8 +120,7 @@ def test_negation_handling_vader_and_transformer():
 def test_rule_6_no_opinion_returns_neutral_low_confidence():
     """Rule 6: If an aspect has no opinion word, return neutral with low confidence (0.30). Do not guess."""
     # A review with an aspect noun and non-evaluative action verb
-    review = "I bought this phone yesterday."
-    
+
     # Direct scorer test when opinion_words=[]
     vader = get_scorer("vader")
     trans = get_scorer("transformer")
@@ -177,8 +172,10 @@ def test_offsets_integrity_invariant():
     for rev in reviews:
         res = analyze_review(rev, scorer="vader")
         for a in res["aspects"]:
-            slice_text = res["text"][a["start"]:a["end"]]
-            assert slice_text == a["term"], f"Offset slice '{slice_text}' does not match term '{a['term']}'"
+            slice_text = res["text"][a["start"] : a["end"]]
+            assert slice_text == a["term"], (
+                f"Offset slice '{slice_text}' does not match term '{a['term']}'"
+            )
 
 
 def test_finetuned_scorer_stub():

@@ -1,11 +1,11 @@
 """Compute and print statistical distributions for datasets (demo sample, Amazon, SemEval)."""
 
+import argparse
 import json
 import sys
-import argparse
-from pathlib import Path
 from collections import Counter, defaultdict
-from typing import List, Dict, Any
+from pathlib import Path
+from typing import Any
 
 # Ensure stdout handles UTF-8 on Windows
 if hasattr(sys.stdout, "reconfigure"):
@@ -20,7 +20,7 @@ PROCESSED_AMAZON_FILE = BASE_DIR / "data" / "processed_amazon.json"
 PROCESSED_SEMEVAL_FILE = BASE_DIR / "data" / "processed_semeval.json"
 
 
-def compute_and_print_stats(dataset_name: str, records: List[Dict[str, Any]]) -> Dict[str, Any]:
+def compute_and_print_stats(dataset_name: str, records: list[dict[str, Any]]) -> dict[str, Any]:
     """Compute and display detailed dataset statistics."""
     total_reviews = len(records)
     print("\n" + "=" * 70)
@@ -84,7 +84,7 @@ def compute_and_print_stats(dataset_name: str, records: List[Dict[str, Any]]) ->
     for pid, p_reviews in sorted_products[:30]:
         count = len(p_reviews)
         ratings = [r["rating"] for r in p_reviews if r.get("rating") is not None]
-        avg_r_str = f"{sum(ratings)/len(ratings):.2f} / 5" if ratings else "N/A"
+        avg_r_str = f"{sum(ratings) / len(ratings):.2f} / 5" if ratings else "N/A"
         name = product_names.get(pid, pid)[:35]
         count_str = f"{count:,}"
         print(f"   {pid:<16} | {count_str:<9} | {avg_r_str:<12} | {name}")
@@ -137,7 +137,7 @@ def main():
         return
 
     for label, path in targets:
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
         compute_and_print_stats(label, data)
 

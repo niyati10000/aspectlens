@@ -1,40 +1,39 @@
 """FastAPI routers and endpoint implementations for AspectLens."""
 
-from typing import List, Dict, Any, Optional
-import io
-import csv
-import json
-import secrets
 import asyncio
+import csv
+import io
+import json
 import logging
+import secrets
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, timezone
 
-from fastapi import APIRouter, Request, Depends, HTTPException, UploadFile, File, Form, Query
-from fastapi.responses import JSONResponse
+from fastapi import APIRouter, File, Form, HTTPException, Query, Request, UploadFile
 
 from app.config import settings
+from app.db import get_connection
 from app.limiter import limiter
 from app.schemas import (
     AnalyzeRequest,
     AnalyzeResponse,
     BatchAnalyzeRequest,
     BatchAnalyzeResponse,
-    ProductItemResponse,
-    ProductDetailResponse,
     CompareProductsResponse,
-    UploadResponse,
-    EvaluationResponse,
     ErrorResponse,
-    ErrorDetail,
+    EvaluationResponse,
+    ProductDetailResponse,
+    ProductItemResponse,
+    UploadResponse,
 )
-from app.db import get_connection, init_db
-from nlp.pipeline import analyze_review, analyze_batch
-from nlp.preprocess import clean_text
 from nlp.aggregate import (
-    get_product_summary,
     compare_products as aggregate_compare_products,
 )
+from nlp.aggregate import (
+    get_product_summary,
+)
+from nlp.pipeline import analyze_batch, analyze_review
+from nlp.preprocess import clean_text
 
 logger = logging.getLogger(__name__)
 
@@ -47,7 +46,11 @@ router = APIRouter()
 @router.post(
     "/analyze",
     response_model=AnalyzeResponse,
-    responses={413: {"model": ErrorResponse}, 422: {"model": ErrorResponse}, 429: {"model": ErrorResponse}},
+    responses={
+        413: {"model": ErrorResponse},
+        422: {"model": ErrorResponse},
+        429: {"model": ErrorResponse},
+    },
     tags=["Analysis"],
 )
 @limiter.limit(settings.RATE_LIMIT_ANALYZE)
@@ -67,7 +70,7 @@ async def analyze_endpoint(
         )
 
     # Protect CPU with heavy job semaphore
-    semaphore: asyncio.Semaphore = getattr(request.app.state, "heavy_job_semaphore", None)
+    semaphore: asyncio.Semaphore | None = getattr(request.app.state, "heavy_job_semaphore", None)
     if semaphore:
         async with semaphore:
             result = await asyncio.to_thread(
@@ -93,7 +96,11 @@ async def analyze_endpoint(
 @router.post(
     "/analyze/batch",
     response_model=BatchAnalyzeResponse,
-    responses={413: {"model": ErrorResponse}, 422: {"model": ErrorResponse}, 429: {"model": ErrorResponse}},
+    responses={
+        413: {"model": ErrorResponse},
+        422: {"model": ErrorResponse},
+        429: {"model": ErrorResponse},
+    },
     tags=["Analysis"],
 )
 @limiter.limit(settings.RATE_LIMIT_BATCH)
@@ -122,7 +129,7 @@ async def analyze_batch_endpoint(
             )
 
     t_start = asyncio.get_event_loop().time()
-    semaphore: asyncio.Semaphore = getattr(request.app.state, "heavy_job_semaphore", None)
+    semaphore: asyncio.Semaphore | None = getattr(request.app.state, "heavy_job_semaphore", None)
 
     if semaphore:
         async with semaphore:
@@ -169,13 +176,13 @@ async def analyze_batch_endpoint(
 async def upload_csv_endpoint(
     request: Request,
     file: UploadFile = File(...),
-    text_col: Optional[str] = Form(None),
-    product_id_col: Optional[str] = Form(None),
-    rating_col: Optional[str] = Form(None),
-    date_col: Optional[str] = Form(None),
+    text_col: str | None = Form(None),
+    product_id_col: str | None = Form(None),
+    rating_col: str | None = Form(None),
+    date_col: str | None = Form(None),
 ) -> UploadResponse:
     """Upload and ingest a CSV file of product reviews with optional column mapping.
-    
+
     Enforces file size cap (2 MB), row cap (2,000 rows), and optional ADMIN_API_KEY.
     """
     # 1. Admin API key verification (if configured)
@@ -192,7 +199,11 @@ async def upload_csv_endpoint(
 
     # 2. Check file extension / content type
     filename = file.filename or "upload.csv"
-    if not (filename.lower().endswith(".csv") or "csv" in (file.content_type or "").lower() or "text" in (file.content_type or "").lower()):
+    if not (
+        filename.lower().endswith(".csv")
+        or "csv" in (file.content_type or "").lower()
+        or "text" in (file.content_type or "").lower()
+    ):
         raise HTTPException(
             status_code=422,
             detail={
@@ -305,7 +316,7 @@ async def upload_csv_endpoint(
 
     # 6. Insert batch and rows into database
     conn = get_connection()
-    now_iso = datetime.now(timezone.utc).isoformat()
+    now_iso = datetime.now(UTC).isoformat()
     default_pid = Path(filename).stem or "uploaded_product"
 
     products_seen = set()
@@ -320,7 +331,7 @@ async def upload_csv_endpoint(
             """,
             (now_iso, filename, len(rows)),
         )
-        batch_id = batch_cur.lastrowid
+        batch_id: int = batch_cur.lastrowid or 0
 
         for idx, row in enumerate(rows, 1):
             raw_review_text = row.get(actual_text_col, "")
@@ -355,16 +366,18 @@ async def upload_csv_endpoint(
                     overall = "negative"
 
             r_id = f"up_{batch_id}_{idx}"
-            review_records.append((
-                r_id,
-                pid,
-                batch_id,
-                cleaned,
-                rating_val,
-                rev_date,
-                overall,
-                None,  # processed_at
-            ))
+            review_records.append(
+                (
+                    r_id,
+                    pid,
+                    batch_id,
+                    cleaned,
+                    rating_val,
+                    rev_date,
+                    overall,
+                    None,  # processed_at
+                )
+            )
 
         # Insert products
         for pid in products_seen:
@@ -415,10 +428,10 @@ async def upload_csv_endpoint(
 # ----------------------------------------------------------------------
 @router.get(
     "/products",
-    response_model=List[ProductItemResponse],
+    response_model=list[ProductItemResponse],
     tags=["Products"],
 )
-async def list_products_endpoint() -> List[ProductItemResponse]:
+async def list_products_endpoint() -> list[ProductItemResponse]:
     """Retrieve all available products and their review counts."""
     conn = get_connection()
     cursor = conn.execute(
@@ -541,12 +554,14 @@ async def get_evaluation_results_endpoint() -> EvaluationResponse:
     collected_results = []
     for jf in sorted(json_files):
         try:
-            with open(jf, "r", encoding="utf-8") as f:
+            with open(jf, encoding="utf-8") as f:
                 data = json.load(f)
-                collected_results.append({
-                    "benchmark": jf.stem,
-                    "data": data,
-                })
+                collected_results.append(
+                    {
+                        "benchmark": jf.stem,
+                        "data": data,
+                    }
+                )
         except Exception as e:
             logger.warning("Could not read evaluation file %s: %s", jf, e)
 

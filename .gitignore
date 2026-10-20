@@ -35,6 +35,7 @@ data/*.zip
 data/semeval/
 data/amazon_sample_large.json
 data/processed_*.json
+!data/processed_semeval.json
 !data/demo_sample.json
 !data/seed_lexicon.json
 

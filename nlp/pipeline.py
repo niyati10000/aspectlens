@@ -19,19 +19,19 @@ Matches the API output contract defined in ARCHITECTURE.md Section 5:
 }
 """
 
-from typing import List, Dict, Any, Optional
 import time
+from typing import Any
+
 import spacy
 
-from app.config import settings
-from nlp.preprocess import clean_text
-from nlp.aspects import extract_aspects, get_spacy_model, AspectCandidate
+from nlp.aspects import AspectCandidate, extract_aspects, get_spacy_model
 from nlp.grouping import AspectGrouper
 from nlp.opinions import extract_opinions_for_aspect, split_into_clauses
-from nlp.sentiment import get_scorer, Scorer, ScoreResult
+from nlp.preprocess import clean_text
+from nlp.sentiment import Scorer, ScoreResult, get_scorer
 
 # Pipeline singleton caches
-_PIPELINE_GROUPER: Optional[AspectGrouper] = None
+_PIPELINE_GROUPER: AspectGrouper | None = None
 
 
 def get_aspect_grouper() -> AspectGrouper:
@@ -47,10 +47,10 @@ def analyze_review(
     scorer: str = "vader",
     extractor: str = "spacy_chunks",
     min_freq: int = 1,
-    product_reviews: Optional[List[str]] = None,
-    spacy_nlp: Optional[spacy.language.Language] = None,
-    grouper: Optional[AspectGrouper] = None,
-) -> Dict[str, Any]:
+    product_reviews: list[str] | None = None,
+    spacy_nlp: spacy.language.Language | None = None,
+    grouper: AspectGrouper | None = None,
+) -> dict[str, Any]:
     """Run the complete ABSA pipeline on a single review text.
 
     Steps:
@@ -78,7 +78,7 @@ def analyze_review(
     scorer_instance: Scorer = get_scorer(scorer)
 
     # Step 2: Extract aspect candidates
-    candidates: List[AspectCandidate] = extract_aspects(
+    candidates: list[AspectCandidate] = extract_aspects(
         cleaned,
         method=extractor,
         min_freq=min_freq,
@@ -98,7 +98,7 @@ def analyze_review(
     doc = nlp(cleaned)
     clauses = split_into_clauses(doc)
 
-    aspect_results: List[Dict[str, Any]] = []
+    aspect_results: list[dict[str, Any]] = []
 
     for cand in candidates:
         # Step 4: Map to canonical aspect group
@@ -120,19 +120,21 @@ def analyze_review(
         )
 
         # Invariant validation: ensure character offsets exactly slice the term
-        assert cleaned[cand.char_start:cand.char_end] == cand.term, (
-            f"Offset mismatch: '{cleaned[cand.char_start:cand.char_end]}' != '{cand.term}'"
+        assert cleaned[cand.char_start : cand.char_end] == cand.term, (
+            f"Offset mismatch: '{cleaned[cand.char_start : cand.char_end]}' != '{cand.term}'"
         )
 
-        aspect_results.append({
-            "term": cand.term,
-            "canonical": canonical_name,
-            "start": cand.char_start,
-            "end": cand.char_end,
-            "sentiment": score_res.label,
-            "confidence": score_res.confidence,
-            "opinion_words": score_res.opinion_words,
-        })
+        aspect_results.append(
+            {
+                "term": cand.term,
+                "canonical": canonical_name,
+                "start": cand.char_start,
+                "end": cand.char_end,
+                "sentiment": score_res.label,
+                "confidence": score_res.confidence,
+                "opinion_words": score_res.opinion_words,
+            }
+        )
 
     latency_ms = round((time.perf_counter() - t_start) * 1000, 1)
 
@@ -145,11 +147,11 @@ def analyze_review(
 
 
 def analyze_batch(
-    reviews: List[str],
+    reviews: list[str],
     scorer: str = "vader",
     extractor: str = "spacy_chunks",
     min_freq: int = 1,
-) -> List[Dict[str, Any]]:
+) -> list[dict[str, Any]]:
     """Analyze a batch of reviews reusing cached models and components."""
     nlp = get_spacy_model()
     grouper = get_aspect_grouper()

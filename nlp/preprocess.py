@@ -2,13 +2,11 @@
 
 import re
 from dataclasses import dataclass
-from typing import List, Dict, Tuple, Optional
+
 import spacy
 
 # Regex patterns for PII stripping
-EMAIL_REGEX = re.compile(
-    r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b", re.IGNORECASE
-)
+EMAIL_REGEX = re.compile(r"\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}\b", re.IGNORECASE)
 PHONE_REGEX = re.compile(
     r"\b(?:\+?(\d{1,3}))?[-.\s]?(?:\(?(\d{3})\)?[-.\s]?)?(\d{3})[-.\s]?(\d{4})\b"
 )
@@ -66,8 +64,10 @@ def expand_contractions(text: str) -> str:
     if not text:
         return ""
     # Process word-level contractions case-insensitively
-    pattern = re.compile(r"\b(" + "|".join(re.escape(k) for k in CONTRACTIONS_MAP.keys()) + r")\b", re.IGNORECASE)
-    
+    pattern = re.compile(
+        r"\b(" + "|".join(re.escape(k) for k in CONTRACTIONS_MAP.keys()) + r")\b", re.IGNORECASE
+    )
+
     def replace_match(match):
         w = match.group(0).lower()
         expanded = CONTRACTIONS_MAP.get(w, w)
@@ -81,6 +81,7 @@ def expand_contractions(text: str) -> str:
 @dataclass
 class SentenceSpan:
     """Represents a sentence with text, lowercase text, and original character offsets."""
+
     text: str
     lower_text: str
     start_char: int
@@ -90,15 +91,16 @@ class SentenceSpan:
 @dataclass
 class PreprocessedDocument:
     """Container for preprocessed review text preserving offsets and sentence boundaries."""
+
     raw_text: str
     clean_text: str
     clean_text_lower: str
-    sentences: List[SentenceSpan]
+    sentences: list[SentenceSpan]
 
 
 def preprocess_review(
     raw_text: str,
-    spacy_model: Optional[spacy.language.Language] = None,
+    spacy_model: spacy.language.Language | None = None,
 ) -> PreprocessedDocument:
     """Preprocess review:
     1. Clean HTML, PII, and excessive whitespace.
@@ -127,12 +129,14 @@ def preprocess_review(
                 trailing_ws = len(sent.text) - len(sent.text.rstrip())
                 s_start = sent.start_char + leading_ws
                 s_end = sent.end_char - trailing_ws
-                sentences.append(SentenceSpan(
-                    text=s_text,
-                    lower_text=s_text.lower(),
-                    start_char=s_start,
-                    end_char=s_end,
-                ))
+                sentences.append(
+                    SentenceSpan(
+                        text=s_text,
+                        lower_text=s_text.lower(),
+                        start_char=s_start,
+                        end_char=s_end,
+                    )
+                )
     else:
         # Fallback simple regex sentence split with character offsets
         for match in re.finditer(r"[^.!?]+[.!?]*", cleaned):
@@ -142,12 +146,14 @@ def preprocess_review(
                 trailing_ws = len(match.group(0)) - len(match.group(0).rstrip())
                 s_start = match.start() + leading_ws
                 s_end = match.end() - trailing_ws
-                sentences.append(SentenceSpan(
-                    text=m_text,
-                    lower_text=m_text.lower(),
-                    start_char=s_start,
-                    end_char=s_end,
-                ))
+                sentences.append(
+                    SentenceSpan(
+                        text=m_text,
+                        lower_text=m_text.lower(),
+                        start_char=s_start,
+                        end_char=s_end,
+                    )
+                )
 
     return PreprocessedDocument(
         raw_text=raw_text,

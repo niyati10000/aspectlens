@@ -11,20 +11,21 @@ Saves results to:
 - eval/results/latency_benchmark.csv
 """
 
-import json
 import csv
-import time
+import json
 import logging
+import time
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
+
 import numpy as np
 
-from nlp.preprocess import clean_text
 from nlp.aspects import extract_aspects, get_spacy_model
 from nlp.grouping import AspectGrouper
 from nlp.opinions import extract_opinions_for_aspect, split_into_clauses
-from nlp.sentiment import VADERScorer, TransformerScorer
 from nlp.pipeline import analyze_review
+from nlp.preprocess import clean_text
+from nlp.sentiment import TransformerScorer, VADERScorer
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger(__name__)
@@ -38,31 +39,39 @@ def run_latency_benchmark(
     data_path: Path = DATA_PATH,
     results_dir: Path = RESULTS_DIR,
     sample_size: int = 100,
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Execute latency profiling across VADER and Transformer ABSA configurations."""
     logger.info("Loading review sample for latency benchmark from %s", data_path)
-    with open(data_path, "r", encoding="utf-8") as f:
+    with open(data_path, encoding="utf-8") as f:
         all_reviews = json.load(f)
 
     # Select representative sample of non-trivial reviews
     valid_texts = [r["text"] for r in all_reviews if r.get("text") and 40 <= len(r["text"]) <= 800]
     sample_texts = valid_texts[:sample_size]
 
-    logger.info("Benchmarking on %d sample reviews (avg len: %.1f chars)", len(sample_texts), np.mean([len(t) for t in sample_texts]))
+    logger.info(
+        "Benchmarking on %d sample reviews (avg len: %.1f chars)",
+        len(sample_texts),
+        np.mean([len(t) for t in sample_texts]),
+    )
 
     nlp = get_spacy_model()
     grouper = AspectGrouper()
     vader = VADERScorer()
-    transformer = TransformerScorer()
+    TransformerScorer()
 
     # Warmup runs
     logger.info("Warming up models...")
-    _ = analyze_review("Great battery life and clear screen.", scorer="vader", spacy_nlp=nlp, grouper=grouper)
-    _ = analyze_review("Great battery life and clear screen.", scorer="transformer", spacy_nlp=nlp, grouper=grouper)
+    _ = analyze_review(
+        "Great battery life and clear screen.", scorer="vader", spacy_nlp=nlp, grouper=grouper
+    )
+    _ = analyze_review(
+        "Great battery life and clear screen.", scorer="transformer", spacy_nlp=nlp, grouper=grouper
+    )
 
     # 1. Benchmark VADER Pipeline
     logger.info("Profiling VADER Pipeline on %d reviews...", len(sample_texts))
-    vader_latencies: List[float] = []
+    vader_latencies: list[float] = []
     t_start_vader = time.perf_counter()
 
     for text in sample_texts:
@@ -77,7 +86,7 @@ def run_latency_benchmark(
     # Test on a 30-review subset for transformer to balance benchmark speed
     tr_sample = sample_texts[:30]
     logger.info("Profiling Transformer Pipeline on %d reviews...", len(tr_sample))
-    transformer_latencies: List[float] = []
+    transformer_latencies: list[float] = []
     t_start_tr = time.perf_counter()
 
     for text in tr_sample:
@@ -92,11 +101,11 @@ def run_latency_benchmark(
     breakdown_sample = sample_texts[:50]
     logger.info("Measuring granular component breakdown on %d reviews...", len(breakdown_sample))
 
-    t_preprocess: List[float] = []
-    t_extraction: List[float] = []
-    t_grouping: List[float] = []
-    t_opinions: List[float] = []
-    t_vader_scoring: List[float] = []
+    t_preprocess: list[float] = []
+    t_extraction: list[float] = []
+    t_grouping: list[float] = []
+    t_opinions: list[float] = []
+    t_vader_scoring: list[float] = []
 
     for text in breakdown_sample:
         # Preprocessing
@@ -120,14 +129,16 @@ def run_latency_benchmark(
             t_grouping.append((time.perf_counter() - t0) * 1000)
 
             t0 = time.perf_counter()
-            opinion_words, clause_text = extract_opinions_for_aspect(doc, c.char_start, c.char_end, clauses)
+            opinion_words, clause_text = extract_opinions_for_aspect(
+                doc, c.char_start, c.char_end, clauses
+            )
             t_opinions.append((time.perf_counter() - t0) * 1000)
 
             t0 = time.perf_counter()
             _ = vader.score(clause_text, c.term, opinion_words)
             t_vader_scoring.append((time.perf_counter() - t0) * 1000)
 
-    def stats(arr: List[float]) -> Dict[str, float]:
+    def stats(arr: list[float]) -> dict[str, float]:
         if not arr:
             return {"mean": 0, "p50": 0, "p90": 0, "p99": 0, "min": 0, "max": 0}
         return {
@@ -139,25 +150,27 @@ def run_latency_benchmark(
             "max_ms": round(float(np.max(arr)), 2),
         }
 
+    configurations_list: list[dict[str, Any]] = [
+        {
+            "config": "VADER Full Pipeline",
+            "scorer": "vader",
+            "extractor": "spacy_chunks",
+            "throughput_reviews_per_sec": round(vader_throughput, 2),
+            **stats(vader_latencies),
+        },
+        {
+            "config": "Transformer Full Pipeline",
+            "scorer": "transformer",
+            "extractor": "spacy_chunks",
+            "throughput_reviews_per_sec": round(transformer_throughput, 2),
+            **stats(transformer_latencies),
+        },
+    ]
+
     output_payload = {
         "benchmark": "system_latency_and_throughput",
         "sample_size": len(sample_texts),
-        "configurations": [
-            {
-                "config": "VADER Full Pipeline",
-                "scorer": "vader",
-                "extractor": "spacy_chunks",
-                "throughput_reviews_per_sec": round(vader_throughput, 2),
-                **stats(vader_latencies),
-            },
-            {
-                "config": "Transformer Full Pipeline",
-                "scorer": "transformer",
-                "extractor": "spacy_chunks",
-                "throughput_reviews_per_sec": round(transformer_throughput, 2),
-                **stats(transformer_latencies),
-            },
-        ],
+        "configurations": configurations_list,
         "component_breakdown": {
             "preprocessing": stats(t_preprocess),
             "candidate_extraction": stats(t_extraction),
@@ -176,20 +189,31 @@ def run_latency_benchmark(
     logger.info("Saved JSON results to %s", json_path)
 
     with open(csv_path, "w", encoding="utf-8", newline="") as f:
-        fieldnames = ["config", "throughput_reviews_per_sec", "mean_ms", "p50_ms", "p90_ms", "p99_ms", "min_ms", "max_ms"]
+        fieldnames = [
+            "config",
+            "throughput_reviews_per_sec",
+            "mean_ms",
+            "p50_ms",
+            "p90_ms",
+            "p99_ms",
+            "min_ms",
+            "max_ms",
+        ]
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
-        for c in output_payload["configurations"]:
-            writer.writerow({
-                "config": c["config"],
-                "throughput_reviews_per_sec": c["throughput_reviews_per_sec"],
-                "mean_ms": c["mean_ms"],
-                "p50_ms": c["p50_ms"],
-                "p90_ms": c["p90_ms"],
-                "p99_ms": c["p99_ms"],
-                "min_ms": c["min_ms"],
-                "max_ms": c["max_ms"],
-            })
+        for cfg in configurations_list:
+            writer.writerow(
+                {
+                    "config": cfg["config"],
+                    "throughput_reviews_per_sec": cfg["throughput_reviews_per_sec"],
+                    "mean_ms": cfg["mean_ms"],
+                    "p50_ms": cfg["p50_ms"],
+                    "p90_ms": cfg["p90_ms"],
+                    "p99_ms": cfg["p99_ms"],
+                    "min_ms": cfg["min_ms"],
+                    "max_ms": cfg["max_ms"],
+                }
+            )
     logger.info("Saved CSV results to %s", csv_path)
 
     return output_payload
@@ -199,4 +223,6 @@ if __name__ == "__main__":
     results = run_latency_benchmark()
     print("\n=== Latency & Throughput Benchmark ===")
     for c in results["configurations"]:
-        print(f"[{c['config']}] Mean: {c['mean_ms']} ms | Throughput: {c['throughput_reviews_per_sec']} reviews/s")
+        print(
+            f"[{c['config']}] Mean: {c['mean_ms']} ms | Throughput: {c['throughput_reviews_per_sec']} reviews/s"
+        )

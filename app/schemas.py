@@ -1,6 +1,7 @@
 """Pydantic schemas and request/response models for AspectLens API."""
 
-from typing import List, Optional, Dict, Any
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 from app.config import settings
@@ -11,6 +12,7 @@ from app.config import settings
 # ----------------------------------------------------------------------
 class HealthResponse(BaseModel):
     """Health check response reporting service status and model readiness."""
+
     status: str = "ok"
     models_loaded: bool = False
     version: str = settings.APP_VERSION
@@ -18,12 +20,14 @@ class HealthResponse(BaseModel):
 
 class ErrorDetail(BaseModel):
     """Structured error detail model."""
+
     code: str
     message: str
 
 
 class ErrorResponse(BaseModel):
     """Standard structured error response model matching ARCHITECTURE.md."""
+
     error: ErrorDetail
 
 
@@ -32,6 +36,7 @@ class ErrorResponse(BaseModel):
 # ----------------------------------------------------------------------
 class AnalyzeRequest(BaseModel):
     """Request model for single review analysis."""
+
     text: str = Field(
         ...,
         min_length=1,
@@ -52,26 +57,29 @@ class AnalyzeRequest(BaseModel):
 
 class AspectMentionResponse(BaseModel):
     """Single aspect mention result with character offsets referencing clean text."""
+
     term: str
     canonical: str
     start: int
     end: int
     sentiment: str
     confidence: float
-    opinion_words: List[str]
+    opinion_words: list[str]
 
 
 class AnalyzeResponse(BaseModel):
     """Response matching ARCHITECTURE.md Section 5 schema."""
+
     text: str
     scorer: str
-    aspects: List[AspectMentionResponse]
+    aspects: list[AspectMentionResponse]
     latency_ms: float
 
 
 class BatchAnalyzeRequest(BaseModel):
     """Request model for batch review analysis."""
-    reviews: List[str] = Field(
+
+    reviews: list[str] = Field(
         ...,
         min_length=1,
         max_length=settings.MAX_BATCH_SIZE,
@@ -89,7 +97,8 @@ class BatchAnalyzeRequest(BaseModel):
 
 class BatchAnalyzeResponse(BaseModel):
     """Response model for batch analysis."""
-    results: List[AnalyzeResponse]
+
+    results: list[AnalyzeResponse]
     total_reviews: int
     total_aspects: int
     latency_ms: float
@@ -100,34 +109,38 @@ class BatchAnalyzeResponse(BaseModel):
 # ----------------------------------------------------------------------
 class ProductItemResponse(BaseModel):
     """Product summary item."""
+
     id: str
     name: str
-    category: Optional[str] = None
-    source: Optional[str] = None
+    category: str | None = None
+    source: str | None = None
     review_count: int = 0
 
 
 class RepresentativeSnippet(BaseModel):
     """Representative review snippet supporting an aspect sentiment."""
+
     id: int
     term: str
     snippet: str
     confidence: float
     score: float
-    opinion_words: List[str]
+    opinion_words: list[str]
     review_id: str
-    rating: Optional[int] = None
-    review_date: Optional[str] = None
+    rating: int | None = None
+    review_date: str | None = None
 
 
 class SnippetCollection(BaseModel):
     """Collection of positive and negative snippets."""
-    positive: List[RepresentativeSnippet]
-    negative: List[RepresentativeSnippet]
+
+    positive: list[RepresentativeSnippet]
+    negative: list[RepresentativeSnippet]
 
 
 class AspectSummaryItem(BaseModel):
     """Aggregated statistics for a single canonical aspect."""
+
     aspect: str
     canonical_id: int
     mentions: int
@@ -135,11 +148,12 @@ class AspectSummaryItem(BaseModel):
     neg_pct: float
     neu_pct: float
     avg_score: float
-    snippets: Optional[SnippetCollection] = None
+    snippets: SnippetCollection | None = None
 
 
 class MonthlyTrendItem(BaseModel):
     """Sentiment trend for a single calendar month."""
+
     month: str
     aspect: str
     canonical_id: int
@@ -151,13 +165,14 @@ class MonthlyTrendItem(BaseModel):
 
 class ProductDetailResponse(BaseModel):
     """Complete product summary including aspect metrics and trends."""
+
     product_id: str
     name: str
-    category: Optional[str] = None
-    source: Optional[str] = None
+    category: str | None = None
+    source: str | None = None
     review_count: int
-    aspects: List[AspectSummaryItem]
-    monthly_trend: List[MonthlyTrendItem]
+    aspects: list[AspectSummaryItem]
+    monthly_trend: list[MonthlyTrendItem]
 
 
 # ----------------------------------------------------------------------
@@ -165,6 +180,7 @@ class ProductDetailResponse(BaseModel):
 # ----------------------------------------------------------------------
 class ComparedAspectStats(BaseModel):
     """Per-product metrics in a side-by-side comparison."""
+
     mentions: int
     pos_pct: float
     neg_pct: float
@@ -174,6 +190,7 @@ class ComparedAspectStats(BaseModel):
 
 class ComparedAspectItem(BaseModel):
     """Single aspect comparison row."""
+
     aspect: str
     canonical_id: int
     product_a: ComparedAspectStats
@@ -183,9 +200,10 @@ class ComparedAspectItem(BaseModel):
 
 class CompareProductsResponse(BaseModel):
     """Side-by-side product comparison response."""
-    product_a: Dict[str, Any]
-    product_b: Dict[str, Any]
-    aspects: List[ComparedAspectItem]
+
+    product_a: dict[str, Any]
+    product_b: dict[str, Any]
+    aspects: list[ComparedAspectItem]
 
 
 # ----------------------------------------------------------------------
@@ -193,6 +211,7 @@ class CompareProductsResponse(BaseModel):
 # ----------------------------------------------------------------------
 class UploadResponse(BaseModel):
     """Response returned upon successful CSV upload and ingestion."""
+
     batch_id: int
     filename: str
     rows_imported: int
@@ -205,6 +224,7 @@ class UploadResponse(BaseModel):
 # ----------------------------------------------------------------------
 class EvaluationResponse(BaseModel):
     """Response model for benchmark evaluation results."""
+
     status: str
     message: str
-    results: List[Dict[str, Any]] = []
+    results: list[dict[str, Any]] = []

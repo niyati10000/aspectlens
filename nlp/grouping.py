@@ -10,13 +10,12 @@ Includes embedding caching and individual ablation toggles.
 
 import json
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Set, Any
-from functools import lru_cache
+from typing import Any
+
 import numpy as np
-from sklearn.cluster import AgglomerativeClustering
-import nltk
 from nltk.corpus import wordnet as wn
 from sentence_transformers import SentenceTransformer
+from sklearn.cluster import AgglomerativeClustering
 
 from app.config import settings
 
@@ -34,13 +33,13 @@ def get_embedding_model() -> SentenceTransformer:
 class AspectGrouper:
     """Groups candidate aspect terms into canonical aspects using Seed Lexicon, WordNet, and MiniLM Embeddings."""
 
-    def __init__(self, lexicon_path: Optional[Path] = None):
+    def __init__(self, lexicon_path: Path | None = None):
         self.lexicon_path = lexicon_path or settings.SEED_LEXICON_PATH
-        self.canonical_aspects: Dict[str, Dict[str, Any]] = {}
-        self.keyword_to_canonical: Dict[str, str] = {}
-        self.embedding_cache: Dict[str, np.ndarray] = {}
-        self.canonical_embeddings: Dict[str, np.ndarray] = {}
-        self.canonical_list: List[str] = []
+        self.canonical_aspects: dict[str, dict[str, Any]] = {}
+        self.keyword_to_canonical: dict[str, str] = {}
+        self.embedding_cache: dict[str, np.ndarray] = {}
+        self.canonical_embeddings: dict[str, np.ndarray] = {}
+        self.canonical_list: list[str] = []
 
         self.reload_lexicon()
 
@@ -49,7 +48,7 @@ class AspectGrouper:
         if not self.lexicon_path.exists():
             return
 
-        with open(self.lexicon_path, "r", encoding="utf-8") as f:
+        with open(self.lexicon_path, encoding="utf-8") as f:
             data = json.load(f)
 
         self.canonical_aspects = data.get("canonical_aspects", {})
@@ -89,7 +88,7 @@ class AspectGrouper:
         self.embedding_cache[clean] = emb
         return emb
 
-    def get_embeddings_batch(self, texts: List[str]) -> np.ndarray:
+    def get_embeddings_batch(self, texts: list[str]) -> np.ndarray:
         """Batch encode with caching."""
         needed = []
         indices = []
@@ -111,7 +110,7 @@ class AspectGrouper:
     # ------------------------------------------------------------------
     # Tool 1: Seed Lexicon Matching (Rule: Wins on conflicts)
     # ------------------------------------------------------------------
-    def match_seed_lexicon(self, candidate_term: str) -> Optional[str]:
+    def match_seed_lexicon(self, candidate_term: str) -> str | None:
         """Match candidate against seed lexicon keywords (exact or substring)."""
         term_lower = candidate_term.strip().lower()
 
@@ -131,7 +130,7 @@ class AspectGrouper:
     # ------------------------------------------------------------------
     # Tool 2: WordNet Synonyms & Hypernyms
     # ------------------------------------------------------------------
-    def match_wordnet(self, candidate_term: str) -> Optional[str]:
+    def match_wordnet(self, candidate_term: str) -> str | None:
         """Match candidate using WordNet primary sense synonyms and immediate hypernyms."""
         words = candidate_term.strip().lower().split()
         if not words:
@@ -173,7 +172,7 @@ class AspectGrouper:
         self,
         candidate_term: str,
         threshold: float = 0.50,
-    ) -> Tuple[Optional[str], float]:
+    ) -> tuple[str | None, float]:
         """Match candidate against canonical aspect embeddings using cosine similarity."""
         if not self.canonical_embeddings:
             return None, 0.0
@@ -204,9 +203,9 @@ class AspectGrouper:
         use_wordnet: bool = True,
         use_embeddings: bool = True,
         similarity_threshold: float = 0.50,
-    ) -> Tuple[str, str, float]:
+    ) -> tuple[str, str, float]:
         """Map a candidate aspect term to its canonical aspect name.
-        
+
         Returns:
             (canonical_name, origin, confidence)
             origin is one of: 'seed', 'wordnet', 'embedding', 'unmatched'
@@ -237,9 +236,9 @@ class AspectGrouper:
     # ------------------------------------------------------------------
     def cluster_unmatched(
         self,
-        unmatched_terms: List[str],
+        unmatched_terms: list[str],
         distance_threshold: float = 0.35,
-    ) -> Dict[str, List[str]]:
+    ) -> dict[str, list[str]]:
         """Cluster terms that were not matched to any seed canonical aspect using AgglomerativeClustering."""
         if not unmatched_terms:
             return {}
@@ -257,11 +256,11 @@ class AspectGrouper:
         )
         labels = clustering.fit_predict(embs)
 
-        clusters: Dict[str, List[str]] = {}
+        clusters: dict[str, list[str]] = {}
         for label_id in set(labels):
-            members = [unique_terms[i] for i, l in enumerate(labels) if l == label_id]
+            members = [unique_terms[i] for i, lbl in enumerate(labels) if lbl == label_id]
             # Medoid calculation: member closest to the cluster center
-            cluster_embs = [embs[i] for i, l in enumerate(labels) if l == label_id]
+            cluster_embs = [embs[i] for i, lbl in enumerate(labels) if lbl == label_id]
             centroid = np.mean(cluster_embs, axis=0)
             centroid = centroid / np.linalg.norm(centroid)
             sims = [np.dot(e, centroid) for e in cluster_embs]
@@ -289,7 +288,7 @@ def group_aspect_term(
     use_wordnet: bool = True,
     use_embeddings: bool = True,
     similarity_threshold: float = 0.50,
-) -> Tuple[str, str, float]:
+) -> tuple[str, str, float]:
     """Convenience function to group an aspect term."""
     grouper = get_aspect_grouper()
     return grouper.group_aspect(

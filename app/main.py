@@ -1,24 +1,24 @@
 """AspectLens main FastAPI application module."""
 
-from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 import asyncio
 import logging
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, FileResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
-from starlette.exceptions import HTTPException as StarletteHTTPException
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 from slowapi.errors import RateLimitExceeded
+from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from app.config import settings
-from app.schemas import HealthResponse, ErrorResponse, ErrorDetail
-from app.limiter import limiter
 from app.api import router as api_router
+from app.config import settings
 from app.db import init_db
+from app.limiter import limiter
+from app.schemas import ErrorDetail, ErrorResponse, HealthResponse
 from nlp.aspects import get_spacy_model
 from nlp.pipeline import get_aspect_grouper
 
@@ -126,11 +126,13 @@ async def rate_limit_handler(request: Request, exc: RateLimitExceeded) -> JSONRe
 
 
 @app.exception_handler(RequestValidationError)
-async def validation_exception_handler(request: Request, exc: RequestValidationError) -> JSONResponse:
+async def validation_exception_handler(
+    request: Request, exc: RequestValidationError
+) -> JSONResponse:
     """Format Pydantic schema validation errors into clean structured JSON."""
     messages = []
     for err in exc.errors():
-        loc = " -> ".join(str(l) for l in err.get("loc", []))
+        loc = " -> ".join(str(elem) for elem in err.get("loc", []))
         msg = err.get("msg", "Invalid value")
         messages.append(f"{loc}: {msg}")
 
@@ -172,9 +174,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException) 
         elif "error" in exc.detail:
             return JSONResponse(status_code=exc.status_code, content=exc.detail)
 
-    error_payload = ErrorResponse(
-        error=ErrorDetail(code=code, message=str(exc.detail))
-    )
+    error_payload = ErrorResponse(error=ErrorDetail(code=code, message=str(exc.detail)))
     return JSONResponse(status_code=exc.status_code, content=error_payload.model_dump())
 
 

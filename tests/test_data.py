@@ -1,10 +1,10 @@
 """Unit tests for dataset loading and schema verification."""
 
-import pytest
 from pathlib import Path
+
 from data.scripts.build_demo_sample import load_demo_sample
 from data.scripts.download_semeval import load_semeval
-from nlp.preprocess import strip_pii, clean_text
+from nlp.preprocess import strip_pii
 
 
 def test_demo_sample_exists_and_valid():
@@ -37,7 +37,9 @@ def test_semeval_loader_and_schema():
     assert len(laptops_test) == 800, f"Expected 800 laptop test sentences, got {len(laptops_test)}"
 
     restaurants_train = load_semeval(split="train", domain="restaurant")
-    assert len(restaurants_train) == 3041, f"Expected 3041 restaurant train sentences, got {len(restaurants_train)}"
+    assert len(restaurants_train) == 3041, (
+        f"Expected 3041 restaurant train sentences, got {len(restaurants_train)}"
+    )
 
     # Check aspect terms structure
     sample = [r for r in laptops_test if len(r.get("aspect_terms", [])) > 0][0]
