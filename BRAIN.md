@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 5 — Opinions and sentiment (completed)
-- **Last completed phase:** 5 (opinions and sentiment)
-- **Last session summary:** Implemented nlp/opinions.py (clause-scoped dependency opinion linking, contrast boundary splitting without crossing, negation and intensifier handling, Rule 6 empty opinion list for neutral low confidence), nlp/sentiment.py (unified Scorer Protocol for VADER with domain phrase enhancements, RoBERTa/DistilBERT Transformer, and FineTuned stub), nlp/pipeline.py (end-to-end analyze_review and analyze_batch matching ARCHITECTURE.md Section 5 schema with exact character offsets). Verified golden review (Battery+ [amazing], Delivery- [late], Price- [too high]), negation tests ('not good', 'never worked'), and low-confidence neutral fallbacks (all 26 tests passing).
+- **Current phase:** 6 — Aggregation and storage (completed)
+- **Last completed phase:** 6 (aggregation and storage)
+- **Last session summary:** Implemented app/db.py (init_db with PRAGMA foreign_keys=ON, PRAGMA user_version=1, seeding canonical aspects from seed_lexicon.json and reviews from demo_sample.json, parameterized queries only, no reviewer PII stored), nlp/aggregate.py (product aspect summary with mention count, pos %, neg %, neu %, avg_score, min_mentions threshold, monthly trend YYYY-MM grouping, top-3 pos/neg snippets by confidence, and side-by-side product comparison), data/scripts/process_demo.py (offline review batch processor), and tests/test_aggregation.py (all 34 tests passing).
 - **Open questions / blockers:** None.
-- **Next action:** Phase 6 (Aggregation & storage: app/db.py schema, SQLite persistence, and nlp/aggregate.py).
+- **Next action:** Phase 7 (API: FastAPI endpoints for /health, /analyze, /analyze/batch, /upload, /products, /products/{id}/summary, /compare, /evaluation).
