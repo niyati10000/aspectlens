@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 7 — API (completed)
-- **Last completed phase:** 7 (API)
-- **Last session summary:** Implemented FastAPI routes in app/api.py (GET /health, POST /analyze, POST /analyze/batch, POST /upload with CSV mapping & size/row limits, GET /products, GET /products/{id}/summary, GET /compare, GET /evaluation), app/limiter.py (per-IP rate limiting respecting X-Forwarded-For), app/main.py (lifespan model pre-warming, heavy job semaphore, global JSON exception handlers without stack traces, security headers middleware, CORS, static frontend mount at /), and tests/test_api.py (all 50 tests passing across entire repo).
+- **Current phase:** 8 — Frontend (completed)
+- **Last completed phase:** 8 (frontend)
+- **Last session summary:** Implemented five hash-routed pages in frontend/index.html and frontend/app.js (Analyze with character counter, example review pre-fill, interactive offset highlights with sentiment icons, and confidence meters; Product Dashboard with product picker, stat tiles, horizontal stacked bar chart with mention counts, monthly trend line, and top-3 snippets; Compare with dual pickers, grouped bar chart, and delta table; Evaluation with graceful empty state; About with curriculum unit alignment and ethics notes). Vendored Chart.js 4.4.4 into frontend/chart.umd.min.js with zero Node build step. Added frontend/style.css tokens, responsive 640/960 breakpoints, dark/light theme switcher, accessibility skip-link, and verified with 55 passing tests.
 - **Open questions / blockers:** None.
-- **Next action:** Phase 8 (Frontend: Five-tab UI in plain HTML/CSS/JS + Chart.js connecting to the running API).
+- **Next action:** Phase 9 (Evaluation framework: eval/ directory, SemEval-2014 Task 4 metrics, ablation benchmarks, and automated report generation).

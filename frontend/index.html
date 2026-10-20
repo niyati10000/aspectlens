@@ -3,19 +3,417 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AspectLens — Aspect-Based Review Mining</title>
+  <meta name="description" content="AspectLens — Aspect-Based Review Mining System (ABSA)">
+  <title>AspectLens — Review Mining & Aspect Intelligence</title>
   <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
 </head>
 <body>
-  <header>
-    <h1>AspectLens</h1>
-    <p>Aspect-based review mining system</p>
+  <!-- Accessibility Skip Link -->
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <!-- App Header & Navigation -->
+  <header class="app-header">
+    <div class="header-container">
+      <a href="#/analyze" class="brand" aria-label="AspectLens Home">
+        <span class="brand-icon">🔍</span>
+        <span>AspectLens</span>
+      </a>
+
+      <!-- 5 Main Navigation Tabs -->
+      <nav class="app-nav" aria-label="Main Navigation">
+        <a href="#/analyze" class="nav-link active" id="nav-analyze" aria-controls="page-analyze">Analyze</a>
+        <a href="#/dashboard" class="nav-link" id="nav-dashboard" aria-controls="page-dashboard">Product Dashboard</a>
+        <a href="#/compare" class="nav-link" id="nav-compare" aria-controls="page-compare">Compare</a>
+        <a href="#/evaluation" class="nav-link" id="nav-evaluation" aria-controls="page-evaluation">Evaluation</a>
+        <a href="#/about" class="nav-link" id="nav-about" aria-controls="page-about">About</a>
+      </nav>
+
+      <!-- Theme Switcher -->
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
+        <span id="theme-icon">🌓</span>
+        <span id="theme-label">Theme</span>
+      </button>
+    </div>
   </header>
-  <main>
-    <section id="content">
-      <p>Phase 1 Scaffold Loaded.</p>
+
+  <!-- Main Content Area -->
+  <main id="main-content" class="main-wrapper" tabindex="-1">
+
+    <!-- Global Live Region for Screen Readers -->
+    <div id="aria-status" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+
+    <!-- ===================================================================
+         Page 1: Analyze Review
+         =================================================================== -->
+    <section id="page-analyze" class="page-view active" aria-labelledby="heading-analyze">
+      <div class="page-header">
+        <h1 id="heading-analyze">Aspect-Based Review Analysis</h1>
+        <p>Extract fine-grained aspect mentions, assign canonical categories, and score sentiment.</p>
+      </div>
+
+      <div class="card">
+        <form id="analyze-form" onsubmit="return false;">
+          <div class="form-group">
+            <label for="review-input">Customer Review Text</label>
+            <textarea 
+              id="review-input" 
+              class="input-textarea" 
+              rows="4" 
+              placeholder="Enter or paste a product review here (e.g. Battery life is amazing, but the delivery was late and the price is too high.)..."
+              maxlength="2000"
+              required
+            ></textarea>
+            <div class="char-counter">
+              <span id="char-count">0</span> / 2,000 characters
+            </div>
+          </div>
+
+          <div class="controls-row">
+            <div>
+              <label for="scorer-select" class="sr-only">Sentiment Scorer</label>
+              <select id="scorer-select" class="input-select" title="Choose Sentiment Scorer">
+                <option value="vader" selected>VADER (Domain Adjusted)</option>
+                <option value="transformer">Twitter RoBERTa (Neural)</option>
+                <option value="finetuned">Fine-Tuned ABSA (Stub)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="extractor-select" class="sr-only">Extractor</label>
+              <select id="extractor-select" class="input-select" title="Choose Extraction Method">
+                <option value="spacy_chunks" selected>spaCy Noun Chunks</option>
+                <option value="spacy_deps">Syntactic Dependency Rules</option>
+                <option value="nltk_regex">NLTK Regexp Parser</option>
+              </select>
+            </div>
+
+            <button type="button" id="btn-example" class="btn btn-secondary">
+              ⚡ Try an Example
+            </button>
+
+            <button type="submit" id="btn-analyze" class="btn btn-primary">
+              🔍 Analyze Review
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Analysis Results Area -->
+      <div id="analyze-results-container" style="display: none;">
+        <div class="card">
+          <div class="card-title">
+            <span>Extracted Aspect Analysis</span>
+            <span id="analyze-latency" class="badge-latency">-- ms</span>
+          </div>
+
+          <!-- Highlighted Text Display with Offsets -->
+          <div id="highlight-view" class="highlight-panel" aria-label="Annotated Review Text"></div>
+
+          <!-- Aspects Data Table -->
+          <div class="table-container">
+            <table class="data-table" id="analyze-table" aria-label="Extracted Aspects Table">
+              <thead>
+                <tr>
+                  <th>Aspect</th>
+                  <th>Canonical Group</th>
+                  <th>Sentiment</th>
+                  <th>Confidence</th>
+                  <th>Justifying Opinion Words</th>
+                </tr>
+              </thead>
+              <tbody id="analyze-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading / Error Region -->
+      <div id="analyze-status-box" role="status" aria-live="polite"></div>
     </section>
+
+    <!-- ===================================================================
+         Page 2: Product Dashboard
+         =================================================================== -->
+    <section id="page-dashboard" class="page-view" aria-labelledby="heading-dashboard">
+      <div class="page-header">
+        <h1 id="heading-dashboard">Product Intelligence Dashboard</h1>
+        <p>Synthesized aspect sentiment, trends over time, and representative voice-of-customer snippets.</p>
+      </div>
+
+      <div class="card">
+        <div class="controls-row" style="margin-top: 0;">
+          <div style="flex: 1; min-width: 240px;">
+            <label for="dashboard-product-select">Select Product Catalog Item</label>
+            <select id="dashboard-product-select" class="input-select" style="width: 100%;">
+              <option value="">Loading products...</option>
+            </select>
+          </div>
+          <button type="button" id="btn-refresh-dashboard" class="btn btn-secondary" style="margin-top: 22px;">
+            🔄 Refresh
+          </button>
+        </div>
+      </div>
+
+      <!-- Stat Tiles -->
+      <div class="stat-grid" id="dashboard-stats">
+        <div class="stat-tile">
+          <div class="stat-value" id="stat-reviews">-</div>
+          <div class="stat-label">Total Reviews</div>
+          <div class="stat-sub">Verified corpus</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-value" id="stat-aspects">-</div>
+          <div class="stat-label">Aspect Mentions</div>
+          <div class="stat-sub">Granular topics</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-value" id="stat-pos-pct">-</div>
+          <div class="stat-label">Positive Aspect Share</div>
+          <div class="stat-sub">Avg across categories</div>
+        </div>
+        <div class="stat-tile">
+          <div class="stat-value" id="stat-neg-pct">-</div>
+          <div class="stat-label">Negative Aspect Share</div>
+          <div class="stat-sub">Actionable pain points</div>
+        </div>
+      </div>
+
+      <!-- Charts 2-Column Grid -->
+      <div class="grid-2col">
+        <!-- Chart 1: Aspect Sentiment Shares -->
+        <div class="card">
+          <div class="card-title">Aspect Sentiment Breakdown</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 12px;">
+            Positive vs negative distribution with mention counts.
+          </p>
+          <div class="chart-wrapper">
+            <canvas id="aspect-bar-chart" aria-label="Aspect Sentiment Bar Chart" role="img"></canvas>
+          </div>
+          <!-- Accessible Fallback Table -->
+          <details class="chart-fallback">
+            <summary>View Data as Table</summary>
+            <div class="table-container" style="margin-top: 8px;">
+              <table class="data-table" id="fallback-aspect-table">
+                <thead>
+                  <tr><th>Aspect</th><th>Mentions</th><th>Pos %</th><th>Neg %</th><th>Avg Score</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+
+        <!-- Chart 2: Monthly Trend Line -->
+        <div class="card">
+          <div class="card-title" style="display: flex; align-items: center; justify-content: space-between;">
+            <span>Sentiment Trend Over Time</span>
+            <select id="trend-aspect-select" class="input-select" style="font-size: 0.8rem; height: 32px; padding: 4px 8px;">
+              <option value="all">All Aspects</option>
+            </select>
+          </div>
+          <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: -10px; margin-bottom: 12px;">
+            Monthly trajectory of sentiment scores.
+          </p>
+          <div class="chart-wrapper">
+            <canvas id="monthly-trend-chart" aria-label="Monthly Sentiment Trend Chart" role="img"></canvas>
+          </div>
+          <!-- Accessible Fallback Table -->
+          <details class="chart-fallback">
+            <summary>View Data as Table</summary>
+            <div class="table-container" style="margin-top: 8px;">
+              <table class="data-table" id="fallback-trend-table">
+                <thead>
+                  <tr><th>Month</th><th>Aspect</th><th>Mentions</th><th>Score</th></tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <!-- Representative Voice of Customer Snippets -->
+      <div class="card">
+        <div class="card-title">Representative Voice-of-Customer Snippets</div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: -8px; margin-bottom: 16px;">
+          Highest-confidence quotes highlighting key strengths and recurring issues.
+        </p>
+
+        <div class="snippets-grid">
+          <div>
+            <h3 style="font-size: 0.95rem; color: var(--pos); display: flex; align-items: center; gap: 6px; margin: 0 0 12px;">
+              <span>▲</span> Top Positive Snippets
+            </h3>
+            <div id="positive-snippets-list"></div>
+          </div>
+          <div>
+            <h3 style="font-size: 0.95rem; color: var(--neg); display: flex; align-items: center; gap: 6px; margin: 0 0 12px;">
+              <span>▼</span> Top Negative Snippets
+            </h3>
+            <div id="negative-snippets-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Page 3: Side-by-Side Product Comparison
+         =================================================================== -->
+    <section id="page-compare" class="page-view" aria-labelledby="heading-compare">
+      <div class="page-header">
+        <h1 id="heading-compare">Side-by-Side Product Comparison</h1>
+        <p>Compare aspect-level strengths, gaps, and sentiment differences between two products.</p>
+      </div>
+
+      <div class="card">
+        <div class="controls-row" style="margin-top: 0;">
+          <div style="flex: 1; min-width: 200px;">
+            <label for="compare-product-a">Product A</label>
+            <select id="compare-product-a" class="input-select" style="width: 100%;"></select>
+          </div>
+          <div style="flex: 1; min-width: 200px;">
+            <label for="compare-product-b">Product B</label>
+            <select id="compare-product-b" class="input-select" style="width: 100%;"></select>
+          </div>
+          <button type="button" id="btn-run-compare" class="btn btn-primary" style="margin-top: 22px;">
+            ⚖️ Compare Products
+          </button>
+        </div>
+      </div>
+
+      <div id="compare-results-container" style="display: none;">
+        <!-- Side-by-Side Chart -->
+        <div class="card">
+          <div class="card-title">Aspect Sentiment Comparison (Average Score)</div>
+          <div class="chart-wrapper">
+            <canvas id="compare-bar-chart" aria-label="Product Comparison Bar Chart" role="img"></canvas>
+          </div>
+        </div>
+
+        <!-- Delta Table -->
+        <div class="card">
+          <div class="card-title">Comparative Sentiment Breakdown</div>
+          <div class="table-container">
+            <table class="data-table" id="compare-table">
+              <thead>
+                <tr>
+                  <th>Aspect</th>
+                  <th id="th-product-a">Product A</th>
+                  <th id="th-product-b">Product B</th>
+                  <th>Net Score Difference</th>
+                  <th>Leading Product</th>
+                </tr>
+              </thead>
+              <tbody id="compare-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         Page 4: Offline Evaluation & Benchmarks
+         =================================================================== -->
+    <section id="page-evaluation" class="page-view" aria-labelledby="heading-evaluation">
+      <div class="page-header">
+        <h1 id="heading-evaluation">Evaluation & Benchmark Metrics</h1>
+        <p>Rigorous, reproducible offline evaluations across SemEval-2014 Task 4 and ablations.</p>
+      </div>
+
+      <div id="evaluation-content-box"></div>
+    </section>
+
+    <!-- ===================================================================
+         Page 5: About & Architecture
+         =================================================================== -->
+    <section id="page-about" class="page-view" aria-labelledby="heading-about">
+      <div class="page-header">
+        <h1 id="heading-about">About AspectLens</h1>
+        <p>Full-stack aspect-based sentiment analysis system designed for university NLP research and real-world review mining.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-title">End-to-End NLP Pipeline Architecture</div>
+        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
+          The system implements a modular six-stage pipeline directly aligning with core Natural Language Processing curriculum units:
+        </p>
+
+        <div class="syllabus-card">
+          <div class="syllabus-unit">Unit 1 · Text Normalization & Sanitization</div>
+          <div class="syllabus-title">1. Preprocessing, PII Stripping & Offset Preservation</div>
+          <p class="syllabus-desc">
+            Cleans HTML, expands common contractions, and strips personally identifiable information (emails, phone numbers, URLs).
+            Crucially maintains exact character offset mappings to the display text so frontend UI highlights can mark spans cleanly without text drift.
+          </p>
+        </div>
+
+        <div class="syllabus-card">
+          <div class="syllabus-unit">Unit 2 · Part-of-Speech Tagging & Chunking</div>
+          <div class="syllabus-title">2. Aspect Candidate Extraction</div>
+          <p class="syllabus-desc">
+            Provides three switchable extractors: (1) NLTK Regexp chunker with grammar <code>NP: {&lt;DT&gt;?&lt;JJ&gt;*&lt;NN.*&gt;+}</code>,
+            (2) spaCy noun chunk parser, and (3) Syntactic dependency rules (copular predicates, adjectival modifiers).
+            Filters out pronouns and generic nouns (e.g. <em>thing, product, item, bit, stuff</em>).
+          </p>
+        </div>
+
+        <div class="syllabus-card">
+          <div class="syllabus-unit">Unit 3 · Distributional Semantics & Taxonomies</div>
+          <div class="syllabus-title">3. Aspect Canonical Grouping</div>
+          <p class="syllabus-desc">
+            Unifies heterogeneous candidate variants (e.g. <em>cost, value, price point</em>) into 11 locked-in canonical categories
+            using a prioritized cascade: (1) Domain Seed Lexicon (wins conflicts), (2) WordNet primary sense hypernyms/synonyms,
+            and (3) all-MiniLM-L6-v2 centroid cosine similarity with Agglomerative Clustering.
+          </p>
+        </div>
+
+        <div class="syllabus-card">
+          <div class="syllabus-unit">Unit 4 · Syntactic & Dependency Parsing</div>
+          <div class="syllabus-title">4. Clause-Scoped Opinion Association</div>
+          <p class="syllabus-desc">
+            Associates evaluative words with aspects using syntactic dependency arcs first, with a fallback window of ≤ 5 tokens.
+            Splits sentences at contrast conjunctions (<em>but, however, although, though, yet</em>) and guarantees opinions never link across contrast boundaries.
+            Explicitly captures negation (<em>not good, never worked</em>) and intensifiers (<em>too high, very fast</em>).
+          </p>
+        </div>
+
+        <div class="syllabus-card">
+          <div class="syllabus-unit">Unit 5 · Sentiment Lexicons & Pretrained Transformers</div>
+          <div class="syllabus-title">5. Sentiment Scoring Interface</div>
+          <p class="syllabus-desc">
+            Behind a unified Scorer Protocol, supports: (1) Domain-adapted VADER with phrase rules, (2) Twitter RoBERTa sequence classification
+            applied directly to the aspect's clause, and (3) Fine-tuned ABSA cross-encoder stub.
+            Rule 6 enforcement: if no opinion word is found, strictly returns neutral with low confidence (0.30) without guessing.
+          </p>
+        </div>
+
+        <div class="syllabus-card">
+          <div class="syllabus-unit">Unit 6 · Information Extraction & Aggregation</div>
+          <div class="syllabus-title">6. Storage, Trends & Side-by-Side Analytics</div>
+          <p class="syllabus-desc">
+            Persists aspect mentions in SQLite with foreign key integrity. Computes mention volume alongside positive/negative percentages,
+            chronological monthly trajectories, top representative snippets, and competitive delta analysis.
+          </p>
+        </div>
+      </div>
+
+      <!-- Ethics & Limitations Card -->
+      <div class="card">
+        <div class="card-title">System Limitations & Ethical Disclosures</div>
+        <ul style="font-size: 0.9rem; color: var(--text-muted); padding-left: 20px; line-height: 1.7;">
+          <li><strong>Review Verification:</strong> AspectLens processes and summarizes text provided by users or imported datasets. It does not authenticate whether an online review is genuine, incentivized, or synthetic.</li>
+          <li><strong>Domain Sensitivity:</strong> Models evaluated on electronics (laptops/phones) may experience performance shifts when applied to other domains (e.g. restaurants or healthcare).</li>
+          <li><strong>Statistical Caution:</strong> Low-frequency aspect categories (e.g. &lt; 5 mentions) must be interpreted with caution. AspectLens always presents raw mention counts alongside percentages to prevent deceptive ratios.</li>
+          <li><strong>Privacy First:</strong> No reviewer names, emails, phone numbers, or account IDs are stored in the database.</li>
+        </ul>
+      </div>
+    </section>
+
   </main>
+
+  <!-- Vendored Local Chart.js & App Script -->
+  <script src="/static/chart.umd.min.js"></script>
   <script src="/static/app.js"></script>
 </body>
 </html>
