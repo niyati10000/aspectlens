@@ -8,9 +8,10 @@ client = TestClient(app)
 
 def test_health_endpoint():
     """Verify GET /health returns 200 OK and expected payload."""
-    response = client.get("/health")
-    assert response.status_code == 200
-    data = response.json()
-    assert data["status"] == "ok"
-    assert data["models_loaded"] is False
-    assert "version" in data
+    with TestClient(app) as client:
+        response = client.get("/health")
+        assert response.status_code == 200
+        data = response.json()
+        assert data["status"] == "ok"
+        assert isinstance(data["models_loaded"], bool)
+        assert "version" in data

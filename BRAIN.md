@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 6 — Aggregation and storage (completed)
-- **Last completed phase:** 6 (aggregation and storage)
-- **Last session summary:** Implemented app/db.py (init_db with PRAGMA foreign_keys=ON, PRAGMA user_version=1, seeding canonical aspects from seed_lexicon.json and reviews from demo_sample.json, parameterized queries only, no reviewer PII stored), nlp/aggregate.py (product aspect summary with mention count, pos %, neg %, neu %, avg_score, min_mentions threshold, monthly trend YYYY-MM grouping, top-3 pos/neg snippets by confidence, and side-by-side product comparison), data/scripts/process_demo.py (offline review batch processor), and tests/test_aggregation.py (all 34 tests passing).
+- **Current phase:** 7 — API (completed)
+- **Last completed phase:** 7 (API)
+- **Last session summary:** Implemented FastAPI routes in app/api.py (GET /health, POST /analyze, POST /analyze/batch, POST /upload with CSV mapping & size/row limits, GET /products, GET /products/{id}/summary, GET /compare, GET /evaluation), app/limiter.py (per-IP rate limiting respecting X-Forwarded-For), app/main.py (lifespan model pre-warming, heavy job semaphore, global JSON exception handlers without stack traces, security headers middleware, CORS, static frontend mount at /), and tests/test_api.py (all 50 tests passing across entire repo).
 - **Open questions / blockers:** None.
-- **Next action:** Phase 7 (API: FastAPI endpoints for /health, /analyze, /analyze/batch, /upload, /products, /products/{id}/summary, /compare, /evaluation).
+- **Next action:** Phase 8 (Frontend: Five-tab UI in plain HTML/CSS/JS + Chart.js connecting to the running API).
