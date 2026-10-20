@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 2 — Data (completed)
-- **Last completed phase:** 2 (data)
-- **Last session summary:** Implemented download and parsing scripts for SemEval-2014 Task 4 (7,686 sentences with aspect terms) and Amazon review dataset (20,709 reviews across 59 products); implemented PII stripping and common review schema; generated deterministic, balanced demo sample (3,750 reviews across 15 products, 2.48 MB < 20 MB); implemented stats script and verified with pytest (4 tests passing).
-- **Open questions / blockers:** None. Ready for Phase 3 (Aspect extraction).
-- **Next action:** Phase 3 (Aspect extraction: 3 switchable candidate extractors, generic blacklist, candidate filtering).
+- **Current phase:** 3 — Aspect extraction (completed)
+- **Last completed phase:** 3 (aspect extraction)
+- **Last session summary:** Implemented nlp/preprocess.py with HTML/whitespace normalization, PII stripping, contraction expansion, and sentence splitting preserving character offsets. Implemented nlp/aspects.py with 3 switchable extractors (NLTK Regexp chunker, spaCy noun chunks, spaCy dependency rules), generic noun blacklist pruning, and product-level frequency thresholding. Verified against 15 test sentences and full pytest suite (12 passing tests).
+- **Open questions / blockers:** None. Ready for Phase 4 (Aspect grouping).
+- **Next action:** Phase 4 (Aspect grouping: WordNet + MiniLM embeddings + seed lexicon).
