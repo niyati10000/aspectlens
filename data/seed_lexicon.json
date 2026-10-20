@@ -1,81 +1,91 @@
 {
-  "domains": ["electronics", "restaurant", "general"],
+  "domains": ["electronics", "general", "restaurant"],
   "canonical_aspects": {
     "Battery": {
       "domain": "electronics",
       "keywords": [
         "battery", "battery life", "charge", "charger", "charging",
-        "power", "cord", "cable", "adapter", "standby", "recharge", "drain"
+        "power", "cord", "cable", "adapter", "standby", "recharge",
+        "drain", "battery capacity", "power bank", "life", "cell"
       ]
     },
     "Price": {
       "domain": "general",
       "keywords": [
         "price", "cost", "value", "expensive", "cheap", "worth",
-        "deal", "money", "pricing", "budget", "affordable", "discount"
+        "deal", "money", "pricing", "budget", "affordable", "discount",
+        "value for money", "bang for the buck", "price point", "dollar"
       ]
     },
     "Delivery": {
       "domain": "general",
       "keywords": [
-        "delivery", "shipping", "shipment", "package", "packaging",
-        "arrival", "arrived", "carrier", "tracking", "box", "order time"
+        "delivery", "shipping", "shipment", "arrival", "arrived",
+        "carrier", "tracking", "order time", "transit", "delivered",
+        "post", "mail"
       ]
     },
     "Display": {
       "domain": "electronics",
       "keywords": [
         "display", "screen", "resolution", "brightness", "color",
-        "touchscreen", "panel", "pixels", "clarity", "glare", "viewing angle"
+        "touchscreen", "panel", "pixels", "clarity", "glare",
+        "viewing angle", "glass", "monitor", "screen protector"
       ]
     },
     "Camera": {
       "domain": "electronics",
       "keywords": [
         "camera", "photo", "lens", "video", "sensor", "picture",
-        "flash", "zoom", "megapixel", "shot", "recording", "focus"
+        "flash", "zoom", "megapixel", "shot", "recording", "focus",
+        "pictures", "photos", "selfie"
       ]
     },
     "Performance": {
       "domain": "electronics",
       "keywords": [
         "performance", "speed", "fast", "slow", "processor", "cpu",
-        "lag", "freezing", "smooth", "responsive", "multitasking", "ram"
+        "lag", "freezing", "smooth", "responsive", "multitasking",
+        "ram", "load time", "execution"
       ]
     },
     "Build Quality": {
       "domain": "general",
       "keywords": [
         "build quality", "build", "material", "durability", "sturdy",
-        "durable", "finish", "design", "case", "hinge", "feel", "weight"
+        "durable", "finish", "design", "case", "hinge", "feel",
+        "weight", "craftsmanship", "bumper", "frame", "construction"
       ]
     },
     "Customer Service": {
       "domain": "general",
       "keywords": [
         "customer service", "support", "warranty", "refund", "return",
-        "seller", "representative", "response", "service", "help", "repair"
+        "seller", "representative", "response", "service", "help",
+        "repair", "replacement", "assistance", "staff"
       ]
     },
     "Packaging": {
       "domain": "general",
       "keywords": [
-        "packaging", "box", "wrapped", "unboxing", "packing", "packaged",
-        "bubble wrap", "package condition"
+        "packaging", "box", "wrapped", "unboxing", "packing",
+        "packaged", "bubble wrap", "package condition", "package"
       ]
     },
     "Sound": {
       "domain": "electronics",
       "keywords": [
         "sound", "audio", "speaker", "volume", "bass", "clarity",
-        "microphone", "mic", "earpiece", "treble", "noise", "headphone"
+        "microphone", "mic", "earpiece", "treble", "noise",
+        "headphone", "speakers", "loudness", "earphones"
       ]
     },
     "Software": {
       "domain": "electronics",
       "keywords": [
-        "software", "app", "operating system", "os", "update", "interface",
-        "ui", "firmware", "sync", "bluetooth", "connectivity", "wifi"
+        "software", "app", "operating system", "os", "update",
+        "interface", "ui", "firmware", "sync", "bluetooth",
+        "connectivity", "wifi", "software updates", "system"
       ]
     },
     "Food Quality": {

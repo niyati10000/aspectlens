@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 3 — Aspect extraction (completed)
-- **Last completed phase:** 3 (aspect extraction)
-- **Last session summary:** Implemented nlp/preprocess.py with HTML/whitespace normalization, PII stripping, contraction expansion, and sentence splitting preserving character offsets. Implemented nlp/aspects.py with 3 switchable extractors (NLTK Regexp chunker, spaCy noun chunks, spaCy dependency rules), generic noun blacklist pruning, and product-level frequency thresholding. Verified against 15 test sentences and full pytest suite (12 passing tests).
-- **Open questions / blockers:** None. Ready for Phase 4 (Aspect grouping).
-- **Next action:** Phase 4 (Aspect grouping: WordNet + MiniLM embeddings + seed lexicon).
+- **Current phase:** 4 — Aspect grouping (completed, awaiting cluster review)
+- **Last completed phase:** 4 (aspect grouping)
+- **Last session summary:** Implemented data/seed_lexicon.json covering 11 canonical aspects and variants without code coupling; implemented nlp/grouping.py combining Seed Lexicon (priority 1), WordNet primary sense synonyms/hypernyms, and all-MiniLM-L6-v2 centroid cosine similarity with AgglomerativeClustering; cached embeddings; built demo cluster analysis script and verified with pytest (18 passing tests).
+- **Open questions / blockers:** Awaiting manual review of the printed cluster analysis table before proceeding to Phase 5.
+- **Next action:** Phase 5 (Opinions & sentiment: clause-scoped linking, VADER, and transformer scorers).
