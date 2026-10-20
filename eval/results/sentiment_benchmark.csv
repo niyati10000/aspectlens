@@ -1,0 +1,4 @@
+scorer,accuracy,macro_f1,total_instances,pos_f1,neu_f1,neg_f1,pos_precision,pos_recall,neg_precision,neg_recall
+vader,0.6735,0.616,1758,0.7958,0.4756,0.5766,0.8558,0.7437,0.6926,0.4938
+transformer,0.7321,0.6842,1758,0.8431,0.5464,0.6633,0.9222,0.7764,0.7386,0.6019
+finetuned,0.6735,0.616,1758,0.7958,0.4756,0.5766,0.8558,0.7437,0.6926,0.4938

@@ -78,12 +78,20 @@ def test_page_3_compare_integration(client):
 
 
 def test_page_4_evaluation_integration(client):
-    """Page 4 (Evaluation): fetch evaluation state."""
+    """Page 4 (Evaluation): fetch evaluation state and populated benchmark results."""
     res_eval = client.get("/evaluation")
     assert res_eval.status_code == 200
     data = res_eval.json()
-    assert data["status"] in ("ok", "not_generated_yet")
-    assert "message" in data
+    assert data["status"] == "ok"
+    assert len(data["results"]) == 7
+    benchmarks = {r["benchmark"]: r["data"] for r in data["results"]}
+    assert "summary_metrics" in benchmarks
+    assert "extraction_ablation" in benchmarks
+    assert "sentiment_benchmark" in benchmarks
+    assert "baseline_comparison" in benchmarks
+    assert "amazon_mixed_sentiment" in benchmarks
+    assert "latency_benchmark" in benchmarks
+    assert "error_analysis" in benchmarks
 
 
 def test_page_5_static_assets_and_html(client):

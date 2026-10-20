@@ -95,8 +95,8 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 8 — Frontend (completed)
-- **Last completed phase:** 8 (frontend)
-- **Last session summary:** Implemented five hash-routed pages in frontend/index.html and frontend/app.js (Analyze with character counter, example review pre-fill, interactive offset highlights with sentiment icons, and confidence meters; Product Dashboard with product picker, stat tiles, horizontal stacked bar chart with mention counts, monthly trend line, and top-3 snippets; Compare with dual pickers, grouped bar chart, and delta table; Evaluation with graceful empty state; About with curriculum unit alignment and ethics notes). Vendored Chart.js 4.4.4 into frontend/chart.umd.min.js with zero Node build step. Added frontend/style.css tokens, responsive 640/960 breakpoints, dark/light theme switcher, accessibility skip-link, and verified with 55 passing tests.
+- **Current phase:** 9 — Evaluation (completed)
+- **Last completed phase:** 9 (evaluation)
+- **Last session summary:** Implemented offline evaluation framework in eval/ (eval/extraction_eval.py, eval/sentiment_eval.py, eval/baseline_tfidf.py, eval/amazon_value.py, eval/latency.py, eval/error_analysis.py, eval/run_all.py). Executed `python -m eval.run_all` with fixed seed 42 on identical splits, saving 7 JSON and 6 CSV artifacts to eval/results/. RoBERTa transformer achieved 0.6842 Macro-F1 (winner vs 0.6240 TF-IDF baseline and 0.6160 VADER). Amazon mining revealed 39.43% of 4-5★ reviews contain hidden negative aspects and 61.02% of 1-2★ reviews contain positive praise. Enhanced frontend Evaluation page with KPI tiles, ablation table, sentiment comparison, and 60-example error inspector. Full test suite passing (61/61 tests).
 - **Open questions / blockers:** None.
-- **Next action:** Phase 9 (Evaluation framework: eval/ directory, SemEval-2014 Task 4 metrics, ablation benchmarks, and automated report generation).
+- **Next action:** Phase 10 (Tests and quality: comprehensive pytest coverage, type hints, docstrings, formatting and linting).

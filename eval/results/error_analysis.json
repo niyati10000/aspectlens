@@ -1,0 +1,752 @@
+{
+  "benchmark": "error_analysis",
+  "dataset": "SemEval-2014 Task 4 Test Split",
+  "total_misclassifications_found": 574,
+  "total_examples_curated": 60,
+  "category_distribution": {
+    "implicit aspect": 12,
+    "negation": 10,
+    "multi-aspect clause": 18,
+    "comparison": 10,
+    "other": 10
+  },
+  "examples": [
+    {
+      "id": 1,
+      "sentence": "It's fast, light, and simple to use.",
+      "aspect": "use",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "simple"
+      ],
+      "clause": "It's fast, light, and simple to use",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 2,
+      "sentence": "Made interneting (part of my business) very difficult to maintain.",
+      "aspect": "interneting",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Made interneting (part of my business) very difficult to maintain",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 3,
+      "sentence": "Strong build though which really adds to its durability.",
+      "aspect": "durability",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "which really adds to its durability",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 4,
+      "sentence": "I've had my computer for 2 weeks already and it works perfectly.",
+      "aspect": "works",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "I've had my computer for 2 weeks already and it works perfectly",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 5,
+      "sentence": "The baterry is very longer.",
+      "aspect": "baterry",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "very longer"
+      ],
+      "clause": "The baterry is very longer",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 6,
+      "sentence": "This laptop has only 2 USB ports, and they are both on the same side.",
+      "aspect": "USB ports",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "This laptop has only 2 USB ports, and they are both on the same side",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 7,
+      "sentence": "However, I can refute that OSX is \"FAST\".",
+      "aspect": "OSX",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "FAST"
+      ],
+      "clause": "I can refute that OSX is \"FAST\"",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 8,
+      "sentence": "Cons: Screen resolution.",
+      "aspect": "Screen resolution",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Screen resolution",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 9,
+      "sentence": "And the fact that Apple is driving the 13\" RMBP with the Intel4000 graphic chip seems underpowered (to me.",
+      "aspect": "Intel4000 graphic chip",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "Intel4000",
+        "graphic"
+      ],
+      "clause": "And the fact that Apple is driving the 13\" RMBP with the Intel4000 graphic chip seems underpowered (to me",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 10,
+      "sentence": "The durability of the laptop will make it worth the money.",
+      "aspect": "durability",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "The durability of the laptop will make it worth the money",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 11,
+      "sentence": "tech support would not fix the problem unless I bought your plan for $150 plus.",
+      "aspect": "tech support",
+      "gold_polarity": "negative",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "not fix"
+      ],
+      "clause": "tech support would not fix the problem unless I bought your plan for $150 plus",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 12,
+      "sentence": "Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag.",
+      "aspect": "price tag",
+      "gold_polarity": "positive",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "considering"
+      ],
+      "clause": "Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 13,
+      "sentence": "Sure it's not light and slim but the features make up for it 100%.",
+      "aspect": "features",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "the features make up for it 100%",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 14,
+      "sentence": "The Apple engineers have not yet discovered the delete key.",
+      "aspect": "delete key",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "delete",
+        "discovered"
+      ],
+      "clause": "discovered the delete key",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 15,
+      "sentence": "I would have given it 5 starts was it not for the fact that it had Windows 8",
+      "aspect": "Windows 8",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "I would have given it 5 starts was it not for the fact that it had Windows 8",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 16,
+      "sentence": "The Mountain Lion OS is not hard to figure out if you are familiar with Microsoft Windows.",
+      "aspect": "Microsoft Windows",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "familiar"
+      ],
+      "clause": "The Mountain Lion OS is not hard to figure out if you are familiar with Microsoft Windows",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 17,
+      "sentence": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare.",
+      "aspect": "SquareTrade 3-Year Computer Accidental Protection Warranty",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 18,
+      "sentence": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare.",
+      "aspect": "AppleCare",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 19,
+      "sentence": "It feels cheap, the keyboard is not very sensitive.",
+      "aspect": "keyboard",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "not very sensitive"
+      ],
+      "clause": "It feels cheap, the keyboard is not very sensitive",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 20,
+      "sentence": "I have experienced no problems, works as anticipated.",
+      "aspect": "works",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "I have experienced no problems, works as anticipated",
+      "category": "negation",
+      "reason": "Complex or scoped negation inverted intended aspect sentiment."
+    },
+    {
+      "id": 21,
+      "sentence": "Works well, and I am extremely happy to be back to an apple OS.",
+      "aspect": "Works",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Works well, and I am extremely happy to be back to an apple OS",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (apple OS) with diverging polarity."
+    },
+    {
+      "id": 22,
+      "sentence": "Works well, and I am extremely happy to be back to an apple OS.",
+      "aspect": "apple OS",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Works well, and I am extremely happy to be back to an apple OS",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (Works) with diverging polarity."
+    },
+    {
+      "id": 23,
+      "sentence": "It has so much more speed and the screen is very sharp.",
+      "aspect": "speed",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "more"
+      ],
+      "clause": "It has so much more speed and the screen is very sharp",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (screen) with diverging polarity."
+    },
+    {
+      "id": 24,
+      "sentence": "It has so much more speed and the screen is very sharp.",
+      "aspect": "screen",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "very sharp"
+      ],
+      "clause": "It has so much more speed and the screen is very sharp",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (speed) with diverging polarity."
+    },
+    {
+      "id": 25,
+      "sentence": "It has all the expected features and more +plus a wide screen and more than roomy keyboard.",
+      "aspect": "features",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "expected"
+      ],
+      "clause": "It has all the expected features and more +plus a wide screen and more than roomy keyboard",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (screen, keyboard) with diverging polarity."
+    },
+    {
+      "id": 26,
+      "sentence": "It has all the expected features and more +plus a wide screen and more than roomy keyboard.",
+      "aspect": "screen",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "wide"
+      ],
+      "clause": "It has all the expected features and more +plus a wide screen and more than roomy keyboard",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (features, keyboard) with diverging polarity."
+    },
+    {
+      "id": 27,
+      "sentence": "It has all the expected features and more +plus a wide screen and more than roomy keyboard.",
+      "aspect": "keyboard",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "more"
+      ],
+      "clause": "It has all the expected features and more +plus a wide screen and more than roomy keyboard",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (features, screen) with diverging polarity."
+    },
+    {
+      "id": 28,
+      "sentence": "The receiver was full of superlatives for the quality and performance.",
+      "aspect": "quality",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "full"
+      ],
+      "clause": "The receiver was full of superlatives for the quality and performance",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (performance) with diverging polarity."
+    },
+    {
+      "id": 29,
+      "sentence": "The receiver was full of superlatives for the quality and performance.",
+      "aspect": "performance",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "The receiver was full of superlatives for the quality and performance",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (quality) with diverging polarity."
+    },
+    {
+      "id": 30,
+      "sentence": "From the speed to the multi touch gestures this operating system beats Windows easily.",
+      "aspect": "Windows",
+      "gold_polarity": "negative",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "beats"
+      ],
+      "clause": "From the speed to the multi touch gestures this operating system beats Windows easily",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (operating system, speed, multi touch gestures) with diverging polarity."
+    },
+    {
+      "id": 31,
+      "sentence": "Not as fast as I would have expect for an i5.",
+      "aspect": "i5",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Not as fast as I would have expect for an i5",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 32,
+      "sentence": "I think this is about as good as it gets at anything close to this price point.",
+      "aspect": "price point",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "close"
+      ],
+      "clause": "I think this is about as good as it gets at anything close to this price point",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 33,
+      "sentence": "USB3 Peripherals are noticably less expensive than the ThunderBolt ones.",
+      "aspect": "USB3 Peripherals",
+      "gold_polarity": "positive",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "noticably",
+        "expensive"
+      ],
+      "clause": "USB3 Peripherals are noticably less expensive than the ThunderBolt ones",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 34,
+      "sentence": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product.",
+      "aspect": "Price",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "higher"
+      ],
+      "clause": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 35,
+      "sentence": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product.",
+      "aspect": "price",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 36,
+      "sentence": "I like coming back to Mac OS but this laptop is lacking in speaker quality compared to my $400 old HP laptop.",
+      "aspect": "speaker quality",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "this laptop is lacking in speaker quality compared to my $400 old HP laptop",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 37,
+      "sentence": "No Cd Rom in the new version there's no way I'm spending that kind of money on something has less features than the older version.",
+      "aspect": "Cd Rom",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "new"
+      ],
+      "clause": "No Cd Rom in the new version there's no way I'm spending that kind of money on something has less features than the older version",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 38,
+      "sentence": "Cost is more as compared to other brands.",
+      "aspect": "Cost",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Cost is more as compared to other brands",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 39,
+      "sentence": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate.",
+      "aspect": "asparagus",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "soft"
+      ],
+      "clause": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 40,
+      "sentence": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate.",
+      "aspect": "soft shell crab",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "soft"
+      ],
+      "clause": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate",
+      "category": "comparison",
+      "reason": "Comparative construct shifts sentiment relative to another entity."
+    },
+    {
+      "id": 41,
+      "sentence": "Only 2 usb ports...seems kind of...limited.",
+      "aspect": "usb ports",
+      "gold_polarity": "negative",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "limited"
+      ],
+      "clause": "Only 2 usb ports...seems kind of...limited",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 42,
+      "sentence": "They don't just look good; they deliver excellent performance.",
+      "aspect": "look",
+      "gold_polarity": "positive",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "good"
+      ],
+      "clause": "They don't just look good",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 43,
+      "sentence": "I wanted a computer that was quite, fast, and that had overall great performance.",
+      "aspect": "performance",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "overall",
+        "great"
+      ],
+      "clause": "I wanted a computer that was quite, fast, and that had overall great performance",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 44,
+      "sentence": "The only solution is to turn the brightness down, etc.",
+      "aspect": "brightness",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "turn"
+      ],
+      "clause": "The only solution is to turn the brightness down, etc",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 45,
+      "sentence": "If you want more information on macs I suggest going to apple.com and heading towards the macbook page for more information on the applications.",
+      "aspect": "applications",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "more"
+      ],
+      "clause": "If you want more information on macs I suggest going to apple.com and heading towards the macbook page for more information on the applications",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 46,
+      "sentence": "It shouldn't happen like that, I don't have any design app open or anything.",
+      "aspect": "design app",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "open"
+      ],
+      "clause": "It shouldn't happen like that, I don't have any design app open or anything",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 47,
+      "sentence": "I thought the transition would be difficult at best and would take some time to fully familiarize myself with the new Mac ecosystem.",
+      "aspect": "Mac ecosystem",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "new"
+      ],
+      "clause": "I thought the transition would be difficult at best and would take some time to fully familiarize myself with the new Mac ecosystem",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 48,
+      "sentence": "so i called technical support.",
+      "aspect": "technical support",
+      "gold_polarity": "neutral",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "technical",
+        "so called"
+      ],
+      "clause": "so i called technical support",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 49,
+      "sentence": "Logic board utterly fried, cried, and laid down and died.",
+      "aspect": "Logic board",
+      "gold_polarity": "positive",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "utterly"
+      ],
+      "clause": "Logic board utterly fried, cried, and laid down and died",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 50,
+      "sentence": "More likely it will require replacing the logic board once they admit they have a problem and come up with a solution.",
+      "aspect": "logic board",
+      "gold_polarity": "negative",
+      "predicted_polarity": "positive",
+      "opinion_words": [
+        "replacing"
+      ],
+      "clause": "More likely it will require replacing the logic board once they admit they have a problem and come up with a solution",
+      "category": "other",
+      "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+    },
+    {
+      "id": 51,
+      "sentence": "The reason why I choose apple MacBook because of their design and the aluminum casing.",
+      "aspect": "design",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "The reason why I choose apple MacBook because of their design and the aluminum casing",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (aluminum casing) with diverging polarity."
+    },
+    {
+      "id": 52,
+      "sentence": "The reason why I choose apple MacBook because of their design and the aluminum casing.",
+      "aspect": "aluminum casing",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "The reason why I choose apple MacBook because of their design and the aluminum casing",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (design) with diverging polarity."
+    },
+    {
+      "id": 53,
+      "sentence": "Apple removed the DVD drive Firewire port (will work with adapter) and put the SDXC slot in a silly position on the back.",
+      "aspect": "SDXC slot",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "SDXC"
+      ],
+      "clause": "Apple removed the DVD drive Firewire port (will work with adapter) and put the SDXC slot in a silly position on the back",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (DVD drive Firewire port, adapter) with diverging polarity."
+    },
+    {
+      "id": 54,
+      "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+      "aspect": "product quality",
+      "gold_polarity": "positive",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "unmatched"
+      ],
+      "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (aesthetics, craftmanship, customer service) with diverging polarity."
+    },
+    {
+      "id": 55,
+      "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+      "aspect": "aesthetics",
+      "gold_polarity": "positive",
+      "predicted_polarity": "negative",
+      "opinion_words": [
+        "unmatched"
+      ],
+      "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (product quality, craftmanship, customer service) with diverging polarity."
+    },
+    {
+      "id": 56,
+      "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+      "aspect": "craftmanship",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (product quality, aesthetics, customer service) with diverging polarity."
+    },
+    {
+      "id": 57,
+      "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+      "aspect": "customer service",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (product quality, aesthetics, craftmanship) with diverging polarity."
+    },
+    {
+      "id": 58,
+      "sentence": "Startup times are incredibly long: over two minutes.",
+      "aspect": "Startup times",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [
+        "incredibly long"
+      ],
+      "clause": "Startup times are incredibly long",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 59,
+      "sentence": "Set up was a breeze.",
+      "aspect": "Set up",
+      "gold_polarity": "positive",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "Set up was a breeze",
+      "category": "implicit aspect",
+      "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+    },
+    {
+      "id": 60,
+      "sentence": "I had the same reasons as most PC users: the price, the overbearing restrictions of OSX and lack of support for games.",
+      "aspect": "price",
+      "gold_polarity": "negative",
+      "predicted_polarity": "neutral",
+      "opinion_words": [],
+      "clause": "the price, the overbearing restrictions of OSX and lack of support for games",
+      "category": "multi-aspect clause",
+      "reason": "Clause contains multiple co-occurring aspects (OSX, support for games) with diverging polarity."
+    }
+  ]
+}

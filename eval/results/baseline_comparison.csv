@@ -1,0 +1,5 @@
+model,accuracy,macro_f1,pos_f1,neu_f1,neg_f1
+tfidf_logistic_regression_whole_review,0.7071,0.624,0.8285,0.4706,0.573
+vader,0.6735,0.616,0.7958,0.4756,0.5766
+transformer,0.7321,0.6842,0.8431,0.5464,0.6633
+finetuned,0.6735,0.616,0.7958,0.4756,0.5766

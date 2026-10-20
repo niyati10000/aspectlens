@@ -1,0 +1,52 @@
+{
+  "benchmark": "aspect_extraction_ablation",
+  "dataset": "SemEval-2014 Task 4 (Laptops & Restaurants Test)",
+  "test_sentences": 1600,
+  "total_gold_aspects": 1788,
+  "ablations": [
+    {
+      "ablation": "1. Chunks Only",
+      "description": "spaCy noun chunks with blacklist filtering",
+      "exact_precision": 0.2666,
+      "exact_recall": 0.5219,
+      "exact_f1": 0.3529,
+      "overlap_f1": 0.534,
+      "tp": 929,
+      "fp": 2556,
+      "fn": 851
+    },
+    {
+      "ablation": "2. Chunks + Dependency Rules",
+      "description": "Noun chunks combined with syntactic subject/amod rules",
+      "exact_precision": 0.2647,
+      "exact_recall": 0.5236,
+      "exact_f1": 0.3516,
+      "overlap_f1": 0.5354,
+      "tp": 932,
+      "fp": 2589,
+      "fn": 848
+    },
+    {
+      "ablation": "3. Chunks + Deps + Frequency Filter",
+      "description": "Candidate pruning requiring corpus frequency >= 2",
+      "exact_precision": 0.3604,
+      "exact_recall": 0.3489,
+      "exact_f1": 0.3546,
+      "overlap_f1": 0.4068,
+      "tp": 621,
+      "fp": 1102,
+      "fn": 1159
+    },
+    {
+      "ablation": "4. Full Pipeline (+ Grouping)",
+      "description": "Canonical aspect normalization via lexicon, WordNet & SBERT",
+      "exact_precision": 0.1387,
+      "exact_recall": 0.1258,
+      "exact_f1": 0.132,
+      "overlap_f1": 0.2739,
+      "tp": 224,
+      "fp": 1391,
+      "fn": 1556
+    }
+  ]
+}

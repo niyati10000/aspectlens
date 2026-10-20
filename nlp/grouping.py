@@ -73,7 +73,7 @@ class AspectGrouper:
         for c in self.canonical_list:
             kws = self.canonical_aspects[c].get("keywords", [])[:6]
             terms_to_encode = [c] + kws
-            embs = model.encode(terms_to_encode, normalize_embeddings=True)
+            embs = model.encode(terms_to_encode, normalize_embeddings=True, show_progress_bar=False)
             centroid = np.mean(embs, axis=0)
             centroid = centroid / np.linalg.norm(centroid)
             self.canonical_embeddings[c] = centroid
@@ -85,7 +85,7 @@ class AspectGrouper:
             return self.embedding_cache[clean]
 
         model = get_embedding_model()
-        emb = model.encode([clean], normalize_embeddings=True)[0]
+        emb = model.encode([clean], normalize_embeddings=True, show_progress_bar=False)[0]
         self.embedding_cache[clean] = emb
         return emb
 
@@ -101,7 +101,7 @@ class AspectGrouper:
 
         if needed:
             model = get_embedding_model()
-            new_embs = model.encode(needed, normalize_embeddings=True)
+            new_embs = model.encode(needed, normalize_embeddings=True, show_progress_bar=False)
             for clean, emb in zip(needed, new_embs):
                 self.embedding_cache[clean] = emb
 

@@ -1,0 +1,5 @@
+ablation,description,exact_precision,exact_recall,exact_f1,overlap_f1,tp,fp,fn
+1. Chunks Only,spaCy noun chunks with blacklist filtering,0.2666,0.5219,0.3529,0.534,929,2556,851
+2. Chunks + Dependency Rules,Noun chunks combined with syntactic subject/amod rules,0.2647,0.5236,0.3516,0.5354,932,2589,848
+3. Chunks + Deps + Frequency Filter,Candidate pruning requiring corpus frequency >= 2,0.3604,0.3489,0.3546,0.4068,621,1102,1159
+4. Full Pipeline (+ Grouping),"Canonical aspect normalization via lexicon, WordNet & SBERT",0.1387,0.1258,0.132,0.2739,224,1391,1556

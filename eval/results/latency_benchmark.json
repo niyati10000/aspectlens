@@ -1,0 +1,72 @@
+{
+  "benchmark": "system_latency_and_throughput",
+  "sample_size": 80,
+  "configurations": [
+    {
+      "config": "VADER Full Pipeline",
+      "scorer": "vader",
+      "extractor": "spacy_chunks",
+      "throughput_reviews_per_sec": 13.36,
+      "mean_ms": 74.84,
+      "p50_ms": 60.79,
+      "p90_ms": 142.17,
+      "p99_ms": 254.7,
+      "min_ms": 9.52,
+      "max_ms": 404.09
+    },
+    {
+      "config": "Transformer Full Pipeline",
+      "scorer": "transformer",
+      "extractor": "spacy_chunks",
+      "throughput_reviews_per_sec": 2.06,
+      "mean_ms": 484.35,
+      "p50_ms": 321.76,
+      "p90_ms": 946.82,
+      "p99_ms": 1549.0,
+      "min_ms": 21.68,
+      "max_ms": 1586.14
+    }
+  ],
+  "component_breakdown": {
+    "preprocessing": {
+      "mean_ms": 0.09,
+      "p50_ms": 0.07,
+      "p90_ms": 0.15,
+      "p99_ms": 0.46,
+      "min_ms": 0.03,
+      "max_ms": 0.63
+    },
+    "candidate_extraction": {
+      "mean_ms": 14.63,
+      "p50_ms": 12.68,
+      "p90_ms": 22.94,
+      "p99_ms": 31.45,
+      "min_ms": 7.75,
+      "max_ms": 35.75
+    },
+    "canonical_grouping_per_candidate": {
+      "mean_ms": 0.1,
+      "p50_ms": 0.09,
+      "p90_ms": 0.19,
+      "p99_ms": 0.37,
+      "min_ms": 0.0,
+      "max_ms": 0.44
+    },
+    "opinion_association_per_candidate": {
+      "mean_ms": 0.09,
+      "p50_ms": 0.07,
+      "p90_ms": 0.14,
+      "p99_ms": 0.44,
+      "min_ms": 0.02,
+      "max_ms": 0.8
+    },
+    "vader_scoring_per_candidate": {
+      "mean_ms": 0.24,
+      "p50_ms": 0.2,
+      "p90_ms": 0.56,
+      "p99_ms": 1.26,
+      "min_ms": 0.0,
+      "max_ms": 1.67
+    }
+  }
+}

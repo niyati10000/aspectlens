@@ -1,0 +1,3 @@
+config,throughput_reviews_per_sec,mean_ms,p50_ms,p90_ms,p99_ms,min_ms,max_ms
+VADER Full Pipeline,13.36,74.84,60.79,142.17,254.7,9.52,404.09
+Transformer Full Pipeline,2.06,484.35,321.76,946.82,1549.0,21.68,1586.14
