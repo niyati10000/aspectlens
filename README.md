@@ -12,6 +12,9 @@ license: mit
 
 AspectLens is an aspect-based sentiment analysis and review mining application built for customer review analytics, comparing products across granular dimensions (battery, delivery, price, display, etc.).
 
+# Hosted link
+https://niyati26-aspectlens.static.hf.space
+
 ## Tech Stack
 - **Backend:** Python 3.11, FastAPI, Uvicorn, Pydantic
 - **NLP:** spaCy (`en_core_web_sm`), NLTK (RegexpParser, WordNet, VADER), sentence-transformers (`all-MiniLM-L6-v2`), Hugging Face Transformers (`cardiffnlp/twitter-roberta-base-sentiment-latest`)
