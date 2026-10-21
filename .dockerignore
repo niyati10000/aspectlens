@@ -12,15 +12,19 @@ env/
 *.db
 *.sqlite3
 
-# Python caches
+# Python caches and testing
 __pycache__/
 *.pyc
 *.pyo
 .pytest_cache/
 .coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
 
-# Notebooks and raw data
+# Notebooks, scratch, and raw data
 notebooks/
+scratch/
 data/raw/
 *.gz
 *.zip

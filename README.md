@@ -1,3 +1,13 @@
+---
+title: aspectlens
+emoji: 🔍
+colorFrom: blue
+colorTo: indigo
+sdk: static
+pinned: false
+license: mit
+---
+
 # AspectLens — Aspect-Based Review Mining System
 
 AspectLens is an aspect-based sentiment analysis and review mining application built for customer review analytics, comparing products across granular dimensions (battery, delivery, price, display, etc.).
@@ -21,6 +31,16 @@ pip install -r requirements.txt
 
 # 3. Run FastAPI application
 uvicorn app.main:app --port 7860 --reload
+```
+
+## Docker
+
+```bash
+# Build image
+docker build -t aspectlens .
+
+# Run container
+docker run -p 7860:7860 aspectlens
 ```
 
 ## Health Check

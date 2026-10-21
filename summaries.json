@@ -1,0 +1,173 @@
+{
+  "B0042FV2SI": {
+    "product_id": "B0042FV2SI",
+    "name": "Acase Super Tough Dual Layer Case",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B009RXU59C": {
+    "product_id": "B009RXU59C",
+    "name": "Anker 24W Dual-Port USB Wall Charger",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B0073FCPSK": {
+    "product_id": "B0073FCPSK",
+    "name": "Anker Astro Mini 3000mAh Power Bank",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B0088U4YAG": {
+    "product_id": "B0088U4YAG",
+    "name": "Anker SlimTalk 3200mAh Battery Pack",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B007FXMOV8": {
+    "product_id": "B007FXMOV8",
+    "name": "Fintie Premium Vegan Leather Folio Case",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B007FHX9OK": {
+    "product_id": "B007FHX9OK",
+    "name": "Hyperion Extended Battery 3800mAh",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B008DJIIG8": {
+    "product_id": "B008DJIIG8",
+    "name": "Kensington Protective Rubber Bumper",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B00BT7RAPG": {
+    "product_id": "B00BT7RAPG",
+    "name": "Maxboost 3.1A USB Car Charger",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B0015RB39O": {
+    "product_id": "B0015RB39O",
+    "name": "Motorola Original Vehicle Power Adapter",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B005SUHPO6": {
+    "product_id": "B005SUHPO6",
+    "name": "OtterBox Commuter Case (Plum)",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B0088LYCZC": {
+    "product_id": "B0088LYCZC",
+    "name": "Samsung OEM Micro USB Data Cable",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B009A5204K": {
+    "product_id": "B009A5204K",
+    "name": "Spigen Ultra Thin Slim Armor Case",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B008OHNZI0": {
+    "product_id": "B008OHNZI0",
+    "name": "Tech Armor HD Clear Screen Protector",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B000S5Q9CA": {
+    "product_id": "B000S5Q9CA",
+    "name": "Universal Micro USB Car Charger",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "B0090YGJ4I": {
+    "product_id": "B0090YGJ4I",
+    "name": "i-Blason Armorbox Hybrid Protective Case",
+    "category": "Cell Phones & Accessories",
+    "source": "amazon",
+    "review_count": 250,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "limit": {
+    "product_id": "limit",
+    "name": "Product limit",
+    "category": "Uploaded",
+    "source": "upload",
+    "review_count": 24,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "UPLOAD_TEST_1": {
+    "product_id": "UPLOAD_TEST_1",
+    "name": "Product UPLOAD_TEST_1",
+    "category": "Uploaded",
+    "source": "upload",
+    "review_count": 18,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "UPLOAD_TEST_2": {
+    "product_id": "UPLOAD_TEST_2",
+    "name": "Product UPLOAD_TEST_2",
+    "category": "Uploaded",
+    "source": "upload",
+    "review_count": 9,
+    "aspects": [],
+    "monthly_trend": []
+  },
+  "data": {
+    "product_id": "data",
+    "name": "Product data",
+    "category": "Uploaded",
+    "source": "upload",
+    "review_count": 8,
+    "aspects": [],
+    "monthly_trend": []
+  }
+}

@@ -1,0 +1,1674 @@
+{
+  "status": "ok",
+  "message": "Found 7 benchmark evaluation result files.",
+  "results": [
+    {
+      "benchmark": "amazon_mixed_sentiment",
+      "data": {
+        "benchmark": "amazon_mixed_sentiment_value",
+        "dataset": "Amazon Cell Phones & Accessories Demo Sample",
+        "total_reviews_analyzed": 800,
+        "metrics": {
+          "high_star_reviews": {
+            "star_range": "4-5 stars",
+            "total_count": 317,
+            "count_with_negative_aspect": 125,
+            "share_pct": 39.43,
+            "whole_review_baseline_assumption_pct": 0.0,
+            "value_uncovered": "39.43% of high-rated reviews contain critical negative feedback hidden from star ratings."
+          },
+          "low_star_reviews": {
+            "star_range": "1-2 stars",
+            "total_count": 313,
+            "count_with_positive_aspect": 191,
+            "share_pct": 61.02,
+            "whole_review_baseline_assumption_pct": 0.0,
+            "value_uncovered": "61.02% of low-rated reviews contain positive praise or redeeming qualities."
+          }
+        },
+        "examples_negative_in_high_star": [
+          {
+            "review_id": "amz_B0088U4YAG_00107",
+            "rating": 4,
+            "text": "The device works as promised. I use it to charge Android devices [Galaxy phones] and it does great. Be sure to plug your USB into the N/A slot. N/A = Non-Apple. That USB slot has the proper voltage to...",
+            "negative_aspects": [
+              "Galaxy S4",
+              "Battery"
+            ],
+            "opinion_words": [
+              "charges",
+              "n't even"
+            ]
+          },
+          {
+            "review_id": "amz_B009A5204K_00331",
+            "rating": 4,
+            "text": "Would not pair to my phone right out of the box. (Nexus 4) When I went into manual pairing, I was able to pair it. Then I took it for a road test - literally - drove into work using it for the first t...",
+            "negative_aspects": [
+              "Same Problem",
+              "Kitkat",
+              "No Interruptions",
+              "Minor Inconvenience",
+              "Lg",
+              "Customer Service",
+              "Delivery",
+              "Fairly Simple Search",
+              "Customer Service",
+              "Customer Service",
+              "Google",
+              "Upgrade",
+              "Rating",
+              "Actual Device",
+              "4 Stars",
+              "Software"
+            ],
+            "opinion_words": [
+              "same",
+              "same",
+              "work",
+              "minor",
+              "not aware",
+              "not aware",
+              "Also",
+              "fairly simple",
+              "fairly simple",
+              "aware",
+              "so afraid",
+              "not challenge",
+              "moved",
+              "actual",
+              "actual",
+              "more"
+            ]
+          },
+          {
+            "review_id": "amz_B000S5Q9CA_00591",
+            "rating": 4,
+            "text": "This is a Motorola product, not a cheap Chinise special. Well made and works perfect! Works on all brands not just Motorola.",
+            "negative_aspects": [
+              "Not A Cheap Chinise Special"
+            ],
+            "opinion_words": [
+              "not cheap"
+            ]
+          },
+          {
+            "review_id": "amz_B005SUHPO6_00162",
+            "rating": 4,
+            "text": "So far, the quality is great. I installed these yesterday (very easy and a tight fit), so only time will tell. My only complaint is, I cant use the belt clip holster. I cant use it because all of my b...",
+            "negative_aspects": [
+              "Only Complaint",
+              "New Belts"
+            ],
+            "opinion_words": [
+              "only",
+              "new"
+            ]
+          },
+          {
+            "review_id": "amz_B007FXMOV8_00203",
+            "rating": 4,
+            "text": "The barrel is pretty barren--maybe a cool logo would add to it & advertise. To appeal to kids, add childish designs. To appeal to the classier, add a leather barrel. To appeal to aesthetics, add a car...",
+            "negative_aspects": [
+              "Kids",
+              "Build Quality",
+              "Metal Clip",
+              "Hard",
+              "Plastic Tip",
+              "Build Quality",
+              "Build Quality"
+            ],
+            "opinion_words": [
+              "childish",
+              "childish",
+              "add",
+              "very stiff",
+              "hard",
+              "very stiff",
+              "plastic",
+              "confusing",
+              "hard",
+              "most"
+            ]
+          },
+          {
+            "review_id": "amz_B009RXU59C_00566",
+            "rating": 4,
+            "text": "the following is my review of the the following is my review of the IMP90C, a dual USB wall charger.My first suggestion is to include details or some sort of guide to the product. I read the product d...",
+            "negative_aspects": [
+              "Packaging",
+              "Packaging",
+              "Kindle Fire",
+              "Itouches"
+            ],
+            "opinion_words": [
+              "plain",
+              "white",
+              "Same",
+              "charges"
+            ]
+          },
+          {
+            "review_id": "amz_B007FXMOV8_00212",
+            "rating": 4,
+            "text": "The New Trent Arcadia clickpen stylus is small and lightweight which makesit easy to use. Having the tip recessed protects it from damage, and theunique metallic mesh tip works well on both iPad and i...",
+            "negative_aspects": [
+              "Shirt Pocket"
+            ],
+            "opinion_words": [
+              "difficult"
+            ]
+          },
+          {
+            "review_id": "amz_B005SUHPO6_00024",
+            "rating": 4,
+            "text": "Ottherbox Defender series is the best. I have a friend who cracked her iPhone 4 screen. I quickly told her to buy an Otterbox and she wasn't swayed. So I carelessly threw my phone at the wall, tossed ...",
+            "negative_aspects": [
+              "Customer Service",
+              "Hardwood Floor",
+              "Display",
+              "Weird Splotches"
+            ],
+            "opinion_words": [
+              "so threw",
+              "hit",
+              "also",
+              "suceptible",
+              "weird"
+            ]
+          },
+          {
+            "review_id": "amz_B00BT7RAPG_00155",
+            "rating": 4,
+            "text": "The film feels great, my finger does glides in the screen very cleanly, unlike other films I have used that make it harder to navigate and drag or touch the screen.My only gripe is the possible combin...",
+            "negative_aspects": [
+              "Only Gripe",
+              "Possible Combination",
+              "Camera",
+              "Build Quality",
+              "Lint",
+              "Camera"
+            ],
+            "opinion_words": [
+              "only",
+              "combination",
+              "possible",
+              "possible",
+              "possible",
+              "causes",
+              "first"
+            ]
+          },
+          {
+            "review_id": "amz_B0088U4YAG_00035",
+            "rating": 4,
+            "text": "The PowerGen Dual USB charger is a great option for charging USB devices on the go.The charger is done in a piano black plastic, and is nicely constructed and feels sturdy in the hand. There are a few...",
+            "negative_aspects": [
+              "Iphone 4 And Iphone 4S"
+            ],
+            "opinion_words": [
+              "charged"
+            ]
+          }
+        ],
+        "examples_positive_in_low_star": [
+          {
+            "review_id": "amz_B0015RB39O_00169",
+            "rating": 1,
+            "text": "Do not buy this. It is not apple certified. Pay more and get a real cord. My dad burnt up the drive in his iPhone using non apple certified cords, so don't risk it.",
+            "positive_aspects": [
+              "Drive",
+              "Software",
+              "Non Apple Certified Cords"
+            ],
+            "opinion_words": [
+              "burnt",
+              "non",
+              "certified"
+            ]
+          },
+          {
+            "review_id": "amz_B0090YGJ4I_00076",
+            "rating": 1,
+            "text": "I got this because I am a klutz & drop my phone all the time. I have had other otter boxes but this one is just poor design. I thought the birds would be cute (not all cases have birds I found out) & ...",
+            "positive_aspects": [
+              "Birds",
+              "Build Quality",
+              "Rubber Backing",
+              "Build Quality"
+            ],
+            "opinion_words": [
+              "cute",
+              "cute",
+              "n't flush",
+              "hard"
+            ]
+          },
+          {
+            "review_id": "amz_B0042FV2SI_00179",
+            "rating": 1,
+            "text": "Not even worth the dollar you pay for these screen protectors. I was pleasantly surprised to find 3 protectors in the package when I thought I was only ordering one, but that was the end of my happine...",
+            "positive_aspects": [
+              "3 Protectors",
+              "Protectors",
+              "Layers",
+              "Top",
+              "Same Spot"
+            ],
+            "opinion_words": [
+              "surprised",
+              "already",
+              "remove",
+              "scratch",
+              "same"
+            ]
+          },
+          {
+            "review_id": "amz_B0015RB39O_00136",
+            "rating": 1,
+            "text": "READ UPDATE!As always, my Apple cord shorted out and I was in need of another. This was a great, cheap, working replacement charger!UPDATE: Literally a few hours later the cord won't sync to the compu...",
+            "positive_aspects": [
+              "Customer Service",
+              "Save",
+              "Price",
+              "Battery"
+            ],
+            "opinion_words": [
+              "great",
+              "cheap",
+              "working",
+              "OTHER",
+              "OTHER",
+              "OTHER"
+            ]
+          },
+          {
+            "review_id": "amz_B0088LYCZC_00226",
+            "rating": 1,
+            "text": "I just bought my Samsung intensity III, i wanted to get a nice screen protector so that my phone would stay nice. I spent a little extra money on this screen protector. Not worth the money, the screen...",
+            "positive_aspects": [
+              "Display",
+              "Customer Service",
+              "Adhesive",
+              "Sticky Side",
+              "Sides",
+              "Instructions"
+            ],
+            "opinion_words": [
+              "nice",
+              "nice",
+              "n't sticky",
+              "sticky",
+              "n't want",
+              "read"
+            ]
+          },
+          {
+            "review_id": "amz_B0088U4YAG_00048",
+            "rating": 1,
+            "text": "Bought two of these. Like others have said, one works when it wants too. The other was doing the same thing and then almost exactly a month later, got really hot and just stopped working. It stays hot...",
+            "positive_aspects": [
+              "Others",
+              "Software",
+              "4S",
+              "Battery"
+            ],
+            "opinion_words": [
+              "Like",
+              "lower",
+              "lower",
+              "lower"
+            ]
+          },
+          {
+            "review_id": "amz_B0073FCPSK_00210",
+            "rating": 1,
+            "text": "I bought this so I could charge my iPhone and android simultaneously without having to carry 2 chargers. Well it doesn't work that way. It only charged the iPhone and very very slowly at that. I would...",
+            "positive_aspects": [
+              "Battery"
+            ],
+            "opinion_words": [
+              "better"
+            ]
+          },
+          {
+            "review_id": "amz_B0015RB39O_00435",
+            "rating": 1,
+            "text": "Beware who you buy from, as there are many vendors out there, all whom seem to have some version or another.I ordered this from one of the vendors and the vendor actually sent me an older style, which...",
+            "positive_aspects": [
+              "Software",
+              "Tolerance",
+              "Lesson",
+              "Customer Service",
+              "Customer Service",
+              "Price",
+              "Customer Service"
+            ],
+            "opinion_words": [
+              "genuine",
+              "good",
+              "learned",
+              "luckily",
+              "full",
+              "full",
+              "probably"
+            ]
+          },
+          {
+            "review_id": "amz_B007FHX9OK_00477",
+            "rating": 1,
+            "text": "When I got it I loved it now a month later it all fell apart the sides won't go in to hold the phone at all I'm a little upset by that... I mean its still sticking to my car but everything else is jus...",
+            "positive_aspects": [
+              "Customer Service",
+              "Food Quality",
+              "Las Vegas",
+              "Super",
+              "Dash",
+              "Flat Head"
+            ],
+            "opinion_words": [
+              "hold",
+              "stand",
+              "like",
+              "like",
+              "like",
+              "flat"
+            ]
+          },
+          {
+            "review_id": "amz_B0088U4YAG_00158",
+            "rating": 1,
+            "text": "Like many reviews mentioned earlier that this phone doesn't work with iPhone 5, it's absolutely true. It may work with other phones or other iphone models but not with iPhone 5. If it doesn't work wit...",
+            "positive_aspects": [
+              "Many Reviews",
+              "Customer Service",
+              "Software"
+            ],
+            "opinion_words": [
+              "many",
+              "n't work",
+              "n't work"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "benchmark": "baseline_comparison",
+      "data": {
+        "benchmark": "baseline_comparison",
+        "dataset": "SemEval-2014 Task 4 Test Split",
+        "baseline": {
+          "model": "tfidf_logistic_regression_whole_review",
+          "description": "TF-IDF (1-2 grams) + Logistic Regression applied to entire sentence",
+          "accuracy": 0.7071,
+          "macro_f1": 0.624,
+          "total_instances": 1758,
+          "per_class": {
+            "positive": {
+              "precision": 0.8368,
+              "recall": 0.8204,
+              "f1": 0.8285,
+              "support": 1069
+            },
+            "neutral": {
+              "precision": 0.5079,
+              "recall": 0.4384,
+              "f1": 0.4706,
+              "support": 365
+            },
+            "negative": {
+              "precision": 0.5215,
+              "recall": 0.6358,
+              "f1": 0.573,
+              "support": 324
+            }
+          }
+        },
+        "comparison": [
+          {
+            "model": "tfidf_logistic_regression_whole_review",
+            "description": "TF-IDF (1-2 grams) + Logistic Regression applied to entire sentence",
+            "accuracy": 0.7071,
+            "macro_f1": 0.624,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8368,
+                "recall": 0.8204,
+                "f1": 0.8285,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.5079,
+                "recall": 0.4384,
+                "f1": 0.4706,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.5215,
+                "recall": 0.6358,
+                "f1": 0.573,
+                "support": 324
+              }
+            }
+          },
+          {
+            "model": "vader",
+            "description": "AspectLens clause-scoped vader scorer",
+            "accuracy": 0.6735,
+            "macro_f1": 0.616,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8558,
+                "recall": 0.7437,
+                "f1": 0.7958,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.3829,
+                "recall": 0.6274,
+                "f1": 0.4756,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.6926,
+                "recall": 0.4938,
+                "f1": 0.5766,
+                "support": 324
+              }
+            }
+          },
+          {
+            "model": "transformer",
+            "description": "AspectLens clause-scoped transformer scorer",
+            "accuracy": 0.7321,
+            "macro_f1": 0.6842,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.9222,
+                "recall": 0.7764,
+                "f1": 0.8431,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.4411,
+                "recall": 0.7178,
+                "f1": 0.5464,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.7386,
+                "recall": 0.6019,
+                "f1": 0.6633,
+                "support": 324
+              }
+            }
+          },
+          {
+            "model": "finetuned",
+            "description": "AspectLens clause-scoped finetuned scorer",
+            "accuracy": 0.6735,
+            "macro_f1": 0.616,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8558,
+                "recall": 0.7437,
+                "f1": 0.7958,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.3829,
+                "recall": 0.6274,
+                "f1": 0.4756,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.6926,
+                "recall": 0.4938,
+                "f1": 0.5766,
+                "support": 324
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "benchmark": "error_analysis",
+      "data": {
+        "benchmark": "error_analysis",
+        "dataset": "SemEval-2014 Task 4 Test Split",
+        "total_misclassifications_found": 574,
+        "total_examples_curated": 60,
+        "category_distribution": {
+          "implicit aspect": 12,
+          "negation": 10,
+          "multi-aspect clause": 18,
+          "comparison": 10,
+          "other": 10
+        },
+        "examples": [
+          {
+            "id": 1,
+            "sentence": "It's fast, light, and simple to use.",
+            "aspect": "use",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "simple"
+            ],
+            "clause": "It's fast, light, and simple to use",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 2,
+            "sentence": "Made interneting (part of my business) very difficult to maintain.",
+            "aspect": "interneting",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Made interneting (part of my business) very difficult to maintain",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 3,
+            "sentence": "Strong build though which really adds to its durability.",
+            "aspect": "durability",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "which really adds to its durability",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 4,
+            "sentence": "I've had my computer for 2 weeks already and it works perfectly.",
+            "aspect": "works",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "I've had my computer for 2 weeks already and it works perfectly",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 5,
+            "sentence": "The baterry is very longer.",
+            "aspect": "baterry",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "very longer"
+            ],
+            "clause": "The baterry is very longer",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 6,
+            "sentence": "This laptop has only 2 USB ports, and they are both on the same side.",
+            "aspect": "USB ports",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "This laptop has only 2 USB ports, and they are both on the same side",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 7,
+            "sentence": "However, I can refute that OSX is \"FAST\".",
+            "aspect": "OSX",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "FAST"
+            ],
+            "clause": "I can refute that OSX is \"FAST\"",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 8,
+            "sentence": "Cons: Screen resolution.",
+            "aspect": "Screen resolution",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Screen resolution",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 9,
+            "sentence": "And the fact that Apple is driving the 13\" RMBP with the Intel4000 graphic chip seems underpowered (to me.",
+            "aspect": "Intel4000 graphic chip",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "Intel4000",
+              "graphic"
+            ],
+            "clause": "And the fact that Apple is driving the 13\" RMBP with the Intel4000 graphic chip seems underpowered (to me",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 10,
+            "sentence": "The durability of the laptop will make it worth the money.",
+            "aspect": "durability",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "The durability of the laptop will make it worth the money",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 11,
+            "sentence": "tech support would not fix the problem unless I bought your plan for $150 plus.",
+            "aspect": "tech support",
+            "gold_polarity": "negative",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "not fix"
+            ],
+            "clause": "tech support would not fix the problem unless I bought your plan for $150 plus",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 12,
+            "sentence": "Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag.",
+            "aspect": "price tag",
+            "gold_polarity": "positive",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "considering"
+            ],
+            "clause": "Other than not being a fan of click pads (industry standard these days) and the lousy internal speakers, it's hard for me to find things about this notebook I don't like, especially considering the $350 price tag",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 13,
+            "sentence": "Sure it's not light and slim but the features make up for it 100%.",
+            "aspect": "features",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "the features make up for it 100%",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 14,
+            "sentence": "The Apple engineers have not yet discovered the delete key.",
+            "aspect": "delete key",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "delete",
+              "discovered"
+            ],
+            "clause": "discovered the delete key",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 15,
+            "sentence": "I would have given it 5 starts was it not for the fact that it had Windows 8",
+            "aspect": "Windows 8",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "I would have given it 5 starts was it not for the fact that it had Windows 8",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 16,
+            "sentence": "The Mountain Lion OS is not hard to figure out if you are familiar with Microsoft Windows.",
+            "aspect": "Microsoft Windows",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "familiar"
+            ],
+            "clause": "The Mountain Lion OS is not hard to figure out if you are familiar with Microsoft Windows",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 17,
+            "sentence": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare.",
+            "aspect": "SquareTrade 3-Year Computer Accidental Protection Warranty",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 18,
+            "sentence": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare.",
+            "aspect": "AppleCare",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "I opted for the SquareTrade 3-Year Computer Accidental Protection Warranty ($[PHONE]) which also support \"accidents\" like drops and spills that are NOT covered by AppleCare",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 19,
+            "sentence": "It feels cheap, the keyboard is not very sensitive.",
+            "aspect": "keyboard",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "not very sensitive"
+            ],
+            "clause": "It feels cheap, the keyboard is not very sensitive",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 20,
+            "sentence": "I have experienced no problems, works as anticipated.",
+            "aspect": "works",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "I have experienced no problems, works as anticipated",
+            "category": "negation",
+            "reason": "Complex or scoped negation inverted intended aspect sentiment."
+          },
+          {
+            "id": 21,
+            "sentence": "Works well, and I am extremely happy to be back to an apple OS.",
+            "aspect": "Works",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Works well, and I am extremely happy to be back to an apple OS",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (apple OS) with diverging polarity."
+          },
+          {
+            "id": 22,
+            "sentence": "Works well, and I am extremely happy to be back to an apple OS.",
+            "aspect": "apple OS",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Works well, and I am extremely happy to be back to an apple OS",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (Works) with diverging polarity."
+          },
+          {
+            "id": 23,
+            "sentence": "It has so much more speed and the screen is very sharp.",
+            "aspect": "speed",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "more"
+            ],
+            "clause": "It has so much more speed and the screen is very sharp",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (screen) with diverging polarity."
+          },
+          {
+            "id": 24,
+            "sentence": "It has so much more speed and the screen is very sharp.",
+            "aspect": "screen",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "very sharp"
+            ],
+            "clause": "It has so much more speed and the screen is very sharp",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (speed) with diverging polarity."
+          },
+          {
+            "id": 25,
+            "sentence": "It has all the expected features and more +plus a wide screen and more than roomy keyboard.",
+            "aspect": "features",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "expected"
+            ],
+            "clause": "It has all the expected features and more +plus a wide screen and more than roomy keyboard",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (screen, keyboard) with diverging polarity."
+          },
+          {
+            "id": 26,
+            "sentence": "It has all the expected features and more +plus a wide screen and more than roomy keyboard.",
+            "aspect": "screen",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "wide"
+            ],
+            "clause": "It has all the expected features and more +plus a wide screen and more than roomy keyboard",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (features, keyboard) with diverging polarity."
+          },
+          {
+            "id": 27,
+            "sentence": "It has all the expected features and more +plus a wide screen and more than roomy keyboard.",
+            "aspect": "keyboard",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "more"
+            ],
+            "clause": "It has all the expected features and more +plus a wide screen and more than roomy keyboard",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (features, screen) with diverging polarity."
+          },
+          {
+            "id": 28,
+            "sentence": "The receiver was full of superlatives for the quality and performance.",
+            "aspect": "quality",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "full"
+            ],
+            "clause": "The receiver was full of superlatives for the quality and performance",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (performance) with diverging polarity."
+          },
+          {
+            "id": 29,
+            "sentence": "The receiver was full of superlatives for the quality and performance.",
+            "aspect": "performance",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "The receiver was full of superlatives for the quality and performance",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (quality) with diverging polarity."
+          },
+          {
+            "id": 30,
+            "sentence": "From the speed to the multi touch gestures this operating system beats Windows easily.",
+            "aspect": "Windows",
+            "gold_polarity": "negative",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "beats"
+            ],
+            "clause": "From the speed to the multi touch gestures this operating system beats Windows easily",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (operating system, speed, multi touch gestures) with diverging polarity."
+          },
+          {
+            "id": 31,
+            "sentence": "Not as fast as I would have expect for an i5.",
+            "aspect": "i5",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Not as fast as I would have expect for an i5",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 32,
+            "sentence": "I think this is about as good as it gets at anything close to this price point.",
+            "aspect": "price point",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "close"
+            ],
+            "clause": "I think this is about as good as it gets at anything close to this price point",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 33,
+            "sentence": "USB3 Peripherals are noticably less expensive than the ThunderBolt ones.",
+            "aspect": "USB3 Peripherals",
+            "gold_polarity": "positive",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "noticably",
+              "expensive"
+            ],
+            "clause": "USB3 Peripherals are noticably less expensive than the ThunderBolt ones",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 34,
+            "sentence": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product.",
+            "aspect": "Price",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "higher"
+            ],
+            "clause": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 35,
+            "sentence": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product.",
+            "aspect": "price",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Price was higher when purchased on MAC when compared to price showing on PC when I bought this product",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 36,
+            "sentence": "I like coming back to Mac OS but this laptop is lacking in speaker quality compared to my $400 old HP laptop.",
+            "aspect": "speaker quality",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "this laptop is lacking in speaker quality compared to my $400 old HP laptop",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 37,
+            "sentence": "No Cd Rom in the new version there's no way I'm spending that kind of money on something has less features than the older version.",
+            "aspect": "Cd Rom",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "new"
+            ],
+            "clause": "No Cd Rom in the new version there's no way I'm spending that kind of money on something has less features than the older version",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 38,
+            "sentence": "Cost is more as compared to other brands.",
+            "aspect": "Cost",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Cost is more as compared to other brands",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 39,
+            "sentence": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate.",
+            "aspect": "asparagus",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "soft"
+            ],
+            "clause": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 40,
+            "sentence": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate.",
+            "aspect": "soft shell crab",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "soft"
+            ],
+            "clause": "We started with the scallops and asparagus and also had the soft shell crab as well as the cheese plate",
+            "category": "comparison",
+            "reason": "Comparative construct shifts sentiment relative to another entity."
+          },
+          {
+            "id": 41,
+            "sentence": "Only 2 usb ports...seems kind of...limited.",
+            "aspect": "usb ports",
+            "gold_polarity": "negative",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "limited"
+            ],
+            "clause": "Only 2 usb ports...seems kind of...limited",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 42,
+            "sentence": "They don't just look good; they deliver excellent performance.",
+            "aspect": "look",
+            "gold_polarity": "positive",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "good"
+            ],
+            "clause": "They don't just look good",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 43,
+            "sentence": "I wanted a computer that was quite, fast, and that had overall great performance.",
+            "aspect": "performance",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "overall",
+              "great"
+            ],
+            "clause": "I wanted a computer that was quite, fast, and that had overall great performance",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 44,
+            "sentence": "The only solution is to turn the brightness down, etc.",
+            "aspect": "brightness",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "turn"
+            ],
+            "clause": "The only solution is to turn the brightness down, etc",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 45,
+            "sentence": "If you want more information on macs I suggest going to apple.com and heading towards the macbook page for more information on the applications.",
+            "aspect": "applications",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "more"
+            ],
+            "clause": "If you want more information on macs I suggest going to apple.com and heading towards the macbook page for more information on the applications",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 46,
+            "sentence": "It shouldn't happen like that, I don't have any design app open or anything.",
+            "aspect": "design app",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "open"
+            ],
+            "clause": "It shouldn't happen like that, I don't have any design app open or anything",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 47,
+            "sentence": "I thought the transition would be difficult at best and would take some time to fully familiarize myself with the new Mac ecosystem.",
+            "aspect": "Mac ecosystem",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "new"
+            ],
+            "clause": "I thought the transition would be difficult at best and would take some time to fully familiarize myself with the new Mac ecosystem",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 48,
+            "sentence": "so i called technical support.",
+            "aspect": "technical support",
+            "gold_polarity": "neutral",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "technical",
+              "so called"
+            ],
+            "clause": "so i called technical support",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 49,
+            "sentence": "Logic board utterly fried, cried, and laid down and died.",
+            "aspect": "Logic board",
+            "gold_polarity": "positive",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "utterly"
+            ],
+            "clause": "Logic board utterly fried, cried, and laid down and died",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 50,
+            "sentence": "More likely it will require replacing the logic board once they admit they have a problem and come up with a solution.",
+            "aspect": "logic board",
+            "gold_polarity": "negative",
+            "predicted_polarity": "positive",
+            "opinion_words": [
+              "replacing"
+            ],
+            "clause": "More likely it will require replacing the logic board once they admit they have a problem and come up with a solution",
+            "category": "other",
+            "reason": "Domain-specific vocabulary or subtle nuance outside general sentiment lexicon."
+          },
+          {
+            "id": 51,
+            "sentence": "The reason why I choose apple MacBook because of their design and the aluminum casing.",
+            "aspect": "design",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "The reason why I choose apple MacBook because of their design and the aluminum casing",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (aluminum casing) with diverging polarity."
+          },
+          {
+            "id": 52,
+            "sentence": "The reason why I choose apple MacBook because of their design and the aluminum casing.",
+            "aspect": "aluminum casing",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "The reason why I choose apple MacBook because of their design and the aluminum casing",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (design) with diverging polarity."
+          },
+          {
+            "id": 53,
+            "sentence": "Apple removed the DVD drive Firewire port (will work with adapter) and put the SDXC slot in a silly position on the back.",
+            "aspect": "SDXC slot",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "SDXC"
+            ],
+            "clause": "Apple removed the DVD drive Firewire port (will work with adapter) and put the SDXC slot in a silly position on the back",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (DVD drive Firewire port, adapter) with diverging polarity."
+          },
+          {
+            "id": 54,
+            "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+            "aspect": "product quality",
+            "gold_polarity": "positive",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "unmatched"
+            ],
+            "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (aesthetics, craftmanship, customer service) with diverging polarity."
+          },
+          {
+            "id": 55,
+            "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+            "aspect": "aesthetics",
+            "gold_polarity": "positive",
+            "predicted_polarity": "negative",
+            "opinion_words": [
+              "unmatched"
+            ],
+            "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (product quality, craftmanship, customer service) with diverging polarity."
+          },
+          {
+            "id": 56,
+            "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+            "aspect": "craftmanship",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (product quality, aesthetics, customer service) with diverging polarity."
+          },
+          {
+            "id": 57,
+            "sentence": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service.",
+            "aspect": "customer service",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Apple is unmatched in product quality,aesthetics,craftmanship, and customer service",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (product quality, aesthetics, craftmanship) with diverging polarity."
+          },
+          {
+            "id": 58,
+            "sentence": "Startup times are incredibly long: over two minutes.",
+            "aspect": "Startup times",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [
+              "incredibly long"
+            ],
+            "clause": "Startup times are incredibly long",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 59,
+            "sentence": "Set up was a breeze.",
+            "aspect": "Set up",
+            "gold_polarity": "positive",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "Set up was a breeze",
+            "category": "implicit aspect",
+            "reason": "Reviewer implies sentiment without standard evaluative adjectives."
+          },
+          {
+            "id": 60,
+            "sentence": "I had the same reasons as most PC users: the price, the overbearing restrictions of OSX and lack of support for games.",
+            "aspect": "price",
+            "gold_polarity": "negative",
+            "predicted_polarity": "neutral",
+            "opinion_words": [],
+            "clause": "the price, the overbearing restrictions of OSX and lack of support for games",
+            "category": "multi-aspect clause",
+            "reason": "Clause contains multiple co-occurring aspects (OSX, support for games) with diverging polarity."
+          }
+        ]
+      }
+    },
+    {
+      "benchmark": "extraction_ablation",
+      "data": {
+        "benchmark": "aspect_extraction_ablation",
+        "dataset": "SemEval-2014 Task 4 (Laptops & Restaurants Test)",
+        "test_sentences": 1600,
+        "total_gold_aspects": 1788,
+        "ablations": [
+          {
+            "ablation": "1. Chunks Only",
+            "description": "spaCy noun chunks with blacklist filtering",
+            "exact_precision": 0.2666,
+            "exact_recall": 0.5219,
+            "exact_f1": 0.3529,
+            "overlap_f1": 0.534,
+            "tp": 929,
+            "fp": 2556,
+            "fn": 851
+          },
+          {
+            "ablation": "2. Chunks + Dependency Rules",
+            "description": "Noun chunks combined with syntactic subject/amod rules",
+            "exact_precision": 0.2647,
+            "exact_recall": 0.5236,
+            "exact_f1": 0.3516,
+            "overlap_f1": 0.5354,
+            "tp": 932,
+            "fp": 2589,
+            "fn": 848
+          },
+          {
+            "ablation": "3. Chunks + Deps + Frequency Filter",
+            "description": "Candidate pruning requiring corpus frequency >= 2",
+            "exact_precision": 0.3604,
+            "exact_recall": 0.3489,
+            "exact_f1": 0.3546,
+            "overlap_f1": 0.4068,
+            "tp": 621,
+            "fp": 1102,
+            "fn": 1159
+          },
+          {
+            "ablation": "4. Full Pipeline (+ Grouping)",
+            "description": "Canonical aspect normalization via lexicon, WordNet & SBERT",
+            "exact_precision": 0.1387,
+            "exact_recall": 0.1258,
+            "exact_f1": 0.132,
+            "overlap_f1": 0.2739,
+            "tp": 224,
+            "fp": 1391,
+            "fn": 1556
+          }
+        ]
+      }
+    },
+    {
+      "benchmark": "latency_benchmark",
+      "data": {
+        "benchmark": "system_latency_and_throughput",
+        "sample_size": 80,
+        "configurations": [
+          {
+            "config": "VADER Full Pipeline",
+            "scorer": "vader",
+            "extractor": "spacy_chunks",
+            "throughput_reviews_per_sec": 13.36,
+            "mean_ms": 74.84,
+            "p50_ms": 60.79,
+            "p90_ms": 142.17,
+            "p99_ms": 254.7,
+            "min_ms": 9.52,
+            "max_ms": 404.09
+          },
+          {
+            "config": "Transformer Full Pipeline",
+            "scorer": "transformer",
+            "extractor": "spacy_chunks",
+            "throughput_reviews_per_sec": 2.06,
+            "mean_ms": 484.35,
+            "p50_ms": 321.76,
+            "p90_ms": 946.82,
+            "p99_ms": 1549.0,
+            "min_ms": 21.68,
+            "max_ms": 1586.14
+          }
+        ],
+        "component_breakdown": {
+          "preprocessing": {
+            "mean_ms": 0.09,
+            "p50_ms": 0.07,
+            "p90_ms": 0.15,
+            "p99_ms": 0.46,
+            "min_ms": 0.03,
+            "max_ms": 0.63
+          },
+          "candidate_extraction": {
+            "mean_ms": 14.63,
+            "p50_ms": 12.68,
+            "p90_ms": 22.94,
+            "p99_ms": 31.45,
+            "min_ms": 7.75,
+            "max_ms": 35.75
+          },
+          "canonical_grouping_per_candidate": {
+            "mean_ms": 0.1,
+            "p50_ms": 0.09,
+            "p90_ms": 0.19,
+            "p99_ms": 0.37,
+            "min_ms": 0.0,
+            "max_ms": 0.44
+          },
+          "opinion_association_per_candidate": {
+            "mean_ms": 0.09,
+            "p50_ms": 0.07,
+            "p90_ms": 0.14,
+            "p99_ms": 0.44,
+            "min_ms": 0.02,
+            "max_ms": 0.8
+          },
+          "vader_scoring_per_candidate": {
+            "mean_ms": 0.24,
+            "p50_ms": 0.2,
+            "p90_ms": 0.56,
+            "p99_ms": 1.26,
+            "min_ms": 0.0,
+            "max_ms": 1.67
+          }
+        }
+      }
+    },
+    {
+      "benchmark": "sentiment_benchmark",
+      "data": {
+        "benchmark": "aspect_sentiment_benchmark",
+        "dataset": "SemEval-2014 Task 4 Test Split",
+        "total_aspect_instances": 1758,
+        "results": [
+          {
+            "scorer": "vader",
+            "accuracy": 0.6735,
+            "macro_f1": 0.616,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8558,
+                "recall": 0.7437,
+                "f1": 0.7958,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.3829,
+                "recall": 0.6274,
+                "f1": 0.4756,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.6926,
+                "recall": 0.4938,
+                "f1": 0.5766,
+                "support": 324
+              }
+            }
+          },
+          {
+            "scorer": "transformer",
+            "accuracy": 0.7321,
+            "macro_f1": 0.6842,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.9222,
+                "recall": 0.7764,
+                "f1": 0.8431,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.4411,
+                "recall": 0.7178,
+                "f1": 0.5464,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.7386,
+                "recall": 0.6019,
+                "f1": 0.6633,
+                "support": 324
+              }
+            }
+          },
+          {
+            "scorer": "finetuned",
+            "accuracy": 0.6735,
+            "macro_f1": 0.616,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8558,
+                "recall": 0.7437,
+                "f1": 0.7958,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.3829,
+                "recall": 0.6274,
+                "f1": 0.4756,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.6926,
+                "recall": 0.4938,
+                "f1": 0.5766,
+                "support": 324
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "benchmark": "summary_metrics",
+      "data": {
+        "generated_at": "2026-10-20T21:55:11.955768+00:00",
+        "total_runtime_seconds": 1060.0,
+        "aspect_extraction": {
+          "best_ablation": "3. Chunks + Deps + Frequency Filter",
+          "best_exact_f1": 0.3546,
+          "best_overlap_f1": 0.5354,
+          "ablations": [
+            {
+              "ablation": "1. Chunks Only",
+              "description": "spaCy noun chunks with blacklist filtering",
+              "exact_precision": 0.2666,
+              "exact_recall": 0.5219,
+              "exact_f1": 0.3529,
+              "overlap_f1": 0.534,
+              "tp": 929,
+              "fp": 2556,
+              "fn": 851
+            },
+            {
+              "ablation": "2. Chunks + Dependency Rules",
+              "description": "Noun chunks combined with syntactic subject/amod rules",
+              "exact_precision": 0.2647,
+              "exact_recall": 0.5236,
+              "exact_f1": 0.3516,
+              "overlap_f1": 0.5354,
+              "tp": 932,
+              "fp": 2589,
+              "fn": 848
+            },
+            {
+              "ablation": "3. Chunks + Deps + Frequency Filter",
+              "description": "Candidate pruning requiring corpus frequency >= 2",
+              "exact_precision": 0.3604,
+              "exact_recall": 0.3489,
+              "exact_f1": 0.3546,
+              "overlap_f1": 0.4068,
+              "tp": 621,
+              "fp": 1102,
+              "fn": 1159
+            },
+            {
+              "ablation": "4. Full Pipeline (+ Grouping)",
+              "description": "Canonical aspect normalization via lexicon, WordNet & SBERT",
+              "exact_precision": 0.1387,
+              "exact_recall": 0.1258,
+              "exact_f1": 0.132,
+              "overlap_f1": 0.2739,
+              "tp": 224,
+              "fp": 1391,
+              "fn": 1556
+            }
+          ]
+        },
+        "aspect_sentiment": {
+          "vader": {
+            "scorer": "vader",
+            "accuracy": 0.6735,
+            "macro_f1": 0.616,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8558,
+                "recall": 0.7437,
+                "f1": 0.7958,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.3829,
+                "recall": 0.6274,
+                "f1": 0.4756,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.6926,
+                "recall": 0.4938,
+                "f1": 0.5766,
+                "support": 324
+              }
+            }
+          },
+          "transformer": {
+            "scorer": "transformer",
+            "accuracy": 0.7321,
+            "macro_f1": 0.6842,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.9222,
+                "recall": 0.7764,
+                "f1": 0.8431,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.4411,
+                "recall": 0.7178,
+                "f1": 0.5464,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.7386,
+                "recall": 0.6019,
+                "f1": 0.6633,
+                "support": 324
+              }
+            }
+          },
+          "baseline": {
+            "model": "tfidf_logistic_regression_whole_review",
+            "description": "TF-IDF (1-2 grams) + Logistic Regression applied to entire sentence",
+            "accuracy": 0.7071,
+            "macro_f1": 0.624,
+            "total_instances": 1758,
+            "per_class": {
+              "positive": {
+                "precision": 0.8368,
+                "recall": 0.8204,
+                "f1": 0.8285,
+                "support": 1069
+              },
+              "neutral": {
+                "precision": 0.5079,
+                "recall": 0.4384,
+                "f1": 0.4706,
+                "support": 365
+              },
+              "negative": {
+                "precision": 0.5215,
+                "recall": 0.6358,
+                "f1": 0.573,
+                "support": 324
+              }
+            }
+          },
+          "winner": "transformer"
+        },
+        "amazon_value": {
+          "high_star_with_negative_aspect_pct": 39.43,
+          "low_star_with_positive_aspect_pct": 61.02
+        },
+        "system_performance": {
+          "vader_mean_latency_ms": 74.84,
+          "vader_throughput_rps": 13.36,
+          "transformer_mean_latency_ms": 484.35,
+          "transformer_throughput_rps": 2.06
+        },
+        "error_analysis": {
+          "total_curated_examples": 60,
+          "category_breakdown": {
+            "implicit aspect": 12,
+            "negation": 10,
+            "multi-aspect clause": 18,
+            "comparison": 10,
+            "other": 10
+          }
+        }
+      }
+    }
+  ]
+}
