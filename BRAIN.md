@@ -95,8 +95,10 @@ Offline: eval/ scripts → SemEval benchmark → JSON/CSV results → shown on E
 
 ---
 ## STATUS (update every session)
-- **Current phase:** 10 — Tests and quality (completed)
-- **Last completed phase:** 10 (tests and quality)
-- **Last session summary:** Completed pytest suite to 80 passing unit and integration tests across preprocessing, opinion linking, mocked scorers, aggregation, and API limits. Configured pyproject.toml with ruff (linter & formatter) and mypy; fixed all 20 type issues across 25 source files with 0 errors remaining. Executed pip-audit vulnerability scan. Verified 86% production code coverage (95% pipeline, 92% aspects, 92% preprocess, 90% grouping, 87% aggregation, 86% api). Validated clean checkout clone and test execution.
+- **Current phase:** 11 — Docker & deployment (completed)
+- **Last completed phase:** 11 (deployment)
+- **Live Space URL:** [https://niyati26-aspectlens.static.hf.space](https://niyati26-aspectlens.static.hf.space)
+- **Hugging Face Hub:** [https://huggingface.co/spaces/Niyati26/aspectlens](https://huggingface.co/spaces/Niyati26/aspectlens)
+- **Last session summary:** Successfully deployed AspectLens to Hugging Face Spaces (`Niyati26/aspectlens`). Verified all 5 frontend hash pages (Analyze, Dashboard, Compare, Evaluation, About) and static data endpoints (`/`, `style.css`, `app.js`, `chart.umd.min.js`, `products.json`, `summaries.json`, `evaluation.json`) returning HTTP 200 over public HTTPS. Tested golden ABSA sentence with correct sentiment polarity, confidence, and opinion words. Verified local server idle memory at 487.1 MB RSS and 834.4 MB RSS under batch load. Pushed via authenticated Git remote and sanitized credentials.
 - **Open questions / blockers:** None.
-- **Next action:** Phase 11 (Docker & deployment: Dockerfile, entrypoint, Hugging Face Space configuration).
+- **Next action:** Phase 12 (Documentation: README update matching evaluation numbers, presentation outline, 3-min demo script, and final academic report).
