@@ -6,34 +6,66 @@
   <meta name="description" content="AspectLens — Aspect-Based Review Mining System (ABSA)">
   <title>AspectLens — Review Mining & Aspect Intelligence</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔍</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='10' fill='%236BA4E8'/><circle cx='15' cy='15' r='7' stroke='white' stroke-width='2.5' fill='none'/><line x1='20' y1='20' x2='26' y2='26' stroke='white' stroke-width='2.5' stroke-linecap='round'/></svg>">
 </head>
 <body>
   <!-- Accessibility Skip Link -->
   <a href="#main-content" class="skip-link">Skip to main content</a>
 
-  <!-- App Header & Navigation -->
+  <!-- App Header & Floating Glass Dock -->
   <header class="app-header">
     <div class="header-container">
       <a href="#/analyze" class="brand" aria-label="AspectLens Home">
-        <span class="brand-icon">🔍</span>
-        <span>AspectLens</span>
+        <span class="brand-mark">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="11" y1="8" x2="11" y2="14"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </span>
+        <span class="brand-text">AspectLens</span>
       </a>
 
-      <!-- 5 Main Navigation Tabs -->
+      <!-- 4 Core Navigation Tabs -->
       <nav class="app-nav" aria-label="Main Navigation">
-        <a href="#/analyze" class="nav-link active" id="nav-analyze" aria-controls="page-analyze">Analyze</a>
-        <a href="#/dashboard" class="nav-link" id="nav-dashboard" aria-controls="page-dashboard">Product Dashboard</a>
-        <a href="#/compare" class="nav-link" id="nav-compare" aria-controls="page-compare">Compare</a>
-        <a href="#/evaluation" class="nav-link" id="nav-evaluation" aria-controls="page-evaluation">Evaluation</a>
-        <a href="#/about" class="nav-link" id="nav-about" aria-controls="page-about">About</a>
+        <a href="#/analyze" class="nav-link active" id="nav-analyze" aria-controls="page-analyze">
+          <svg class="nav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>Analyze</span>
+        </a>
+        <a href="#/dashboard" class="nav-link" id="nav-dashboard" aria-controls="page-dashboard">
+          <svg class="nav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="20" x2="18" y2="10"></line>
+            <line x1="12" y1="20" x2="12" y2="4"></line>
+            <line x1="6" y1="20" x2="6" y2="14"></line>
+          </svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#/compare" class="nav-link" id="nav-compare" aria-controls="page-compare">
+          <svg class="nav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+            <polyline points="2 17 12 22 22 17"></polyline>
+            <polyline points="2 12 12 17 22 12"></polyline>
+          </svg>
+          <span>Compare</span>
+        </a>
+        <a href="#/evaluation" class="nav-link" id="nav-evaluation" aria-controls="page-evaluation">
+          <svg class="nav-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <span>Benchmarks</span>
+        </a>
       </nav>
 
-      <!-- Theme Switcher -->
-      <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle theme">
-        <span id="theme-icon">🌓</span>
-        <span id="theme-label">Theme</span>
-      </button>
+      <!-- Clean Status Indicator / Tag -->
+      <div class="header-badge">
+        <span class="live-dot"></span>
+        <span class="live-label">ABSA Engine</span>
+      </div>
     </div>
   </header>
 
@@ -58,9 +90,9 @@
             <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
               <label for="review-input" style="margin-bottom: 0;">Customer Review Text</label>
               <div style="display: flex; align-items: center; gap: 6px;">
-                <label for="example-select" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0;">📚 Test Library:</label>
-                <select id="example-select" class="input-select" style="font-size: 0.8rem; height: 32px; padding: 2px 8px; max-width: 290px;">
-                  <option value="">-- Choose from 30 Curated Examples --</option>
+                <label for="example-select" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0;">Test Corpus:</label>
+                <select id="example-select" class="input-select" style="font-size: 0.8rem; height: 32px; padding: 2px 10px; max-width: 290px;">
+                  <option value="">Choose Curated Example...</option>
                 </select>
               </div>
             </div>
@@ -68,7 +100,7 @@
               id="review-input" 
               class="input-textarea" 
               rows="4" 
-              placeholder="Enter or paste a product review here (e.g. Battery life is amazing, but the delivery was late and the price is too high.)..."
+              placeholder="Enter or paste a customer review (e.g. Battery life is amazing, but the delivery was late and the price is too high)..."
               maxlength="2000"
               required
             ></textarea>
@@ -76,7 +108,7 @@
               <span id="char-count">0</span> / 2,000 characters
             </div>
             <!-- Recommended Model Pairing Notice -->
-            <div id="example-recommendation-badge" style="display: none; margin-top: 8px; font-size: 0.8rem; background: var(--surface-alt); border-left: 3px solid var(--primary); padding: 8px 12px; border-radius: var(--radius-sm); color: var(--text);"></div>
+            <div id="example-recommendation-badge" style="display: none; margin-top: 10px; font-size: 0.8rem; background: rgba(255, 255, 255, 0.85); border-left: 3px solid #6BA4E8; padding: 10px 14px; border-radius: 12px; color: var(--text); box-shadow: 0 4px 14px rgba(167, 199, 231, 0.15);"></div>
           </div>
 
           <div class="controls-row">
@@ -85,7 +117,7 @@
               <select id="scorer-select" class="input-select" title="Choose Sentiment Scorer">
                 <option value="vader" selected>VADER (Domain Adjusted)</option>
                 <option value="transformer">Twitter RoBERTa (Neural)</option>
-                <option value="finetuned">Fine-Tuned ABSA (Stub)</option>
+                <option value="finetuned">Fine-Tuned ABSA (Cross-Encoder)</option>
               </select>
             </div>
 
@@ -99,11 +131,22 @@
             </div>
 
             <button type="button" id="btn-example" class="btn btn-secondary">
-              ⚡ Random Example
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="21 16 21 21 16 21"></polyline>
+                <line x1="15" y1="15" x2="21" y2="21"></line>
+                <line x1="4" y1="4" x2="9" y2="9"></line>
+              </svg>
+              <span>Random Sample</span>
             </button>
 
             <button type="submit" id="btn-analyze" class="btn btn-primary">
-              🔍 Analyze Review
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"></circle>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+              </svg>
+              <span>Analyze Review</span>
             </button>
           </div>
         </form>
@@ -160,7 +203,12 @@
             </select>
           </div>
           <button type="button" id="btn-refresh-dashboard" class="btn btn-secondary" style="margin-top: 22px;">
-            🔄 Refresh
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 4v6h-6"></path>
+              <path d="M1 20v-6h6"></path>
+              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+            </svg>
+            <span>Refresh</span>
           </button>
         </div>
       </div>
@@ -252,14 +300,20 @@
 
         <div class="snippets-grid">
           <div>
-            <h3 style="font-size: 0.95rem; color: var(--pos); display: flex; align-items: center; gap: 6px; margin: 0 0 12px;">
-              <span>▲</span> Top Positive Snippets
+            <h3 style="font-size: 0.95rem; color: #22844E; display: flex; align-items: center; gap: 6px; margin: 0 0 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+              <span>Top Positive Snippets</span>
             </h3>
             <div id="positive-snippets-list"></div>
           </div>
           <div>
-            <h3 style="font-size: 0.95rem; color: var(--neg); display: flex; align-items: center; gap: 6px; margin: 0 0 12px;">
-              <span>▼</span> Top Negative Snippets
+            <h3 style="font-size: 0.95rem; color: #C73546; display: flex; align-items: center; gap: 6px; margin: 0 0 12px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+              <span>Top Negative Snippets</span>
             </h3>
             <div id="negative-snippets-list"></div>
           </div>
@@ -287,7 +341,12 @@
             <select id="compare-product-b" class="input-select" style="width: 100%;"></select>
           </div>
           <button type="button" id="btn-run-compare" class="btn btn-primary" style="margin-top: 22px;">
-            ⚖️ Compare Products
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="4"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+            </svg>
+            <span>Compare Products</span>
           </button>
         </div>
       </div>
@@ -311,7 +370,10 @@
                 Show All Aspects
               </button>
               <button type="button" id="compare-ai-assist-btn" class="btn btn-primary" style="font-size: 0.8rem; height: 32px; padding: 4px 10px;">
-                ✨ Ask AI to Compare
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+                </svg>
+                <span>Ask Copilot</span>
               </button>
             </div>
           </div>
@@ -348,90 +410,6 @@
       <div id="evaluation-content-box"></div>
     </section>
 
-    <!-- ===================================================================
-         Page 5: About & Architecture
-         =================================================================== -->
-    <section id="page-about" class="page-view" aria-labelledby="heading-about">
-      <div class="page-header">
-        <h1 id="heading-about">About AspectLens</h1>
-        <p>Full-stack aspect-based sentiment analysis system designed for university NLP research and real-world review mining.</p>
-      </div>
-
-      <div class="card">
-        <div class="card-title">End-to-End NLP Pipeline Architecture</div>
-        <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 20px;">
-          The system implements a modular six-stage pipeline directly aligning with core Natural Language Processing curriculum units:
-        </p>
-
-        <div class="syllabus-card">
-          <div class="syllabus-unit">Unit 1 · Text Normalization & Sanitization</div>
-          <div class="syllabus-title">1. Preprocessing, PII Stripping & Offset Preservation</div>
-          <p class="syllabus-desc">
-            Cleans HTML, expands common contractions, and strips personally identifiable information (emails, phone numbers, URLs).
-            Crucially maintains exact character offset mappings to the display text so frontend UI highlights can mark spans cleanly without text drift.
-          </p>
-        </div>
-
-        <div class="syllabus-card">
-          <div class="syllabus-unit">Unit 2 · Part-of-Speech Tagging & Chunking</div>
-          <div class="syllabus-title">2. Aspect Candidate Extraction</div>
-          <p class="syllabus-desc">
-            Provides three switchable extractors: (1) NLTK Regexp chunker with grammar <code>NP: {&lt;DT&gt;?&lt;JJ&gt;*&lt;NN.*&gt;+}</code>,
-            (2) spaCy noun chunk parser, and (3) Syntactic dependency rules (copular predicates, adjectival modifiers).
-            Filters out pronouns and generic nouns (e.g. <em>thing, product, item, bit, stuff</em>).
-          </p>
-        </div>
-
-        <div class="syllabus-card">
-          <div class="syllabus-unit">Unit 3 · Distributional Semantics & Taxonomies</div>
-          <div class="syllabus-title">3. Aspect Canonical Grouping</div>
-          <p class="syllabus-desc">
-            Unifies heterogeneous candidate variants (e.g. <em>cost, value, price point</em>) into 11 locked-in canonical categories
-            using a prioritized cascade: (1) Domain Seed Lexicon (wins conflicts), (2) WordNet primary sense hypernyms/synonyms,
-            and (3) all-MiniLM-L6-v2 centroid cosine similarity with Agglomerative Clustering.
-          </p>
-        </div>
-
-        <div class="syllabus-card">
-          <div class="syllabus-unit">Unit 4 · Syntactic & Dependency Parsing</div>
-          <div class="syllabus-title">4. Clause-Scoped Opinion Association</div>
-          <p class="syllabus-desc">
-            Associates evaluative words with aspects using syntactic dependency arcs first, with a fallback window of ≤ 5 tokens.
-            Splits sentences at contrast conjunctions (<em>but, however, although, though, yet</em>) and guarantees opinions never link across contrast boundaries.
-            Explicitly captures negation (<em>not good, never worked</em>) and intensifiers (<em>too high, very fast</em>).
-          </p>
-        </div>
-
-        <div class="syllabus-card">
-          <div class="syllabus-unit">Unit 5 · Sentiment Lexicons & Pretrained Transformers</div>
-          <div class="syllabus-title">5. Sentiment Scoring Interface</div>
-          <p class="syllabus-desc">
-            Behind a unified Scorer Protocol, supports: (1) Domain-adapted VADER with phrase rules, (2) Twitter RoBERTa sequence classification
-            applied directly to the aspect's clause, and (3) Fine-tuned ABSA cross-encoder stub.
-            Rule 6 enforcement: if no opinion word is found, strictly returns neutral with low confidence (0.30) without guessing.
-          </p>
-        </div>
-
-        <div class="syllabus-card">
-          <div class="syllabus-unit">Unit 6 · Information Extraction & Aggregation</div>
-          <div class="syllabus-title">6. Storage, Trends & Side-by-Side Analytics</div>
-          <p class="syllabus-desc">
-            Persists aspect mentions in SQLite with foreign key integrity. Computes mention volume alongside positive/negative percentages,
-            chronological monthly trajectories, top representative snippets, and competitive delta analysis.
-          </p>
-        </div>
-      </div>
-
-      <!-- Ethics & Limitations Card -->
-      <div class="card">
-        <div class="card-title">System Limitations & Ethical Disclosures</div>
-        <ul style="font-size: 0.9rem; color: var(--text-muted); padding-left: 20px; line-height: 1.7;">
-          <li><strong>Review Verification:</strong> AspectLens processes and summarizes text provided by users or imported datasets. It does not authenticate whether an online review is genuine, incentivized, or synthetic.</li>
-          <li><strong>Domain Sensitivity:</strong> Models evaluated on electronics (laptops/phones) may experience performance shifts when applied to other domains (e.g. restaurants or healthcare).</li>
-          <li><strong>Statistical Caution:</strong> Low-frequency aspect categories (e.g. &lt; 5 mentions) must be interpreted with caution. AspectLens always presents raw mention counts alongside percentages to prevent deceptive ratios.</li>
-          <li><strong>Privacy First:</strong> No reviewer names, emails, phone numbers, or account IDs are stored in the database.</li>
-        </ul>
-      </div>
     </section>
 
   </main>
@@ -441,7 +419,11 @@
        =================================================================== -->
   <!-- Floating Launcher Button -->
   <button type="button" id="ai-chat-launcher" class="ai-launcher-btn" aria-label="Open AI Assistant" title="Open AspectLens AI Copilot">
-    <span class="ai-launcher-icon">✨</span>
+    <span class="ai-launcher-icon">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83"></path>
+      </svg>
+    </span>
     <span class="ai-launcher-label">AI Copilot</span>
     <span class="ai-launcher-pulse"></span>
   </button>
@@ -454,25 +436,31 @@
           <span class="ai-header-dot"></span>
           <strong>AspectLens AI Copilot</strong>
         </div>
-        <div class="ai-header-sub" id="ai-context-indicator">Context: Analyze Tab</div>
+        <div class="ai-header-sub" id="ai-context-indicator">Context: Analyze Review</div>
       </div>
       
       <div class="ai-header-actions">
         <!-- Engine Switcher -->
         <select id="ai-model-select" class="ai-model-select" title="Switch AI Engine">
-          <option value="local">⚡ Local Engine (Free/Offline)</option>
-          <option value="gemini">🌟 Google Gemini (1.5 Flash)</option>
-          <option value="groq">🚀 Groq (Llama 3.3 70B)</option>
+          <option value="local">Local Synthesizer</option>
+          <option value="gemini">Google Gemini 1.5</option>
+          <option value="groq">Groq Llama 3.3</option>
         </select>
 
         <!-- Settings Button -->
         <button type="button" id="ai-settings-toggle" class="ai-btn-icon" title="API Keys & Settings" aria-label="API Settings">
-          ⚙️
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
         </button>
 
         <!-- Close Drawer Button -->
         <button type="button" id="ai-chat-close" class="ai-btn-icon" title="Minimize Chat" aria-label="Minimize Chat">
-          ✕
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
         </button>
       </div>
     </div>
@@ -480,9 +468,9 @@
     <!-- Collapsible Settings Panel -->
     <div id="ai-settings-panel" class="ai-settings-panel" style="display: none;">
       <div class="ai-settings-header">
-        <h4 style="margin: 0 0 4px; font-size: 0.95rem;">⚙️ AI Engine Keys & Preferences</h4>
+        <h4 style="margin: 0 0 4px; font-size: 0.95rem;">AI Engine Configuration</h4>
         <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">
-          Keys are stored strictly in your browser (<code>localStorage</code>) and are never sent to external servers or committed to any repository.
+          Keys are stored locally in your browser storage (<code>localStorage</code>) and are never uploaded or committed.
         </p>
       </div>
 
@@ -493,7 +481,7 @@
         </label>
         <input type="password" id="key-gemini" class="input-text" style="font-size: 0.85rem; padding: 6px 10px; width: 100%; box-sizing: border-box;" placeholder="AIzaSy..." autocomplete="off">
         <div class="ai-key-help">
-          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Get free Gemini API key from Google AI Studio ↗</a>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Get free Gemini API key from Google AI Studio</a>
         </div>
       </div>
 
@@ -504,21 +492,34 @@
         </label>
         <input type="password" id="key-groq" class="input-text" style="font-size: 0.85rem; padding: 6px 10px; width: 100%; box-sizing: border-box;" placeholder="gsk_..." autocomplete="off">
         <div class="ai-key-help">
-          <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">Get free Groq API key from Groq Console ↗</a>
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">Get free Groq API key from Groq Console</a>
         </div>
       </div>
 
       <div class="ai-settings-checkbox">
         <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">
           <input type="checkbox" id="ai-auto-failover" checked style="margin-top: 2px;">
-          <span>Automatic Failover: If quota (429) or error occurs, fall back automatically to available key or Local Engine</span>
+          <span>Automatic Failover: If quota or rate limit is reached, smoothly fall back to available engine</span>
         </label>
       </div>
 
       <div class="ai-settings-actions">
-        <button type="button" id="btn-save-keys" class="btn btn-primary" style="font-size: 0.8rem; height: 32px; padding: 4px 12px;">💾 Save Keys</button>
-        <button type="button" id="btn-clear-keys" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 12px;">🗑️ Clear Keys</button>
-        <button type="button" id="btn-close-settings" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 12px; margin-left: auto;">Close</button>
+        <button type="button" id="btn-save-keys" class="btn btn-primary" style="font-size: 0.8rem; height: 32px; padding: 4px 14px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+          <span>Save Keys</span>
+        </button>
+        <button type="button" id="btn-clear-keys" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 14px;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          <span>Clear</span>
+        </button>
+        <button type="button" id="btn-close-settings" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 14px; margin-left: auto;">Close</button>
       </div>
     </div>
 
@@ -531,13 +532,16 @@
     <!-- Input Footer -->
     <div class="ai-drawer-footer">
       <div class="ai-input-row">
-        <textarea id="ai-chat-input" class="ai-textarea" rows="1" placeholder="Ask anything about aspects, products, or reviews..."></textarea>
+        <textarea id="ai-chat-input" class="ai-textarea" rows="1" placeholder="Ask about aspect sentiment, comparative deltas, or review text..."></textarea>
         <button type="button" id="ai-chat-send" class="ai-send-btn" title="Send Question" aria-label="Send">
-          ➤
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"></line>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+          </svg>
         </button>
       </div>
       <div class="ai-footer-status">
-        <span id="ai-active-model-name">Engine: ⚡ Local Rule Synthesizer</span>
+        <span id="ai-active-model-name">Engine: Local Synthesizer</span>
         <span class="ai-footer-hint">Shift+Enter for newline</span>
       </div>
     </div>

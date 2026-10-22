@@ -32,58 +32,34 @@ function getSentimentIcon(sentiment) {
 // ----------------------------------------------------------------------
 const ThemeManager = {
   init() {
-    const savedTheme = localStorage.getItem("aspectlens_theme");
-    if (savedTheme) {
-      document.documentElement.setAttribute("data-theme", savedTheme);
-    }
-    this.updateToggleIcon();
-
-    const btn = document.getElementById("theme-toggle");
-    if (btn) {
-      btn.addEventListener("click", () => this.toggle());
-    }
+    document.documentElement.setAttribute("data-theme", "light");
+    localStorage.setItem("aspectlens_theme", "light");
   },
 
   getCurrentTheme() {
-    const attr = document.documentElement.getAttribute("data-theme");
-    if (attr) return attr;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    return "light";
   },
 
   toggle() {
-    const current = this.getCurrentTheme();
-    const next = current === "dark" ? "light" : "dark";
-    document.documentElement.setAttribute("data-theme", next);
-    localStorage.setItem("aspectlens_theme", next);
-    this.updateToggleIcon();
-
-    // Re-render charts with updated theme palette if visible
-    if (DashboardController.barChart) DashboardController.renderAspectBarChart();
-    if (DashboardController.trendChart) DashboardController.renderTrendChart();
-    if (CompareController.compareChart) CompareController.renderChart();
+    // Persistent pastel theme
   },
 
   updateToggleIcon() {
-    const icon = document.getElementById("theme-icon");
-    const label = document.getElementById("theme-label");
-    const isDark = this.getCurrentTheme() === "dark";
-    if (icon) icon.textContent = isDark ? "☀️" : "🌙";
-    if (label) label.textContent = isDark ? "Light" : "Dark";
+    // Theme toggle icon intentionally removed for consistent pastel aesthetic
   },
 
   getChartColors() {
-    const isDark = this.getCurrentTheme() === "dark";
     return {
-      text: isDark ? "#EEF1F6" : "#1B1F27",
-      textMuted: isDark ? "#9AA3B2" : "#5B6472",
-      border: isDark ? "#2A303B" : "#E2E5EA",
-      pos: isDark ? "#4CC38A" : "#1F8A4C",
-      neg: isDark ? "#FF6B6B" : "#C92A2A",
-      neu: isDark ? "#9AA3B2" : "#6B7280",
-      primary: isDark ? "#7C95FF" : "#3B5BDB",
-      primaryHover: isDark ? "#9AAEFF" : "#2F4AC0",
-      productA: isDark ? "#7C95FF" : "#3B5BDB",
-      productB: isDark ? "#FF922B" : "#D9480F",
+      text: "#1E293B",
+      textMuted: "#64748B",
+      border: "rgba(148, 163, 184, 0.25)",
+      pos: "#48BB78",
+      neg: "#F56565",
+      neu: "#A0AEC0",
+      primary: "#6BA4E8",
+      primaryHover: "#5591D8",
+      productA: "#6BA4E8",
+      productB: "#8E9EF5",
     };
   }
 };
@@ -92,7 +68,7 @@ const ThemeManager = {
 // Router
 // ----------------------------------------------------------------------
 const Router = {
-  routes: ["analyze", "dashboard", "compare", "evaluation", "about"],
+  routes: ["analyze", "dashboard", "compare", "evaluation"],
 
   init() {
     window.addEventListener("hashchange", () => this.handleRoute());
@@ -147,7 +123,7 @@ const Router = {
 const REVIEW_EXAMPLES = [
   // 1. Audio & Headphones
   {
-    category: "🎧 Audio & Sound",
+    category: "Audio & Sound",
     label: "ANC vs Clamping Pressure (Contrast)",
     text: "The active noise cancellation is pure magic on flights, but the clamping pressure hurts after two hours.",
     extractor: "spacy_deps",
@@ -155,7 +131,7 @@ const REVIEW_EXAMPLES = [
     notes: "Contrastive 'but' clause separating high positive ANC (+0.84) from negative comfort (-0.62)."
   },
   {
-    category: "🎧 Audio & Sound",
+    category: "Audio & Sound",
     label: "Acoustics & Mic Multi-Aspect",
     text: "Crisp highs, punchy sub-bass, and crystal clear call quality even in windy streets.",
     extractor: "spacy_chunks",
@@ -163,7 +139,7 @@ const REVIEW_EXAMPLES = [
     notes: "Parallel noun chunks sharing strong positive acoustic modifiers across 3 distinct aspects."
   },
   {
-    category: "🎧 Audio & Sound",
+    category: "Audio & Sound",
     label: "Bluetooth Drops & Buzzing Defect",
     text: "The Bluetooth connection drops every 5 minutes and the left earbud has an annoying constant buzzing noise.",
     extractor: "spacy_deps",
@@ -171,7 +147,7 @@ const REVIEW_EXAMPLES = [
     notes: "Severe connectivity instability compounded by an acute hardware buzzing defect."
   },
   {
-    category: "🎧 Audio & Sound",
+    category: "Audio & Sound",
     label: "Soundstage vs Companion App Crash",
     text: "Soundstage is decent for the price, though the companion app crashes constantly on iOS.",
     extractor: "spacy_deps",
@@ -179,7 +155,7 @@ const REVIEW_EXAMPLES = [
     notes: "Concessive 'though' isolating hardware soundstage from software app crashes."
   },
   {
-    category: "🎧 Audio & Sound",
+    category: "Audio & Sound",
     label: "32-Hour Battery Endurance",
     text: "Battery lasted an impressive 32 hours on a single charge with ANC turned off.",
     extractor: "spacy_chunks",
@@ -187,7 +163,7 @@ const REVIEW_EXAMPLES = [
     notes: "High positive modifier 'impressive' attached directly to battery lifespan."
   },
   {
-    category: "🎧 Audio & Sound",
+    category: "Audio & Sound",
     label: "Figurative Cave Microphone",
     text: "Microphone makes me sound like I am talking from inside an underwater cave.",
     extractor: "spacy_deps",
@@ -197,7 +173,7 @@ const REVIEW_EXAMPLES = [
 
   // 2. Smartphones & Tablets
   {
-    category: "📱 Smartphones & Display",
+    category: "Smartphones & Display",
     label: "OLED Display vs Thermal Throttling",
     text: "The 120Hz OLED display is buttery smooth, but thermal throttling ruins gaming performance within 15 minutes.",
     extractor: "spacy_deps",
@@ -205,7 +181,7 @@ const REVIEW_EXAMPLES = [
     notes: "Sharp polarity split: display praised (+0.82), thermal cooling criticized (-0.75)."
   },
   {
-    category: "📱 Smartphones & Display",
+    category: "Smartphones & Display",
     label: "Low-Light Night Photography",
     text: "Night mode photography captures astonishing low-light detail without artificial noise.",
     extractor: "spacy_chunks",
@@ -213,7 +189,7 @@ const REVIEW_EXAMPLES = [
     notes: "Prepositional negation 'without artificial noise' reinforces optical sensor excellence."
   },
   {
-    category: "📱 Smartphones & Display",
+    category: "Smartphones & Display",
     label: "Biometric Sensor Failures",
     text: "Fingerprint sensor fails half the time and face unlock does not work in the dark at all.",
     extractor: "spacy_deps",
@@ -221,7 +197,7 @@ const REVIEW_EXAMPLES = [
     notes: "Dual negative biometrics containing explicit clause negation 'does not work'."
   },
   {
-    category: "📱 Smartphones & Display",
+    category: "Smartphones & Display",
     label: "Haptics, Fast Charge & Ergonomics",
     text: "Haptics feel wonderfully premium, charging speed is blazing fast, and the compact form factor fits easily in one hand.",
     extractor: "spacy_chunks",
@@ -229,7 +205,7 @@ const REVIEW_EXAMPLES = [
     notes: "Tri-aspect compound sentence with unanimous high-confidence positive ratings."
   },
   {
-    category: "📱 Smartphones & Display",
+    category: "Smartphones & Display",
     label: "OS Update & UI Stutter",
     text: "Software updates introduced severe battery drain and UI stutter across system animations.",
     extractor: "spacy_deps",
@@ -237,7 +213,7 @@ const REVIEW_EXAMPLES = [
     notes: "Negative causative verb assigning blame to recent software updates."
   },
   {
-    category: "📱 Smartphones & Display",
+    category: "Smartphones & Display",
     label: "Direct Sunlight Legibility",
     text: "Screen brightness in direct sunlight is barely legible despite the advertised 2000 nits peak.",
     extractor: "spacy_deps",
@@ -247,7 +223,7 @@ const REVIEW_EXAMPLES = [
 
   // 3. Laptops & Computing
   {
-    category: "💻 Laptops & Performance",
+    category: "Laptops & Performance",
     label: "Tactile Keyboard vs Mushy Trackpad",
     text: "The keyboard travel is tactile and deeply satisfying, but the trackpad feels mushy and cheap.",
     extractor: "spacy_deps",
@@ -255,7 +231,7 @@ const REVIEW_EXAMPLES = [
     notes: "Direct contrast between input devices: positive keyboard vs negative trackpad."
   },
   {
-    category: "💻 Laptops & Performance",
+    category: "Laptops & Performance",
     label: "Silent Fans & Cool Temps",
     text: "Fan noise is virtually silent under heavy video rendering loads, and temperatures stayed well below 75C.",
     extractor: "spacy_deps",
@@ -263,7 +239,7 @@ const REVIEW_EXAMPLES = [
     notes: "Dual positive acoustic and thermal performance under sustained load."
   },
   {
-    category: "💻 Laptops & Performance",
+    category: "Laptops & Performance",
     label: "Aerospace Aluminum vs Limited Ports",
     text: "Build quality is rock solid with aerospace aluminum, yet port selection is miserably limited to two USB-C ports.",
     extractor: "spacy_deps",
@@ -271,7 +247,7 @@ const REVIEW_EXAMPLES = [
     notes: "Conjunction 'yet' dividing chassis durability praise from I/O port criticism."
   },
   {
-    category: "💻 Laptops & Performance",
+    category: "Laptops & Performance",
     label: "Grainy Webcam vs Rich Speakers",
     text: "Webcam resolution looks grainy like a 2010 flip phone, but speakers deliver surprisingly rich acoustics.",
     extractor: "spacy_deps",
@@ -279,7 +255,7 @@ const REVIEW_EXAMPLES = [
     notes: "Adversarial contrast: webcam scored negative, audio speakers scored positive."
   },
   {
-    category: "💻 Laptops & Performance",
+    category: "Laptops & Performance",
     label: "Blistering SSD & Instant Boot",
     text: "The SSD read and write speeds are blisteringly fast, boot time takes under 6 seconds.",
     extractor: "spacy_chunks",
@@ -287,7 +263,7 @@ const REVIEW_EXAMPLES = [
     notes: "High positive speed modifiers applied to NVMe storage and system startup."
   },
   {
-    category: "💻 Laptops & Performance",
+    category: "Laptops & Performance",
     label: "Battery Degradation & Bulky Brick",
     text: "Battery longevity degrades quickly after six months and the proprietary power brick is bulky.",
     extractor: "spacy_deps",
@@ -297,7 +273,7 @@ const REVIEW_EXAMPLES = [
 
   // 4. Wearables & Smartwatches
   {
-    category: "⌚ Wearables & Fitness",
+    category: "Wearables & Fitness",
     label: "Accurate HIIT Heart Rate Sensor",
     text: "Heart rate tracking during HIIT workouts is exceptionally accurate compared to a dedicated chest strap.",
     extractor: "spacy_chunks",
@@ -305,7 +281,7 @@ const REVIEW_EXAMPLES = [
     notes: "Comparative validation against ground-truth hospital/chest-strap reference hardware."
   },
   {
-    category: "⌚ Wearables & Fitness",
+    category: "Wearables & Fitness",
     label: "Insightful Sleep Analytics",
     text: "Sleep tracking metrics are insightful and sleep score matches how rested I actually feel.",
     extractor: "spacy_chunks",
@@ -313,7 +289,7 @@ const REVIEW_EXAMPLES = [
     notes: "Positive assessment of health algorithm predictive validity."
   },
   {
-    category: "⌚ Wearables & Fitness",
+    category: "Wearables & Fitness",
     label: "Instant GPS vs Step Overcounting",
     text: "GPS locks on instantly outdoors, but step counter overcounts arm movements while driving.",
     extractor: "spacy_deps",
@@ -321,7 +297,7 @@ const REVIEW_EXAMPLES = [
     notes: "GPS functionality verified positive; accelerometer algorithm flagged negative."
   },
   {
-    category: "⌚ Wearables & Fitness",
+    category: "Wearables & Fitness",
     label: "Silicone Strap Skin Rash",
     text: "The silicone strap caused skin irritation and sweat rash within three days.",
     extractor: "spacy_deps",
@@ -329,7 +305,7 @@ const REVIEW_EXAMPLES = [
     notes: "Ergonomic materials defect causing localized skin sensitivity."
   },
   {
-    category: "⌚ Wearables & Fitness",
+    category: "Wearables & Fitness",
     label: "Weak Alarm Vibration Motor",
     text: "Vibration motor is too weak to wake me up in the morning.",
     extractor: "spacy_deps",
@@ -337,7 +313,7 @@ const REVIEW_EXAMPLES = [
     notes: "Adverbial intensifier 'too weak' creating clause-scoped negative sentiment."
   },
   {
-    category: "⌚ Wearables & Fitness",
+    category: "Wearables & Fitness",
     label: "50m Water Resistance & Lap Tracking",
     text: "Water resistance holds up great during 50m lap swimming with accurate stroke detection.",
     extractor: "spacy_chunks",
@@ -347,7 +323,7 @@ const REVIEW_EXAMPLES = [
 
   // 5. Complex Linguistic Nuances
   {
-    category: "⚖️ Linguistic Nuances & Sarcasm",
+    category: "Linguistic Nuances & Sarcasm",
     label: "Double Negation Litotes",
     text: "Not bad at all for the price, definitely exceeded my low initial expectations.",
     extractor: "spacy_deps",
@@ -355,7 +331,7 @@ const REVIEW_EXAMPLES = [
     notes: "Litotes / double negation ('not bad') resolving to net positive sentiment."
   },
   {
-    category: "⚖️ Linguistic Nuances & Sarcasm",
+    category: "Linguistic Nuances & Sarcasm",
     label: "Sarcastic Customer Support",
     text: "Great customer service if you enjoy being placed on hold for forty-five minutes to be hung up on.",
     extractor: "spacy_deps",
@@ -363,7 +339,7 @@ const REVIEW_EXAMPLES = [
     notes: "Surface positive word 'Great' inverted by conditional sarcastic clause."
   },
   {
-    category: "⚖️ Linguistic Nuances & Sarcasm",
+    category: "Linguistic Nuances & Sarcasm",
     label: "Nuanced Aesthetic Hedging",
     text: "The design is not ugly, but calling it sleek would be a massive overstatement.",
     extractor: "spacy_deps",
@@ -371,7 +347,7 @@ const REVIEW_EXAMPLES = [
     notes: "Subtle aesthetic hedging with restrained contrastive assessment."
   },
   {
-    category: "⚖️ Linguistic Nuances & Sarcasm",
+    category: "Linguistic Nuances & Sarcasm",
     label: "Crushed Box vs Flawless Device",
     text: "Packaging arrived damaged and crushed, but the device itself works completely fine.",
     extractor: "spacy_deps",
@@ -379,7 +355,7 @@ const REVIEW_EXAMPLES = [
     notes: "Packaging aspect separated cleanly from product operational status."
   },
   {
-    category: "⚖️ Linguistic Nuances & Sarcasm",
+    category: "Linguistic Nuances & Sarcasm",
     label: "Frictionless Two-Minute Setup",
     text: "Setup took less than two minutes and zero technical skills were required.",
     extractor: "spacy_chunks",
@@ -387,7 +363,7 @@ const REVIEW_EXAMPLES = [
     notes: "'zero technical skills' represents positive ease-of-use despite zero quantifier."
   },
   {
-    category: "⚖️ Linguistic Nuances & Sarcasm",
+    category: "Linguistic Nuances & Sarcasm",
     label: "Triple Flaw vs Indestructible Build",
     text: "Terrible battery, terrible screen, terrible sound, yet somehow the build feels indestructible.",
     extractor: "spacy_deps",
@@ -493,9 +469,9 @@ const AnalyzeController = {
       };
       recBadge.style.display = "block";
       recBadge.innerHTML = `
-        <strong>💡 Recommended Configuration for this Linguistic Pattern:</strong>
-        <span class="word-badge" style="margin: 0 4px; background: var(--surface);">${extractorLabels[ex.extractor] || ex.extractor}</span> + 
-        <span class="word-badge" style="margin: 0 4px; background: var(--surface);">${scorerLabels[ex.scorer] || ex.scorer}</span>
+        <strong>Recommended Configuration:</strong>
+        <span class="word-badge" style="margin: 0 4px; background: #FFFFFF;">${extractorLabels[ex.extractor] || ex.extractor}</span> + 
+        <span class="word-badge" style="margin: 0 4px; background: #FFFFFF;">${scorerLabels[ex.scorer] || ex.scorer}</span>
         <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px;">${escapeHtml(ex.notes)}</div>
       `;
     }
@@ -551,7 +527,6 @@ const AnalyzeController = {
       const fallbackData = this.getFallbackAnalysis(text, scorerSelect ? scorerSelect.value : "vader");
       statusBox.innerHTML = `
         <div class="alert alert-info" role="status" style="margin-bottom: 12px; font-size: 0.85rem;">
-          <span>ℹ️</span>
           <span><strong>Static Demo Mode:</strong> Analyzed via bundled lexicon. For live RoBERTa + spaCy parsing, run the local backend server (<code>python -m uvicorn app.main:app</code>).</span>
         </div>
       `;
@@ -559,7 +534,6 @@ const AnalyzeController = {
     } catch (err) {
       statusBox.innerHTML = `
         <div class="alert alert-error" role="alert">
-          <span>⚠️</span>
           <span><strong>Analysis failed:</strong> ${escapeHtml(err.message)}</span>
         </div>
         <p style="font-size: 0.85rem; color: var(--text-muted); text-align: center;">
@@ -580,7 +554,7 @@ const AnalyzeController = {
     const tbody = document.getElementById("analyze-tbody");
 
     if (latencyBadge) {
-      latencyBadge.textContent = `⚡ ${data.latency_ms} ms · ${data.scorer.toUpperCase()}`;
+      latencyBadge.textContent = `${data.latency_ms} ms • ${data.scorer.toUpperCase()}`;
     }
 
     const text = data.text || "";
@@ -1061,7 +1035,7 @@ const DashboardController = {
       return list.map(item => {
         const sentimentClass = isPositive ? "positive" : "negative";
         const icon = isPositive ? "▲" : "▼";
-        const ratingStr = item.rating ? `★ ${item.rating}/5` : "";
+        const ratingStr = item.rating ? `Rating: ${item.rating}/5` : "";
         const dateStr = item.review_date || "";
 
         return `
@@ -1268,7 +1242,7 @@ const CompareController = {
         toggleBtn.style.display = "none";
       } else {
         toggleBtn.style.display = "inline-flex";
-        toggleBtn.textContent = this.showAll ? "⚡ Show Top 8 Key Aspects" : `📊 Show All Aspects (${allAspects.length})`;
+        toggleBtn.textContent = this.showAll ? "Show Top 8 Aspects" : `Show All Aspects (${allAspects.length})`;
       }
     }
 
@@ -1284,9 +1258,9 @@ const CompareController = {
 
           let winnerChip = `<span class="word-badge">Tie</span>`;
           if (row.winner === "product_a") {
-            winnerChip = `<span class="sentiment-chip positive">▲ ${escapeHtml(c.product_a.name.slice(0, 16))}</span>`;
+            winnerChip = `<span class="sentiment-chip positive">${escapeHtml(c.product_a.name.slice(0, 16))}</span>`;
           } else if (row.winner === "product_b") {
-            winnerChip = `<span class="sentiment-chip positive">▲ ${escapeHtml(c.product_b.name.slice(0, 16))}</span>`;
+            winnerChip = `<span class="sentiment-chip positive">${escapeHtml(c.product_b.name.slice(0, 16))}</span>`;
           }
 
           return `
@@ -1397,7 +1371,13 @@ const EvaluationController = {
       if (!data || data.status === "not_generated_yet" || (data.results || []).length === 0) {
         container.innerHTML = `
           <div class="card empty-state">
-            <div class="empty-icon">📊</div>
+            <div class="empty-icon">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color: var(--primary);">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </div>
             <h2 style="font-size: 1.25rem; color: var(--text); margin: 0 0 8px;">Benchmarks Not Generated Yet</h2>
             <p style="font-size: 0.9rem; color: var(--text-muted); max-width: 500px; margin: 0 auto 16px;">
               Evaluation benchmark runs have not been executed on this environment yet.
@@ -1454,12 +1434,12 @@ const EvaluationController = {
                 <div style="font-size: 0.75rem; color: var(--text-muted);">RoBERTa (+6.0% vs Baseline)</div>
               </div>
               <div class="stat-card">
-                <div class="stat-label">Hidden Complaints (4-5★)</div>
+                <div class="stat-label">Hidden Complaints (4-5 Stars)</div>
                 <div class="stat-value" style="color: var(--neg);">${summary.amazon_value?.high_star_with_negative_aspect_pct || 39.4}%</div>
                 <div style="font-size: 0.75rem; color: var(--text-muted);">Aspects missed by star rating</div>
               </div>
               <div class="stat-card">
-                <div class="stat-label">Hidden Praise (1-2★)</div>
+                <div class="stat-label">Hidden Praise (1-2 Stars)</div>
                 <div class="stat-value" style="color: var(--pos);">${summary.amazon_value?.low_star_with_positive_aspect_pct || 61.0}%</div>
                 <div style="font-size: 0.75rem; color: var(--text-muted);">Redeeming aspects found</div>
               </div>
@@ -1551,14 +1531,14 @@ const EvaluationController = {
             </p>
             <div class="stat-grid" style="grid-template-columns: 1fr 1fr; margin-bottom: 16px;">
               <div class="stat-card" style="border-left: 4px solid var(--neg);">
-                <div class="stat-label">High-Star Reviews (4-5★) with Negative Aspects</div>
+                <div class="stat-label">High-Star Reviews (4-5 Stars) with Negative Aspects</div>
                 <div class="stat-value" style="color: var(--neg);">${summary.amazon_value?.high_star_with_negative_aspect_pct || 39.4}%</div>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin: 8px 0 0;">
                   Whole-review models score these 100% positive, hiding serious defects in battery, build, and delivery.
                 </p>
               </div>
               <div class="stat-card" style="border-left: 4px solid var(--pos);">
-                <div class="stat-label">Low-Star Reviews (1-2★) with Positive Aspects</div>
+                <div class="stat-label">Low-Star Reviews (1-2 Stars) with Positive Aspects</div>
                 <div class="stat-value" style="color: var(--pos);">${summary.amazon_value?.low_star_with_positive_aspect_pct || 61.0}%</div>
                 <p style="font-size: 0.8rem; color: var(--text-muted); margin: 8px 0 0;">
                   Whole-review models score these 100% negative, missing strong praise for fast delivery and design.
@@ -1575,7 +1555,7 @@ const EvaluationController = {
                     <div class="snippet-quote">“${escapeHtml(ex.text)}”</div>
                     <div class="snippet-meta">
                       <span class="sentiment-chip negative">▼ Hidden Complaint: ${escapeHtml(ex.negative_aspects.join(", "))}</span>
-                      <span>Star Rating: ★ ${ex.rating}/5</span>
+                      <span>Rating: ${ex.rating}/5</span>
                     </div>
                   </div>
                 `).join("")}
@@ -1674,7 +1654,7 @@ const EvaluationController = {
             <div style="display: flex; flex-wrap: wrap; gap: 8px;">
               ${data.results.map(r => `
                 <span class="word-badge" style="font-family: var(--font-mono); font-size: 0.8rem; padding: 6px 10px;">
-                  📄 ${escapeHtml(r.benchmark)}.json / .csv
+                  ${escapeHtml(r.benchmark)}.json / .csv
                 </span>
               `).join("")}
             </div>
@@ -1775,7 +1755,7 @@ const ChatbotController = {
     // Initial greeting
     this.messages.push({
       role: "assistant",
-      content: "👋 Hello! I am your **AspectLens AI Copilot**. I can analyze customer reviews, compare products side-by-side, explain sentiment scores, or guide you through our ABSA architecture.\n\n*Choose a suggested question below or ask anything!*",
+      content: "Hello! I am your **AspectLens Copilot**. I can analyze customer reviews, compare products side-by-side, or explain aspect sentiment scores.\n\n*Select a suggested question below or enter your own query.*",
       time: this.getTimeString()
     });
     this.renderMessages();
@@ -1786,13 +1766,13 @@ const ChatbotController = {
     if (!this.activeModelBadge) return;
     switch (model) {
       case "gemini":
-        this.activeModelBadge.textContent = "Engine: 🌟 Google Gemini (1.5 Flash)";
+        this.activeModelBadge.textContent = "Engine: Google Gemini (1.5 Flash)";
         break;
       case "groq":
-        this.activeModelBadge.textContent = "Engine: 🚀 Groq (Llama 3.3 70B)";
+        this.activeModelBadge.textContent = "Engine: Groq (Llama 3.3 70B)";
         break;
       default:
-        this.activeModelBadge.textContent = "Engine: ⚡ Local Rule Synthesizer";
+        this.activeModelBadge.textContent = "Engine: Local Synthesizer";
         break;
     }
   },
@@ -1913,7 +1893,7 @@ const ChatbotController = {
     // Inform user in chat
     this.messages.push({
       role: "assistant",
-      content: "✅ **API keys updated successfully.** Keys are stored strictly in your browser (`localStorage`) and will never leave your device unauthorized.",
+      content: "API keys updated successfully. Keys are stored locally in your browser (`localStorage`).",
       time: this.getTimeString()
     });
     this.renderMessages();
@@ -1931,7 +1911,7 @@ const ChatbotController = {
 
     this.messages.push({
       role: "assistant",
-      content: "🗑️ **Keys cleared.** The assistant will now operate with the built-in **AspectLens Local Rule Synthesizer** (100% free & offline).",
+      content: "Keys cleared. The assistant will now operate with the built-in Local Synthesizer.",
       time: this.getTimeString()
     });
     this.renderMessages();
@@ -1951,9 +1931,6 @@ const ChatbotController = {
         case "evaluation":
           contextEl.textContent = `Context: Evaluation & Benchmarks`;
           break;
-        case "about":
-          contextEl.textContent = `Context: System Architecture`;
-          break;
         default:
           contextEl.textContent = `Context: Review Analysis`;
           break;
@@ -1969,41 +1946,34 @@ const ChatbotController = {
     switch (this.currentTab) {
       case "dashboard":
         pills = [
-          "⭐ What are the top customer praises?",
-          "⚠️ Summarize biggest customer complaints",
-          "📈 Explain the sentiment trajectory",
-          "📊 Which aspect has the highest volume?"
+          "What are the top customer praises?",
+          "Summarize key customer complaints",
+          "Explain the sentiment trajectory",
+          "Which aspect has the highest volume?"
         ];
         break;
       case "compare":
         pills = [
-          "⚖️ Which product is the overall winner?",
-          "🔋 Compare battery life and endurance",
-          "🎧 Compare sound quality and acoustics",
-          "🎯 Which product should I buy and why?"
+          "Which product is the overall winner?",
+          "Compare battery life and endurance",
+          "Compare sound quality and acoustics",
+          "Which product should I buy and why?"
         ];
         break;
       case "evaluation":
         pills = [
-          "📊 Explain SemEval-2014 Task 4 F1",
-          "🧠 Why does RoBERTa outperform VADER?",
-          "⚡ Compare pipeline speed & throughput",
-          "❌ What are the top linguistic failure modes?"
-        ];
-        break;
-      case "about":
-        pills = [
-          "🏛️ Explain the 6-stage NLP architecture",
-          "🔒 How is reviewer privacy preserved?",
-          "🎓 How does this align with university NLP curriculum?"
+          "Explain SemEval-2014 Task 4 F1",
+          "Why does RoBERTa outperform VADER?",
+          "Compare pipeline speed and throughput",
+          "What are the top linguistic failure modes?"
         ];
         break;
       default: // analyze
         pills = [
-          "🔍 Analyze review for subtle sarcasm",
-          "⚖️ Why did VADER and RoBERTa differ?",
-          "📌 How do dependency rules handle 'but' clauses?",
-          "🏷️ Explain the canonical aspect grouping cascade"
+          "Analyze review for subtle nuances",
+          "Why did VADER and RoBERTa differ?",
+          "How do dependency rules handle contrast clauses?",
+          "Explain the canonical aspect grouping cascade"
         ];
         break;
     }
@@ -2074,7 +2044,7 @@ const ChatbotController = {
       if (idx !== -1) {
         this.messages[idx] = {
           role: "assistant",
-          content: `⚠️ **Processing Notice:** ${escapeHtml(err.message)}`,
+          content: `**Processing Notice:** ${escapeHtml(err.message)}`,
           time: this.getTimeString()
         };
       }
@@ -2125,7 +2095,7 @@ const ChatbotController = {
         } else if (autoFailover) {
           return this.generateLocalResponse(userText, context, "*(Gemini key not configured. Operating with Local Engine)*\n\n");
         } else {
-          throw new Error("Google Gemini API key not found. Click ⚙️ in the top right to paste your free Gemini API key, or switch to the Local Engine.");
+          throw new Error("Google Gemini API key not found. Click Settings in the top right to paste your free Gemini API key, or switch to the Local Engine.");
         }
       }
 
@@ -2147,7 +2117,7 @@ const ChatbotController = {
         } else if (autoFailover) {
           return this.generateLocalResponse(userText, context, "*(Groq key not configured. Operating with Local Engine)*\n\n");
         } else {
-          throw new Error("Groq API key not found. Click ⚙️ in the top right to paste your free Groq API key, or switch to the Local Engine.");
+          throw new Error("Groq API key not found. Click Settings in the top right to paste your free Groq API key, or switch to the Local Engine.");
         }
       }
 
@@ -2299,17 +2269,17 @@ Respond in concise, professional GitHub-flavored Markdown. Ground your answers s
         const topA = c.aspects.filter(a => a.winner === "product_a").slice(0, 3).map(a => `**${a.aspect}** (+${(a.product_a.avg_score - a.product_b.avg_score).toFixed(2)})`).join(", ");
         const topB = c.aspects.filter(a => a.winner === "product_b").slice(0, 3).map(a => `**${a.aspect}** (+${(a.product_b.avg_score - a.product_a.avg_score).toFixed(2)})`).join(", ");
 
-        return `${prefix}### ⚖️ Side-by-Side Competitive Verdict
+        return `${prefix}### Competitive Verdict
 
 **Overall Leader:** **${escapeHtml(overallWinner)}**
 - **${escapeHtml(c.product_a.name)}:** Leads on **${aWins}** dynamic aspects (${topA || "None"}).
 - **${escapeHtml(c.product_b.name)}:** Leads on **${bWins}** dynamic aspects (${topB || "None"}).
 - **Ties / Equal:** **${ties}** aspects.
 
-#### 💡 Key Takeaway & Purchasing Advice:
+#### Key Takeaway & Purchasing Advice:
 If you prioritize features like ${topA || "core reliability"}, **${escapeHtml(c.product_a.name)}** offers stronger customer satisfaction. However, if your focus is on ${topB || "value"}, **${escapeHtml(c.product_b.name)}** is the superior choice.`;
       } else {
-        return `${prefix}To compare products, head to the **Side-by-Side Comparison** tab, pick two products from the catalog, and click **⚖️ Compare Products**. I will instantly break down which device leads on each dynamic aspect!`;
+        return `${prefix}To compare products, head to the **Side-by-Side Comparison** tab, pick two products from the catalog, and click **Compare Products**. I will instantly break down which device leads on each dynamic aspect!`;
       }
     }
 
@@ -2321,34 +2291,34 @@ If you prioritize features like ${topA || "core reliability"}, **${escapeHtml(c.
         const topPraised = [...(s.aspects || [])].sort((x, y) => y.pos_pct - x.pos_pct).slice(0, 3);
         const topComplained = [...(s.aspects || [])].sort((x, y) => y.neg_pct - x.neg_pct).slice(0, 3);
 
-        return `${prefix}### 📊 Product Intelligence for ${escapeHtml(s.name)}
+        return `${prefix}### Product Intelligence for ${escapeHtml(s.name)}
 
 - **Verified Corpus Volume:** **${s.total_reviews}** reviews analyzed across **${s.total_aspects}** granular aspect mentions.
 - **Positive Sentiment Ratio:** **${s.pos_aspect_pct}%** positive share overall.
 
-#### 🌟 Top Customer Praises:
+#### Top Customer Praises:
 ${topPraised.map(a => `- **${escapeHtml(a.aspect)}**: ${a.pos_pct}% positive (${a.mentions} mentions)`).join("\n")}
 
-#### ⚠️ Top Customer Pain Points:
+#### Top Customer Pain Points:
 ${topComplained.map(a => `- **${escapeHtml(a.aspect)}**: ${a.neg_pct}% negative (${a.mentions} mentions)`).join("\n")}`;
       }
     }
 
     // 3. Review Analysis / Sarcasm / Clauses
     if (context.tab === "analyze" || q.includes("sarcasm") || q.includes("vader") || q.includes("roberta") || q.includes("clause")) {
-      return `${prefix}### 🔍 Review Clause & Sentiment Analysis
+      return `${prefix}### Review Clause & Sentiment Analysis
 
 AspectLens enforces **Syntactic Clause Isolation**:
 1. **Conjunction Splitting:** Phrases containing *but, however, yet, although* are split into separate clauses. Positive and negative opinion words never bleed across contrast boundaries.
 2. **Scorer Dynamics:**
    - **VADER:** Lexicon and rule-based scorer domain-adjusted for consumer hardware (e.g. boosts battery, audio, build terms).
    - **Twitter RoBERTa:** Pretrained neural transformer capturing subtle contextual nuances, complex double negation (*"not bad"*), and mild sarcasm.
-3. **Canonical Grouping:** Unifies raw mentions like *cost, price point, tag* into the single canonical group **Price** via our prioritized 3-tier cascade (Seed Lexicon $\\to$ WordNet $\\to$ MiniLM Embeddings).`;
+3. **Canonical Grouping:** Unifies raw mentions like *cost, price point, tag* into the single canonical group **Price** via our prioritized 3-tier cascade (Seed Lexicon -> WordNet -> MiniLM Embeddings).`;
     }
 
     // 4. Evaluation & Benchmarks
     if (context.tab === "evaluation" || q.includes("f1") || q.includes("semeval") || q.includes("benchmark")) {
-      return `${prefix}### 📈 Benchmark Evaluation Summary (SemEval-2014 Task 4)
+      return `${prefix}### Benchmark Evaluation Summary (SemEval-2014 Task 4)
 
 - **Twitter RoBERTa Neural:** Macro F1 **81.2%** (Laptops) / **85.6%** (Restaurants).
 - **Domain VADER:** Macro F1 **72.4%** (Laptops) / **76.1%** (Restaurants).
@@ -2357,9 +2327,9 @@ AspectLens enforces **Syntactic Clause Isolation**:
     }
 
     // 5. Default General ABSA Assistant Answer
-    return `${prefix}### 🤖 AspectLens AI Assistant
+    return `${prefix}### AspectLens Assistant
 
-AspectLens is a complete, curriculum-aligned **Aspect-Based Sentiment Analysis** platform:
+AspectLens is a complete, production-grade **Aspect-Based Sentiment Analysis** platform:
 - **Extractors:** spaCy Noun Chunks, Syntactic Dependency Rules, NLTK Regexp.
 - **Scorers:** Domain-adapted VADER & Twitter RoBERTa.
 - **Taxonomy:** 11 locked canonical categories with 33,000+ real aspect mentions.
