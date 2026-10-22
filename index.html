@@ -55,7 +55,15 @@
       <div class="card">
         <form id="analyze-form" onsubmit="return false;">
           <div class="form-group">
-            <label for="review-input">Customer Review Text</label>
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 8px;">
+              <label for="review-input" style="margin-bottom: 0;">Customer Review Text</label>
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <label for="example-select" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0;">📚 Test Library:</label>
+                <select id="example-select" class="input-select" style="font-size: 0.8rem; height: 32px; padding: 2px 8px; max-width: 290px;">
+                  <option value="">-- Choose from 30 Curated Examples --</option>
+                </select>
+              </div>
+            </div>
             <textarea 
               id="review-input" 
               class="input-textarea" 
@@ -67,6 +75,8 @@
             <div class="char-counter">
               <span id="char-count">0</span> / 2,000 characters
             </div>
+            <!-- Recommended Model Pairing Notice -->
+            <div id="example-recommendation-badge" style="display: none; margin-top: 8px; font-size: 0.8rem; background: var(--surface-alt); border-left: 3px solid var(--primary); padding: 8px 12px; border-radius: var(--radius-sm); color: var(--text);"></div>
           </div>
 
           <div class="controls-row">
@@ -89,7 +99,7 @@
             </div>
 
             <button type="button" id="btn-example" class="btn btn-secondary">
-              ⚡ Try an Example
+              ⚡ Random Example
             </button>
 
             <button type="submit" id="btn-analyze" class="btn btn-primary">
@@ -293,7 +303,21 @@
 
         <!-- Delta Table -->
         <div class="card">
-          <div class="card-title">Comparative Sentiment Breakdown</div>
+          <div class="card-title" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+            <span>Comparative Sentiment Breakdown</span>
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <span id="compare-aspects-count-badge" class="word-badge" style="font-size: 0.75rem;">Top 8 Key Aspects</span>
+              <button type="button" id="compare-toggle-all-btn" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 10px;">
+                Show All Aspects
+              </button>
+              <button type="button" id="compare-ai-assist-btn" class="btn btn-primary" style="font-size: 0.8rem; height: 32px; padding: 4px 10px;">
+                ✨ Ask AI to Compare
+              </button>
+            </div>
+          </div>
+          <p id="compare-note-text" style="font-size: 0.8rem; color: var(--text-muted); margin-top: -6px; margin-bottom: 12px;">
+            Derived dynamically from customer review mention volume for the selected products.
+          </p>
           <div class="table-container">
             <table class="data-table" id="compare-table">
               <thead>
@@ -411,6 +435,113 @@
     </section>
 
   </main>
+
+  <!-- ===================================================================
+       Global Floating AI Assistant Widget
+       =================================================================== -->
+  <!-- Floating Launcher Button -->
+  <button type="button" id="ai-chat-launcher" class="ai-launcher-btn" aria-label="Open AI Assistant" title="Open AspectLens AI Copilot">
+    <span class="ai-launcher-icon">✨</span>
+    <span class="ai-launcher-label">AI Copilot</span>
+    <span class="ai-launcher-pulse"></span>
+  </button>
+
+  <!-- Floating Chat Drawer -->
+  <aside id="ai-chat-drawer" class="ai-drawer" aria-label="AspectLens AI Copilot" aria-hidden="true" style="display: none;">
+    <div class="ai-drawer-header">
+      <div class="ai-header-info">
+        <div class="ai-header-title">
+          <span class="ai-header-dot"></span>
+          <strong>AspectLens AI Copilot</strong>
+        </div>
+        <div class="ai-header-sub" id="ai-context-indicator">Context: Analyze Tab</div>
+      </div>
+      
+      <div class="ai-header-actions">
+        <!-- Engine Switcher -->
+        <select id="ai-model-select" class="ai-model-select" title="Switch AI Engine">
+          <option value="local">⚡ Local Engine (Free/Offline)</option>
+          <option value="gemini">🌟 Google Gemini (1.5 Flash)</option>
+          <option value="groq">🚀 Groq (Llama 3.3 70B)</option>
+        </select>
+
+        <!-- Settings Button -->
+        <button type="button" id="ai-settings-toggle" class="ai-btn-icon" title="API Keys & Settings" aria-label="API Settings">
+          ⚙️
+        </button>
+
+        <!-- Close Drawer Button -->
+        <button type="button" id="ai-chat-close" class="ai-btn-icon" title="Minimize Chat" aria-label="Minimize Chat">
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <!-- Collapsible Settings Panel -->
+    <div id="ai-settings-panel" class="ai-settings-panel" style="display: none;">
+      <div class="ai-settings-header">
+        <h4 style="margin: 0 0 4px; font-size: 0.95rem;">⚙️ AI Engine Keys & Preferences</h4>
+        <p style="margin: 0; font-size: 0.8rem; color: var(--text-muted);">
+          Keys are stored strictly in your browser (<code>localStorage</code>) and are never sent to external servers or committed to any repository.
+        </p>
+      </div>
+
+      <div class="ai-settings-group">
+        <label for="key-gemini" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">
+          <span>Google Gemini API Key</span>
+          <span id="gemini-status-badge" class="ai-key-badge not-set">Not configured</span>
+        </label>
+        <input type="password" id="key-gemini" class="input-text" style="font-size: 0.85rem; padding: 6px 10px; width: 100%; box-sizing: border-box;" placeholder="AIzaSy..." autocomplete="off">
+        <div class="ai-key-help">
+          <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">Get free Gemini API key from Google AI Studio ↗</a>
+        </div>
+      </div>
+
+      <div class="ai-settings-group">
+        <label for="key-groq" style="display: flex; justify-content: space-between; align-items: center; font-size: 0.8rem; font-weight: 600; margin-bottom: 4px;">
+          <span>Groq API Key</span>
+          <span id="groq-status-badge" class="ai-key-badge not-set">Not configured</span>
+        </label>
+        <input type="password" id="key-groq" class="input-text" style="font-size: 0.85rem; padding: 6px 10px; width: 100%; box-sizing: border-box;" placeholder="gsk_..." autocomplete="off">
+        <div class="ai-key-help">
+          <a href="https://console.groq.com/keys" target="_blank" rel="noopener noreferrer">Get free Groq API key from Groq Console ↗</a>
+        </div>
+      </div>
+
+      <div class="ai-settings-checkbox">
+        <label style="display: flex; align-items: flex-start; gap: 8px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">
+          <input type="checkbox" id="ai-auto-failover" checked style="margin-top: 2px;">
+          <span>Automatic Failover: If quota (429) or error occurs, fall back automatically to available key or Local Engine</span>
+        </label>
+      </div>
+
+      <div class="ai-settings-actions">
+        <button type="button" id="btn-save-keys" class="btn btn-primary" style="font-size: 0.8rem; height: 32px; padding: 4px 12px;">💾 Save Keys</button>
+        <button type="button" id="btn-clear-keys" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 12px;">🗑️ Clear Keys</button>
+        <button type="button" id="btn-close-settings" class="btn btn-secondary" style="font-size: 0.8rem; height: 32px; padding: 4px 12px; margin-left: auto;">Close</button>
+      </div>
+    </div>
+
+    <!-- Chat Messages Thread -->
+    <div id="ai-chat-messages" class="ai-messages-container" role="log" aria-live="polite"></div>
+
+    <!-- Suggested Prompt Pills -->
+    <div id="ai-prompt-pills" class="ai-pills-container"></div>
+
+    <!-- Input Footer -->
+    <div class="ai-drawer-footer">
+      <div class="ai-input-row">
+        <textarea id="ai-chat-input" class="ai-textarea" rows="1" placeholder="Ask anything about aspects, products, or reviews..."></textarea>
+        <button type="button" id="ai-chat-send" class="ai-send-btn" title="Send Question" aria-label="Send">
+          ➤
+        </button>
+      </div>
+      <div class="ai-footer-status">
+        <span id="ai-active-model-name">Engine: ⚡ Local Rule Synthesizer</span>
+        <span class="ai-footer-hint">Shift+Enter for newline</span>
+      </div>
+    </div>
+  </aside>
 
   <!-- Vendored Local Chart.js & App Script -->
   <script src="chart.umd.min.js"></script>

@@ -103,33 +103,5 @@
     "category": "Cell Phones & Accessories",
     "source": "amazon",
     "review_count": 250
-  },
-  {
-    "id": "limit",
-    "name": "Product limit",
-    "category": "Uploaded",
-    "source": "upload",
-    "review_count": 24
-  },
-  {
-    "id": "UPLOAD_TEST_1",
-    "name": "Product UPLOAD_TEST_1",
-    "category": "Uploaded",
-    "source": "upload",
-    "review_count": 18
-  },
-  {
-    "id": "UPLOAD_TEST_2",
-    "name": "Product UPLOAD_TEST_2",
-    "category": "Uploaded",
-    "source": "upload",
-    "review_count": 9
-  },
-  {
-    "id": "data",
-    "name": "Product data",
-    "category": "Uploaded",
-    "source": "upload",
-    "review_count": 8
   }
 ]
