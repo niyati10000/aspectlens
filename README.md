@@ -1,19 +1,22 @@
-```markdown
 <div align="center">
 
 # AspectLens
 
 **Production-Grade Aspect-Based Sentiment Analysis (ABSA) & Review Intelligence Platform**
 
-[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.4.1-EE4C2C?logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![HuggingFace](https://img.shields.io/badge/HuggingFace-Spaces-FFD21E?logo=huggingface&logoColor=black)](https://huggingface.co/spaces/Niyati26/aspectlens)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+</div>
+
+<p align="center">
+  <a href="https://www.python.org/"><img src="https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white" alt="Python 3.11"></a>
+  <a href="https://fastapi.tiangolo.com/"><img src="https://img.shields.io/badge/FastAPI-0.115.0-009688?logo=fastapi&logoColor=white" alt="FastAPI"></a>
+  <a href="https://pytorch.org/"><img src="https://img.shields.io/badge/PyTorch-2.4.1-EE4C2C?logo=pytorch&logoColor=white" alt="PyTorch"></a>
+  <a href="https://huggingface.co/spaces/Niyati26/aspectlens"><img src="https://img.shields.io/badge/HuggingFace-Spaces-FFD21E?logo=huggingface&logoColor=black" alt="HuggingFace"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg" alt="License: MIT"></a>
+</p>
+
+<div align="center">
 
 [Live Demonstration](https://niyati26-aspectlens.static.hf.space) • [Hugging Face Space](https://huggingface.co/spaces/Niyati26/aspectlens) • [GitHub Repository](https://github.com/niyati10000/aspectlens)
-
-</div>
 
 ---
 
